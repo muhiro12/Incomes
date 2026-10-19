@@ -4,7 +4,7 @@ import MHPlatform
 enum IncomesRemoteUpdateConfiguration {
     static let configurationURLString = "https://raw.githubusercontent.com/muhiro12/MHAppConfig/main/incomes/app.json"
     static let appStoreID = 1_584_472_982
-    static let appStoreURL = URL(string: "https://apps.apple.com/jp/app/incomes/id1584472982")
+    static let appStoreURL = URL(string: "https://apps.apple.com/app/id1584472982")
 
     static let operations: RemoteUpdateOperations = makeOperations()
 
@@ -19,8 +19,7 @@ enum IncomesRemoteUpdateConfiguration {
         do {
             return .init(controller: try .init(
                 appStoreID: appStoreID,
-                configurationURL: configurationURL,
-                storefront: "jp"
+                configurationURL: configurationURL
             ))
         } catch {
             return .init(configurationError: error)

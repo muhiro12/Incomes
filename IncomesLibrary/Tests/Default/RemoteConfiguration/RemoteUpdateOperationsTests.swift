@@ -157,10 +157,11 @@ struct RemoteUpdateOperationsTests {
         ))
         let schedule = try MHRemoteUpdateSchedule.decode(Data(contentsOf: url))
         #expect(schedule.bundleIdentifier == "com.muhiro12.Incomes")
-        #expect(schedule.revision == 1)
+        #expect(schedule.revision == 2)
         #expect(schedule.requirement?.minimumVersion == MHAppVersion("5.0"))
         #expect(schedule.requirement?.effectiveAt == ISO8601DateFormatter().date(from: "2026-10-19T00:00:00Z"))
         #expect(schedule.requirement?.endsAt == nil)
+        #expect(schedule.scheduledRequirements.isEmpty)
     }
 
     @Test
@@ -192,7 +193,7 @@ struct RemoteUpdateOperationsTests {
     }
 }
 
-private extension RemoteUpdateOperationsTests {
+extension RemoteUpdateOperationsTests {
     enum FixtureValues {
         static let initialTimestamp: TimeInterval = 1_000
         static let validity: TimeInterval = 600
@@ -220,12 +221,14 @@ private extension RemoteUpdateOperationsTests {
 
     actor Provider {
         let schedule: MHRemoteUpdateSchedule
+        let configurationData: Data?
         private(set) var fetchCount = 0
         private var isOffline = false
         private var reusedObservation: Date?
 
-        init(schedule: MHRemoteUpdateSchedule) {
+        init(schedule: MHRemoteUpdateSchedule, configurationData: Data?) {
             self.schedule = schedule
+            self.configurationData = configurationData
         }
 
         func fetch(observedAt date: Date) throws -> MHRemoteConfigResponse<MHRemoteUpdateSchedule> {
@@ -233,7 +236,8 @@ private extension RemoteUpdateOperationsTests {
             if isOffline {
                 throw TestError.offline
             }
-            return .init(value: schedule, fetchedAt: reusedObservation ?? date)
+            let value = try configurationData.map(MHRemoteUpdateSchedule.decode) ?? schedule
+            return .init(value: value, fetchedAt: reusedObservation ?? date)
         }
 
         func goOffline() {
@@ -253,25 +257,32 @@ private extension RemoteUpdateOperationsTests {
 
     func makeFixture(
         requirementOffset: TimeInterval? = nil,
+        minimumVersion: String = "6.1",
+        scheduledRequirements: [MHRemoteUpdateSchedule.Requirement] = [],
         publishedVersion: String? = "6.1",
-        store: MHRemoteUpdateStore? = nil
+        store: MHRemoteUpdateStore? = nil,
+        configurationData: Data? = nil
     ) throws -> Fixture {
         let clock = Clock()
-        let minimumVersion = try #require(MHAppVersion("6.1"))
+        let minimumVersion = try #require(MHAppVersion(minimumVersion))
         let requirement = requirementOffset.map { offset in
             MHRemoteUpdateSchedule.Requirement(
                 minimumVersion: minimumVersion,
                 effectiveAt: clock.now().addingTimeInterval(offset)
             )
         }
-        let provider = Provider(schedule: try .init(
-            bundleIdentifier: "test.incomes.remote-update",
-            revision: 1,
-            requirement: requirement
-        ))
+        let provider = Provider(
+            schedule: try .init(
+                bundleIdentifier: "test.incomes.remote-update",
+                revision: 1,
+                requirement: requirement,
+                scheduledRequirements: scheduledRequirements
+            ),
+            configurationData: configurationData
+        )
         let controller = try MHRemoteUpdateController(
             bundleIdentifier: "test.incomes.remote-update",
-            storefront: "jp",
+            storefront: nil,
             policyLifetime: FixtureValues.validity,
             publicationLifetime: FixtureValues.validity,
             store: store,
@@ -285,6 +296,18 @@ private extension RemoteUpdateOperationsTests {
             }
         )
         return .init(operations: .init(controller: controller), provider: provider, clock: clock)
+    }
+
+    func makePlan(
+        version: String,
+        start: TimeInterval,
+        end: TimeInterval? = nil
+    ) throws -> MHRemoteUpdateSchedule.Requirement {
+        .init(
+            minimumVersion: try #require(MHAppVersion(version)),
+            effectiveAt: .init(timeIntervalSinceReferenceDate: FixtureValues.initialTimestamp + start),
+            endsAt: end.map { .init(timeIntervalSinceReferenceDate: FixtureValues.initialTimestamp + $0) }
+        )
     }
 
     func expectBlocked(_ operations: RemoteUpdateOperations, error: RemoteUpdateError) async {

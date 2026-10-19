@@ -48,7 +48,7 @@ and widgets.
   `MHPreferencesUI` products.
 - `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally uses the MHPlatform 1.x semver range
-  `1.18.0..<2.0.0` for consent-managed ads, retained verified purchase
+  `1.19.0..<2.0.0` for consent-managed ads, retained verified purchase
   identifiers, and shared configuration and update processing.
 - Native ad placements choose `MHNativeAdLayout.compact` or `.media`. The ad
   view takes the proposed row width and its natural height; the app owns the
@@ -73,8 +73,11 @@ and widgets.
   automatic CloudKit delivery, preferences, and the Watch's local mirror remain
   separate. Read/export routes do not require write permission.
 - `IncomesRemoteUpdateConfiguration` selects MHAppConfig's `incomes/app.json`
-  HTTPS Raw endpoint and explicitly retains the `jp` publication reference.
-  `features.remoteUpdate` carries the update decision in the common envelope.
+  HTTPS Raw endpoint and uses the package's default publication reference.
+  `features.remoteUpdate` carries the baseline and additional timed requirements
+  in the common envelope. The package selects the strictest active minimum and
+  isolates update-section failures from unrelated feature payloads; the app adds
+  no plan-selection or older-reader fallback layer.
   No publisher renewal is needed; accepted fetch evidence has a 30-day offline
   lifetime, separate from 24-hour publication evidence. Restoring or reusing a
   response never manufactures new freshness. The legacy endpoint remains for

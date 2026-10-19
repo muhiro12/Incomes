@@ -134,7 +134,7 @@ Models.
   `MHPreferencesUI` products.
 - `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally tracks MHPlatform with the 1.x semver range
-  `1.18.0..<2.0.0`.
+  `1.19.0..<2.0.0`.
 - App, watch, and widget UI use only the `MHDesign` product from MHUI 2.4 or
   later; the `MHUI` product is not linked.
 - The app opts into MHPlatform's consent-managed ads and exposes privacy
@@ -184,13 +184,23 @@ The app fetches the shared
 [MHAppConfig document](https://github.com/muhiro12/MHAppConfig/blob/main/incomes/app.json)
 through its HTTPS Raw URL in `IncomesRemoteUpdateConfiguration`. The common
 envelope validates the app identity and selects `features.remoteUpdate`.
-The initial policy preserves the existing minimum version of `5.0`.
+The policy preserves the existing minimum version of `5.0`, with an empty
+`scheduledRequirements` list until a future release decision is made.
 
 An unchanged static policy requires no publisher expiry, scheduled workflow,
 or periodic commit. Edit the update feature and increase its revision only when
-the release decision changes. The standard controller uses the Incomes Store ID
-and an explicit `jp` publication reference to preserve the previous selection;
-MHPlatform 1.18 otherwise omits the country and uses Apple's service default.
+the release decision changes. Keep the baseline in `requirement` when adding
+timed plans to `scheduledRequirements`. The controller applies the highest
+currently active minimum and reevaluates activation and end times before writes.
+Ending a plan leaves other active requirements in force. Full cancellation needs
+explicit `requirement: null` and an empty plan list, with a higher revision.
+
+The standard controller uses the Incomes Store ID and the package's default
+publication reference without a fixed country code. It automatically isolates
+update-section validation from unrelated features in the shared document;
+an invalid update section cannot renew evidence or authorize writes. No
+app-owned plan selector, feature recovery registry, or older-reader fallback
+is needed.
 
 `prepare()` runs at startup and foreground entry. Only a validated network fetch
 renews policy evidence, with up to 30 days of offline reuse. App Store publication
@@ -212,9 +222,9 @@ The old `.config.json` remains compatible with already-distributed app versions.
 It is not fetched by this integration and must not be replaced with the new wire
 format. Forks must configure their own endpoint, Store ID, and app identity.
 
-Use the package's [configuration and update contract](https://github.com/muhiro12/MHPlatform/blob/1.18.0/Designs/Architecture/remote-update.md)
-for deployment, revision changes, postponement, explicit cancellation, and the
-intentional API/wire/cache transition from 1.17.0.
+Use the package's [configuration and update contract](https://github.com/muhiro12/MHPlatform/blob/1.19.0/Designs/Architecture/remote-update.md)
+for deployment, plan changes, postponement, and explicit cancellation. This
+integration targets 1.19 or later for the first shared-configuration app release.
 
 ## Build and Test
 
