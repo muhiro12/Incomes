@@ -142,8 +142,10 @@ Models.
   SDK's current consent keys. AdMob Privacy & messaging configuration remains
   publisher-owned; local verification does not confirm live account setup.
 - Legacy remote configuration keeps its numeric string comparison and fetch
-  recovery behavior through `MHAppVersionComparison` until the separately
-  operated scheduled-policy endpoint is configured.
+  recovery behavior through `MHAppVersionComparison`. The selected configuration
+  repository is [MHAppConfig](https://github.com/muhiro12/MHAppConfig); scheduled
+  rollout awaits static-policy support in
+  [MHPlatform #16](https://github.com/muhiro12/MHPlatform/issues/16).
 
 ## Requirements
 
@@ -183,9 +185,17 @@ Update the file or host your own endpoint when shipping a fork so update prompts
 reflect your release channel.
 
 Scheduled update enforcement is wired but inactive while
-`IncomesRemoteUpdateConfiguration.policyURLString` is `nil`. Choose an independently
-operated HTTPS endpoint before setting that value; no placeholder endpoint or
-live policy is shipped by this integration. Keep the legacy `.config.json`
+`IncomesRemoteUpdateConfiguration.policyURLString` is `nil`.
+[MHAppConfig](https://github.com/muhiro12/MHAppConfig) is the selected independent
+configuration repository. Its `incomes/app.json` records the app identity, Store
+ID, storefront, and existing minimum version; it is not a scheduled-policy
+document and must not be used as the controller endpoint.
+
+Deployment awaits [MHPlatform #16](https://github.com/muhiro12/MHPlatform/issues/16)
+so an unchanged static policy does not require periodic publisher renewal. No
+renewal workflow, placeholder endpoint, or live scheduled policy is shipped by
+this integration. After the supported policy is published and verified, configure
+its HTTPS Raw URL and verify the adopting app. Keep the legacy `.config.json`
 compatible with already-distributed apps.
 
 The configured path uses MHPlatform's standard App Store controller with the

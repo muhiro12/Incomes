@@ -45,7 +45,9 @@ living in the app targets.
 - All UI surfaces use only `MHDesign` from MHUI 2.4 or later, alongside native
   SwiftUI containers.
 - Scheduled update checks and phone UI/App Intent write gates are implemented
-  but remain inactive until an independently operated policy URL is selected.
+  but remain inactive. MHAppConfig is the selected configuration repository;
+  deployment awaits static-policy support in
+  [MHPlatform #16](https://github.com/muhiro12/MHPlatform/issues/16).
 
 ## Current End-User Features
 

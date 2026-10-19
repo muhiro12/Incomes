@@ -72,8 +72,12 @@ and widgets.
   automatic CloudKit delivery, preferences, and the Watch's local mirror remain
   separate. Read/export routes do not require write permission.
 - The scheduled endpoint is intentionally unset in
-  `IncomesRemoteUpdateConfiguration`. A live rollout still requires a separately
-  operated URL and a valid published policy; the legacy endpoint remains intact.
+  `IncomesRemoteUpdateConfiguration`. MHAppConfig is the selected configuration
+  repository; static-policy support in
+  [MHPlatform #16](https://github.com/muhiro12/MHPlatform/issues/16) is a rollout
+  prerequisite. The app record there is not a deployable policy. A live rollout
+  requires a supported, verified policy before enabling its HTTPS endpoint;
+  the legacy endpoint remains intact.
 
 ## MHDesign Adoption
 
