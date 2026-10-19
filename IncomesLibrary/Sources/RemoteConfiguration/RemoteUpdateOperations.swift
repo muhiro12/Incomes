@@ -9,12 +9,16 @@ import Observation
 public final class RemoteUpdateOperations {
     /// Whether the app has chosen scheduled update enforcement.
     public let isEnabled: Bool
-    /// The latest observed decision; an unavailable decision is never permission to write.
-    public private(set) var decision: MHRemoteUpdateDecision = .unavailable
+    /// The latest diagnostic snapshot, shared by presentation and mutation adapters.
+    public private(set) var evaluation: MHRemoteUpdateEvaluation?
+
+    /// The decision from the same observed instant; unavailable is never permission to write.
+    public var decision: MHRemoteUpdateDecision {
+        evaluation?.decision ?? .unavailable
+    }
 
     private let controller: MHRemoteUpdateController?
     private let configurationError: (any Error)?
-    private var hasPrepared = false
 
     /// Disables networking and update enforcement for previews and isolated environments.
     public init() {
@@ -48,8 +52,7 @@ public final class RemoteUpdateOperations {
             return nil
         }
         let preparation = try await controller.prepare()
-        hasPrepared = preparation.restorationError == nil || preparation.refreshError == nil
-        decision = await controller.decision()
+        evaluation = preparation.evaluation
         return preparation
     }
 
@@ -63,16 +66,12 @@ public final class RemoteUpdateOperations {
             throw RemoteUpdateError.policyUnavailable
         }
         do {
-            // App Intents can reach this boundary before a SwiftUI lifecycle runs.
-            if hasPrepared == false {
-                try await prepare()
-            }
             try await controller.checkOperationAllowed()
-            decision = await controller.decision()
+            evaluation = await controller.evaluation()
             try Task.checkCancellation()
             try decision.checkOperationAllowed(whenUnavailable: .block)
         } catch {
-            decision = await controller.decision()
+            evaluation = await controller.evaluation()
             if error is CancellationError || Task.isCancelled {
                 throw CancellationError()
             }

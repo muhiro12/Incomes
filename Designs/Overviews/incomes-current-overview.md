@@ -39,13 +39,13 @@ living in the app targets.
   `MHPreferencesUI` products.
 - `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally tracks MHPlatform with the 1.x semver range
-  `1.19.0..<2.0.0`.
+  `1.20.0..<2.0.0`.
 - The app uses consent-managed advertising and offers privacy options in
   Settings when the SDK requires them. Startup cleanup retains consent keys.
 - All UI surfaces use only `MHDesign` from MHUI 2.4 or later, alongside native
   SwiftUI containers.
 - Update checks and phone UI/App Intent write gates consume MHAppConfig's shared
-  `incomes/app.json` document through MHPlatform 1.19. The static update feature
+  `incomes/app.json` document through MHPlatform 1.20. The static update feature
   needs no publisher renewal; the initial minimum remains `5.0`.
 
 ## Current End-User Features
@@ -207,6 +207,9 @@ living in the app targets.
   leaves other active requirements in force. No future rollout is scheduled yet.
 - Isolate update-section failures from unrelated shared features through the
   standard package reader, without app-owned recovery or selection machinery.
+- Restore retained evidence on the first operation check, including headless
+  App Intents, without an app-owned preparation flag. Record package-provided
+  decision reasons, revision, active minimum, and evidence freshness in logs.
 - Show update-required or unavailable guidance with retry and Store routes.
   Reading and export remain available when writes are blocked.
 - Reuse policy evidence offline for up to 30 days after a validated fetch,

@@ -65,6 +65,11 @@ extension RemoteUpdateOperationsTests {
         await nextLaunch.provider.goOffline()
         await expectBlocked(nextLaunch.operations, error: .updateRequired)
         #expect(nextLaunch.operations.decision == .updateRequired)
+        #expect(nextLaunch.operations.evaluation?.reason == .updateRequired)
+        #expect(nextLaunch.operations.evaluation?.revision == 1)
+        #expect(nextLaunch.operations.evaluation?.policyFreshness == .fresh)
+        #expect(nextLaunch.operations.evaluation?.publicationFreshness == .fresh)
+        #expect(await nextLaunch.provider.fetchCount == 0)
     }
 
     @Test(arguments: [false, true])

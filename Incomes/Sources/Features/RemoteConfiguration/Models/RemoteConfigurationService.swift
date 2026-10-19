@@ -37,14 +37,22 @@ final class RemoteConfigurationService {
 
     private func prepareScheduledUpdates() async throws {
         do {
-            let preparation = try await scheduledUpdates.prepare()
+            guard let preparation = try await scheduledUpdates.prepare() else {
+                return
+            }
+            let evaluation = preparation.evaluation
             logger.notice(
                 "remote_update.prepared",
                 metadata: IncomesLogging.metadata(
-                    ("decision", String(describing: scheduledUpdates.decision))
+                    ("decision", String(describing: evaluation.decision)),
+                    ("reason", evaluation.reason.rawValue),
+                    ("revision", IncomesLogging.optionalInt(evaluation.revision)),
+                    ("minimum_version", evaluation.minimumVersion?.description),
+                    ("policy_freshness", evaluation.policyFreshness.rawValue),
+                    ("publication_freshness", evaluation.publicationFreshness.rawValue)
                 )
             )
-            for error in [preparation?.restorationError, preparation?.refreshError].compactMap(\.self) {
+            for error in [preparation.restorationError, preparation.refreshError].compactMap(\.self) {
                 logger.error("remote_update.preparation_failed", metadata: IncomesLogging.errorMetadata(error))
             }
         } catch {

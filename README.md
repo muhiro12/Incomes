@@ -134,7 +134,7 @@ Models.
   `MHPreferencesUI` products.
 - `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally tracks MHPlatform with the 1.x semver range
-  `1.19.0..<2.0.0`.
+  `1.20.0..<2.0.0`.
 - App, watch, and widget UI use only the `MHDesign` product from MHUI 2.4 or
   later; the `MHUI` product is not linked.
 - The app opts into MHPlatform's consent-managed ads and exposes privacy
@@ -206,10 +206,14 @@ is needed.
 renews policy evidence, with up to 30 days of offline reuse. App Store publication
 evidence has its separate 24-hour lifetime. Storage is source-scoped in
 Application Support. Missing, incompatible, or expired evidence blocks protected
-writes, and invalid setup never falls back to the old endpoint. The first mutation
-also prepares retained evidence when no UI lifecycle has run, so a background
-App Intent can use still-valid cached permission offline. Previews and isolated
-environments disable fetching and update enforcement.
+writes, and invalid setup never falls back to the old endpoint. The controller
+restores retained evidence on the first operation check, so a background App
+Intent can use still-valid permission offline without an app-owned preparation
+flag. Read-only evaluations expose one decision, reason, revision, active minimum,
+and evidence freshness; logs use the same diagnostic instant as the decision.
+Controller instances and processes coordinate revision-checked shared evidence
+through the configured store. Previews and isolated environments disable fetching
+and update enforcement.
 
 Phone UI and App Intents check immediately before user-requested item, ledger,
 and tag mutations, balance recalculation, import, yearly duplication, and data
@@ -222,9 +226,9 @@ The old `.config.json` remains compatible with already-distributed app versions.
 It is not fetched by this integration and must not be replaced with the new wire
 format. Forks must configure their own endpoint, Store ID, and app identity.
 
-Use the package's [configuration and update contract](https://github.com/muhiro12/MHPlatform/blob/1.19.0/Designs/Architecture/remote-update.md)
+Use the package's [configuration and update contract](https://github.com/muhiro12/MHPlatform/blob/1.20.0/Designs/Architecture/remote-update.md)
 for deployment, plan changes, postponement, and explicit cancellation. This
-integration targets 1.19 or later for the first shared-configuration app release.
+integration targets 1.20 or later for the first shared-configuration app release.
 
 ## Build and Test
 

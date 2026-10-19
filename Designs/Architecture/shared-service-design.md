@@ -48,7 +48,7 @@ and widgets.
   `MHPreferencesUI` products.
 - `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally uses the MHPlatform 1.x semver range
-  `1.19.0..<2.0.0` for consent-managed ads, retained verified purchase
+  `1.20.0..<2.0.0` for consent-managed ads, retained verified purchase
   identifiers, and shared configuration and update processing.
 - Native ad placements choose `MHNativeAdLayout.compact` or `.media`. The ad
   view takes the proposed row width and its natural height; the app owns the
@@ -66,8 +66,11 @@ and widgets.
 - `RemoteUpdateOperations` shares scheduled update evidence between UI and
   mutation entry points. It delegates storage, preparation, and operation checks
   to `MHRemoteUpdateController`, whose standard configuration lookup uses
-  `MHRemoteConfig`. Invalid setup stays unavailable and blocks writes;
-  preview environments explicitly disable fetching and enforcement.
+  `MHRemoteConfig`. First-operation restoration is package-owned. The observable
+  adapter retains one `MHRemoteUpdateEvaluation` and derives its decision from
+  that same instant; app logs include the reason and evidence freshness. Invalid
+  setup stays unavailable and blocks writes; preview environments explicitly
+  disable fetching and enforcement.
 - `IncomesMutationWorkflow` checks configured update requirements before phone
   UI and App Intent mutations and their success effects. Startup migration,
   automatic CloudKit delivery, preferences, and the Watch's local mirror remain

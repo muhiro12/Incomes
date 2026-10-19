@@ -56,6 +56,8 @@ struct RemoteUpdateOperationsTests {
         try await fixture.operations.prepare()
         await expectBlocked(fixture.operations, error: .updateRequired)
         #expect(fixture.operations.decision == .updateRequired)
+        #expect(fixture.operations.evaluation?.reason == .updateRequired)
+        #expect(fixture.operations.evaluation?.minimumVersion == MHAppVersion("6.1"))
     }
 
     @Test
@@ -64,6 +66,7 @@ struct RemoteUpdateOperationsTests {
         try await fixture.operations.prepare()
         await expectBlocked(fixture.operations, error: .policyUnavailable)
         #expect(fixture.operations.decision == .unavailable)
+        #expect(fixture.operations.evaluation?.reason == .publicationMissing)
     }
 
     @Test
@@ -90,6 +93,7 @@ struct RemoteUpdateOperationsTests {
         }
         #expect(didMutate)
         #expect(fixture.operations.decision == .notRequired)
+        #expect(fixture.operations.evaluation?.refreshError != nil)
     }
 
     @Test
@@ -110,6 +114,8 @@ struct RemoteUpdateOperationsTests {
         }
         #expect(didMutate)
         #expect(nextLaunch.operations.decision == .notRequired)
+        #expect(nextLaunch.operations.evaluation?.reason == .noActiveRequirement)
+        #expect(await nextLaunch.provider.fetchCount == 0)
     }
 
     @Test
@@ -120,6 +126,8 @@ struct RemoteUpdateOperationsTests {
         await fixture.provider.goOffline()
         await expectBlocked(fixture.operations, error: .policyUnavailable)
         #expect(fixture.operations.decision == .unavailable)
+        #expect(fixture.operations.evaluation?.reason == .policyExpired)
+        #expect(fixture.operations.evaluation?.policyFreshness == .expired)
     }
 
     @Test
