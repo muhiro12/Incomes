@@ -15,7 +15,7 @@ struct LedgerSettingsView: View {
 
     var body: some View {
         Form {
-            Section("Ledger Name") {
+            Section {
                 TextField("Ledger Name", text: $name)
                     .ledgerWriteAccess(owner: identifier)
                 Button("Rename") {
@@ -31,6 +31,15 @@ struct LedgerSettingsView: View {
                 .disabled(
                     !LedgerAccessOperations.canEdit(identifier, isPremium: isSubscribeOn)
                 )
+            } header: {
+                Text("Ledger Name")
+            } footer: {
+                if !LedgerAccessOperations.canEdit(identifier, isPremium: isSubscribeOn) {
+                    VStack(alignment: .leading) {
+                        Text("Read Only: Premium is required to edit this ledger.")
+                        Text("After Premium ends, existing ledgers remain available to view, switch, and export.")
+                    }
+                }
             }
         }
         .navigationTitle("Ledger Settings")

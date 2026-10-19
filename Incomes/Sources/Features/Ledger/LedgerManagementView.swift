@@ -66,6 +66,7 @@ struct LedgerManagementView: View {
         Section {
             Text("Ledgers keep planned income, outgo, and balances separate.")
             Text("All ledgers use the same iCloud account.")
+            Text("Widgets and Apple Watch show the default ledger.")
             Text("Update every device to Incomes 6.0 or later before using additional ledgers.")
             Text("Earlier versions combine all ledgers and can remove an item's ledger assignment when editing.")
         }

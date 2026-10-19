@@ -6,8 +6,10 @@ struct LedgerSelectionMenu: View {
     let manage: () -> Void
 
     var selectedName: String {
-        ledgers.first { $0.id.rawValue == selectedIdentifier }?.name
-            ?? String(localized: "Unavailable Ledger")
+        guard let ledger = ledgers.first(where: { $0.id.rawValue == selectedIdentifier }) else {
+            return String(localized: "Unavailable Ledger")
+        }
+        return selectionTitle(ledger)
     }
 
     var body: some View {
@@ -25,6 +27,7 @@ struct LedgerSelectionMenu: View {
             )
             .labelStyle(.titleAndIcon)
             .lineLimit(1)
+            .truncationMode(.middle)
         }
         .accessibilityLabel(Text(verbatim: String(localized: "Switch Ledger") + ": " + selectedName))
     }

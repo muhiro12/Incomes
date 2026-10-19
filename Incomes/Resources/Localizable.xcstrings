@@ -16973,6 +16973,40 @@
         }
       }
     },
+    "Widgets and Apple Watch show the default ledger." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Widgets and Apple Watch show the default ledger."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los widgets y el Apple Watch muestran el libro predeterminado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les widgets et l’Apple Watch affichent le registre par défaut."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ウィジェットとApple Watchには標準帳簿が表示されます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "小组件和 Apple Watch 显示默认账簿。"
+          }
+        }
+      }
+    },
     "Year" : {
       "localizations" : {
         "en" : {
