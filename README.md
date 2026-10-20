@@ -141,6 +141,11 @@ Models.
   options in Settings when required by the SDK. Startup cleanup preserves the
   SDK's current consent keys. AdMob Privacy & messaging configuration remains
   publisher-owned; local verification does not confirm live account setup.
+  Debug builds accept `INCOMES_ADS_CONSENT_DEBUG_GEOGRAPHY=eea`,
+  `regulatedUSState`, or `other` for regional consent checks on test devices.
+  Distribution builds ignore this environment variable. Keep the Incomes app
+  identifier when verifying its published consent message; test ad units do not
+  replace application-specific message configuration.
 - The standard update controller uses `MHRemoteConfig` through the existing
   umbrellas to fetch and validate the shared MHAppConfig document. Update policy
   owns only `features.remoteUpdate`; no publisher renewal job is needed.
