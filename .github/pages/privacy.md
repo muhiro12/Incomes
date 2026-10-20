@@ -3,7 +3,8 @@
 Effective October 20, 2026.
 
 Incomes is a personal budget app provided by Hiromu Nakano. This policy
-describes how the current app handles information.
+describes Incomes 5.12 and 6.0. Version-specific advertising controls are
+described below.
 
 ## Information stored by Incomes
 
@@ -32,11 +33,16 @@ or generated summaries to a developer-operated AI service.
 ## Advertising and privacy messaging SDKs
 
 The iOS app integrates the Google Mobile Ads SDK and the Google User Messaging
-Platform (UMP) SDK. When a premium subscription is inactive, Incomes checks the
-UMP consent status and presents any required privacy message before requesting
-ads. The advertising SDK starts only when UMP permits ad requests. When UMP
-requires a privacy-options entry point, Incomes provides one in Settings so
-users can review or change their choices.
+Platform (UMP) SDK. In Incomes 6.0, when a premium subscription is inactive, the
+app checks the UMP consent status and presents any required privacy message
+before requesting ads. The advertising SDK starts only when UMP permits ad
+requests. When UMP requires a privacy-options entry point, Incomes 6.0 provides
+one in Settings so users can review or change their choices.
+
+Incomes 5.12 initializes the advertising SDK during app startup and presents
+native ads when a premium subscription is inactive. That version does not
+provide the consent-message workflow or in-app privacy-options entry point
+described for Incomes 6.0.
 
 According to Google's SDK documentation and the privacy manifests bundled with
 the current SDKs, Google may process information such as IP-derived coarse
