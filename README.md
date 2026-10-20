@@ -150,8 +150,11 @@ Models.
 
 ## Requirements
 
-- Xcode 27 RC (27A266a), followed by the corresponding stable Xcode 27 release,
-  for both development and release builds of Incomes 6.x.
+- Xcode 27 or later to read the JSON project configuration. The current
+  [format qualification](Designs/Architecture/xcode-project-format.md)
+  uses Xcode 27.2 RC (27B48). Match local release verification to the actual
+  toolchain used for the release candidate; project-format compatibility alone
+  does not qualify a toolchain for release.
 - The app and widgets deploy to iOS 18 or later, and the watchOS companion
   deploys to watchOS 11 or later.
 - An Apple Developer account configured for App Groups, iCloud, StoreKit 2,

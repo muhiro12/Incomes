@@ -2,10 +2,13 @@
 
 ## Compatibility and scope
 
-Incomes can migrate the configuration inside `Incomes.xcodeproj` from
-`project.pbxproj` to `project.xcproj` without changing application code, deployment
-targets, SDK requirements, or stored data. Apple documents reading both formats
-in Xcode 27 and later; conversion to JSON requires Xcode 27.2 or later.
+Incomes uses `project.xcproj` inside `Incomes.xcodeproj`. Its migration from
+`project.pbxproj` did not change application code, deployment targets, SDK
+requirements, or stored data. Apple documents reading both formats in Xcode 27
+and later; conversion to JSON requires Xcode 27.2 or later.
+
+The current configuration also passes the Xcode 27.2 RC review below. No further
+format conversion or recommended-setting change was necessary.
 
 Keep the release-toolchain policy in [README.md](../../README.md#requirements).
 Local conversion qualification does not qualify a beta toolchain for release.
@@ -151,19 +154,59 @@ restricted context, including SwiftLint over the same 890 tracked Swift files.
 The original Xcode scheme and destination were restored. The Incomes-specific
 configuration work and local qualification are complete. Formal signed archive
 and Xcode Cloud execution are deferred, and the release-toolchain choice is
-unchanged. Issue #400 remains open while the implementation is unpublished;
-the deferred release checks are not a current completion gate.
+unchanged. At the time of this migration run, Issue #400 remained open while the
+implementation was unpublished. The deferred release checks are not a current
+completion gate.
 
 The earlier app build and library-test results are migration-run observations,
 not a publication receipt for subsequent tooling commits. Prepare current-source
 evidence through the [push verification pilot](push-verification-pilot.md) before
-any separately authorized push. Shared verification-skill modernization remains
-separate; Incomes currently uses its repository-owned evidence adapter and
-matcher, while other adopters may delegate to the shared helpers.
+any separately authorized push. Shared verification-skill modernization was
+handled separately after this run. Incomes continues to use its repository-owned
+evidence adapter and matcher, while other adopters may delegate to the shared
+helpers.
+
+## Xcode 27.2 RC requalification on October 20, 2026
+
+The reviewed source baseline was `5362f1d8`. The installed and selected Xcode
+27.2 RC is build `27B48`. Apple's current release notes and conversion guide
+retain JSON as the default new-project format and Xcode 27 as the reader floor.
+This review does not raise the deployment targets or select a release toolchain.
+
+- The RC File inspector identifies the current configuration as **JSON** and
+  describes it as compatible with Xcode 27 and later.
+- Xcode's **Editor > Validate Settings...** reports **Project settings are
+  valid**, with no recommended changes to apply. Historical `last-upgrade` and
+  Swift-migration metadata are not format versions; they were not rewritten
+  solely to make their numbers match the installed Xcode.
+- Native discovery identifies Incomes, Widgets, and Watch, plus all four shared
+  schemes. Native inspection reads 1,712 evaluated settings across the three
+  targets. The existing synchronized folders, package owners, Frameworks
+  links, embedding phases, and Debug/Release configuration remain in place.
+- On separate disposable copies, the RC's direct JSON conversion and its
+  property-list-to-JSON round trip both produce files byte-identical to the
+  current configuration. The ordered structural comparison also has zero
+  differences. No sorting or metadata exclusions were used to make this pass.
+- The Incomes scheme builds successfully on the selected iPhone Duo iOS 27.2
+  Simulator destination, including its Watch and Widgets dependencies. Complete
+  native build-issue retrieval reports no errors or warnings.
+- All 51 Incomes tooling tests and the shared adapters' 24 reader/provenance
+  tests plus 41 receipt-matcher tests pass. Both configuration formats remain
+  covered. Evidence-mode repository rules also pass with zero captured errors
+  or warnings on the clean source baseline.
+
+The project file, package pins, schemes, deployment targets, signing settings,
+application code, and stored-data contracts were not edited by this review.
+The source updates clarify the obsolete Xcode 27 RC requirement and record the
+current qualification. Shared adapters require no RC-specific parser change.
+Library tests and live-app behavior were not rerun; signed Archive and Xcode
+Cloud remain outside this review. These observations are not a publication
+receipt for the documentation commit.
 
 ## References
 
 - [Apple project-format conversion and compatibility](https://developer.apple.com/documentation/xcode/updating-your-xcode-project-configuration-file-format)
+- [Xcode 27.2 release notes](https://developer.apple.com/documentation/xcode-release-notes/xcode-27_2-release-notes)
 - [Apple project-format library](https://github.com/apple/xcode-project-format)
 - [Apple package-product encoding](https://github.com/apple/xcode-project-format/blob/main/Sources/Library/Schema/Target/Target.swift)
 - [Periphery configuration definition](https://github.com/peripheryapp/periphery/blob/master/Sources/Configuration/Configuration.swift)
