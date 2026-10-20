@@ -1,9 +1,15 @@
+import StoreKit
 import SwiftUI
 
 struct StoreListView: View {
     var body: some View {
         List {
-            StoreSection()
+            if let policyURL = IncomesPrivacyConfiguration.policyURL {
+                StoreSection()
+                    .subscriptionStorePolicyDestination(url: policyURL, for: .privacyPolicy)
+            } else {
+                StoreSection()
+            }
         }
         .navigationTitle("Subscription")
     }

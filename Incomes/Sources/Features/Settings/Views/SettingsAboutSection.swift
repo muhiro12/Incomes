@@ -9,6 +9,9 @@ struct SettingsAboutSection: View {
     var body: some View {
         Section {
             AdsPrivacyOptionsButton(onError: onError)
+            if let policyURL = IncomesPrivacyConfiguration.policyURL {
+                Link("Privacy Policy", destination: policyURL)
+            }
             Button("Show tips again", action: showTipsAgain)
             SettingsNavigationRowButton(
                 title: "License",
