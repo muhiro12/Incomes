@@ -73,8 +73,14 @@ Models.
 
 ### App Intents and shortcuts
 
-- Offer App Intents for quickly opening the app or requesting Foundation Model
-  inference from Shortcuts and Siri.
+- Offer App Intents for listing, opening, creating, and renaming ledgers,
+  checking saved balances, and previewing an import. Paid mutations use the
+  same Monthly Plan entitlement as the app.
+- Scope item creation, queries, display, and yearly duplication to an optional
+  ledger; omitting it preserves the default book used by existing Shortcuts.
+- Keep backup execution, ownership recovery, and experimental AI adapters
+  undiscoverable while their system experience is qualified; see
+  [the exposure follow-up](https://github.com/muhiro12/Incomes/issues/410).
 
 ## Architecture and technologies
 

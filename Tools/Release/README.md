@@ -9,9 +9,10 @@ Apogee publishes three-component semantic version tags, so the Git tag, the
 `Package.swift` requirement, and the `Package.resolved` version all read
 `1.4.0`. Check the resolved revision as well as the version when updating.
 
-Use the selected Xcode 27 RC (27A266a), followed by stable Xcode 27, for both
-development and release verification. Run these commands from the repository
-root:
+Match the selected local Xcode to the toolchain used for the intended release
+candidate. The current project-format qualification uses Xcode 27.2 RC
+(27B48); that qualification alone does not establish a Cloud candidate's
+toolchain or release readiness. Run these commands from the repository root:
 
 ```sh
 xcode-select -p
