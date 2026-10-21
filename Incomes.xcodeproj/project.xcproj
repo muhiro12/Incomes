@@ -213,7 +213,6 @@
         "GCC_C_LANGUAGE_STANDARD": "gnu17",
         "GENERATE_INFOPLIST_FILE": "YES",
         "INFOPLIST_FILE": "Widgets/Configurations/Info.plist",
-        "INFOPLIST_KEY_CFBundleDisplayName": "Incomes",
         "INFOPLIST_KEY_NSHumanReadableCopyright": "Copyright © 2025 Hiromu Nakano. All rights reserved.",
         "IPHONEOS_DEPLOYMENT_TARGET": "18.0",
         "LD_RUNPATH_SEARCH_PATHS": [
