@@ -159,7 +159,7 @@ struct DatabaseMigratorTests {
         let fileManager: FileManager = .default
         let sandbox = try makeSandbox(fileManager: fileManager)
 
-        try seedStore(at: sandbox.legacyURL)
+        let seededIdentifier = try seedStore(at: sandbox.legacyURL)
 
         try DatabaseMigrator.migrateSQLiteFilesIfNeeded(
             fileManager: fileManager,
@@ -167,9 +167,8 @@ struct DatabaseMigratorTests {
             currentURL: sandbox.currentURL
         )
 
-        let currentContainer = try ModelContainer(
-            for: Item.self,
-            configurations: .init(
+        let currentContainer = try ModelContainerFactory.make(
+            configuration: .init(
                 url: sandbox.currentURL,
                 cloudKitDatabase: .none
             )
@@ -180,6 +179,9 @@ struct DatabaseMigratorTests {
 
         #expect(currentItems.count == 1)
         #expect(currentItems.first?.content == "Salary")
+        let currentItem = try #require(currentItems.first)
+        #expect(try PersistentIdentifierCoder.encode(currentItem.persistentModelID) == seededIdentifier)
+        #expect(currentItem.category?.name == "Work")
         #expect(!fileManager.fileExists(atPath: sandbox.legacyURL.path))
     }
 }
@@ -242,27 +244,26 @@ private extension DatabaseMigratorTests {
     @MainActor
     func seedStore(
         at storeURL: URL
-    ) throws {
+    ) throws -> String {
         let legacyContainer = try ModelContainer(
-            for: Item.self,
+            for: UnversionedStoreV2.Item.self,
             configurations: .init(
                 url: storeURL,
                 cloudKitDatabase: .none
             )
         )
         let legacyContext = legacyContainer.mainContext
-        _ = try Item.create(
-            context: legacyContext,
-            values: .init(
-                date: .now,
-                content: "Salary",
-                income: 100,
-                outgo: .zero,
-                category: "Work",
-                priority: .zero
-            ),
-            repeatID: UUID()
-        )
+        let category = UnversionedStoreV2.Tag()
+        category.name = "Work"
+        category.typeID = "a7a130f4"
+        let item = UnversionedStoreV2.Item()
+        legacyContext.insert(item)
+        item.date = .now
+        item.content = "Salary"
+        item.income = 100
+        item.tags = [category]
         try legacyContext.save()
+        #expect(try legacyContext.fetchCount(FetchDescriptor<UnversionedStoreV2.Item>()) == 1)
+        return try PersistentIdentifierCoder.encode(item.persistentModelID)
     }
 }
