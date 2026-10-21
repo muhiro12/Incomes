@@ -239,6 +239,40 @@
         }
       }
     },
+    "A subscription is required to change additional ledgers. You can still view, select, and export them." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A subscription is required to change additional ledgers. You can still view, select, and export them."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se necesita una suscripción para modificar libros adicionales. Puedes seguir consultándolos, seleccionándolos y exportándolos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un abonnement est nécessaire pour modifier les registres supplémentaires. Vous pouvez toujours les consulter, les sélectionner et les exporter."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "追加した帳簿の変更にはサブスクリプションが必要です。閲覧・切り替え・書き出しは引き続き利用できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "修改其他账簿需要订阅。你仍可查看、选择和导出这些账簿。"
+          }
+        }
+      }
+    },
     "An item belongs to conflicting ledgers. Its balance is unavailable." : {
       "localizations" : {
         "en" : {
@@ -398,7 +432,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "標準帳簿"
+            "value" : "メイン"
           }
         },
         "zh-Hans" : {

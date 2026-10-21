@@ -18,10 +18,6 @@ struct ItemFormRecognizedTextEditorContent: View {
             .frame(minHeight: Constants.minimumHeight)
             .padding(.horizontal, designMetrics.layout.surface.compactInsetHorizontal)
             .padding(.vertical, designMetrics.layout.surface.compactInsetVertical)
-            .incomesGlassEffect(
-                cornerRadius: designMetrics.cornerRadius.surface,
-                isInteractive: true
-            )
             .accessibilityLabel("Captured text")
     }
 }

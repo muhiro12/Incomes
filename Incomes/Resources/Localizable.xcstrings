@@ -338,6 +338,40 @@
         }
       }
     },
+    "A subscription enables creating and editing additional ledgers. Existing ledgers remain available to view, switch, and export after it ends." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "A subscription enables creating and editing additional ledgers. Existing ledgers remain available to view, switch, and export after it ends."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Una suscripción permite crear y editar libros adicionales. Cuando termina, puedes seguir consultando, seleccionando y exportando los libros existentes."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un abonnement permet de créer et de modifier des registres supplémentaires. Après sa fin, vous pouvez toujours consulter, sélectionner et exporter les registres existants."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サブスクリプションで帳簿を追加・編集できます。終了後も、既存の帳簿の閲覧・切り替え・書き出しは利用できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "订阅后可创建和编辑其他账簿。订阅结束后，仍可查看、切换和导出现有账簿。"
+          }
+        }
+      }
+    },
     "Add Sample Data" : {
       "localizations" : {
         "en" : {
@@ -776,6 +810,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Premium 到期后，仍可查看、切换和导出现有账簿。"
+          }
+        }
+      }
+    },
+    "After your subscription ends, existing ledgers remain available to view, switch, and export." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "After your subscription ends, existing ledgers remain available to view, switch, and export."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuando termina la suscripción, puedes seguir consultando, seleccionando y exportando los libros existentes."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Après la fin de votre abonnement, vous pouvez toujours consulter, sélectionner et exporter les registres existants."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サブスクリプション終了後も、既存の帳簿の閲覧・切り替え・書き出しは利用できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "订阅结束后，仍可查看、切换和导出现有账簿。"
           }
         }
       }
@@ -2233,7 +2301,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "追加の帳簿を作成する前に、すべての端末のIncomesを6.0以降へ更新してください。以前のバージョンでは帳簿が区別されず、編集すると項目の所属帳簿が失われることがあります。更新できない端末がある場合は、標準帳簿だけを使用してください。"
+            "value" : "追加の帳簿を作成する前に、すべての端末のIncomesを6.0以降へ更新してください。以前のバージョンでは帳簿が区別されず、編集すると項目の所属帳簿が失われることがあります。更新できない端末がある場合は、メインの帳簿だけを使用してください。"
           }
         },
         "zh-Hans" : {
@@ -4375,7 +4443,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "標準帳簿"
+            "value" : "メイン"
           }
         },
         "zh-Hans" : {
@@ -5713,6 +5781,40 @@
         }
       }
     },
+    "Even one change may cause data problems that cannot be repaired. Allow editing without checking for updates?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Even one change may cause data problems that cannot be repaired. Allow editing without checking for updates?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un solo cambio puede causar problemas de datos que no se puedan reparar. ¿Permitir la edición sin comprobar las actualizaciones?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une seule modification peut provoquer des problèmes de données irréparables. Autoriser la modification sans vérifier les mises à jour ?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1回の変更でも、元に戻せない問題が起こるおそれがあります。アップデートを確認できなくても編集を許可しますか？"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "即使只修改一次，也可能导致无法修复的数据问题。仍要在无法检查更新时允许编辑吗？"
+          }
+        }
+      }
+    },
     "Expand" : {
       "localizations" : {
         "en" : {
@@ -6525,6 +6627,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "最高余额: %@"
+          }
+        }
+      }
+    },
+    "If an important update is missed, even one change may make records incorrect or unusable. Updating later may not fix this, and the developer cannot restore the affected records for you." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If an important update is missed, even one change may make records incorrect or unusable. Updating later may not fix this, and the developer cannot restore the affected records for you."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si no se detecta una actualización importante, un solo cambio puede hacer que los registros sean incorrectos o inutilizables. Actualizar después podría no solucionarlo, y el desarrollador no puede restaurar los registros afectados."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si une mise à jour importante passe inaperçue, une seule modification peut rendre les données incorrectes ou inutilisables. Une mise à jour ultérieure peut ne pas résoudre le problème, et le développeur ne peut pas restaurer les données concernées."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重要なアップデートを確認できないまま変更すると、1回の操作でも記録が正しく扱えなくなるおそれがあります。後から更新しても直らない場合があり、開発元では記録を修復・復元できません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "如果未能得知重要更新，即使只修改一次，也可能导致记录错误或无法使用。之后更新也可能无法解决，开发者无法为你恢复受影响的记录。"
           }
         }
       }
@@ -10020,7 +10156,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "通知は標準帳簿の項目を対象にします。"
+            "value" : "通知はメインの帳簿の項目を対象にします。"
           }
         },
         "zh-Hans" : {
@@ -12101,6 +12237,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "范围"
+          }
+        }
+      }
+    },
+    "Read Only: A subscription is required to edit this ledger." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read Only: A subscription is required to edit this ledger."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo lectura: se necesita una suscripción para editar este libro."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lecture seule : un abonnement est nécessaire pour modifier ce registre."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "閲覧のみ：この帳簿の編集にはサブスクリプションが必要です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "只读：编辑此账簿需要订阅。"
           }
         }
       }
@@ -17852,7 +18022,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ウィジェットとApple Watchには標準帳簿が表示されます。"
+            "value" : "ウィジェットとApple Watchにはメインの帳簿が表示されます。"
           }
         },
         "zh-Hans" : {

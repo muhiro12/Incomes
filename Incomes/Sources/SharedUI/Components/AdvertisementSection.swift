@@ -5,16 +5,12 @@
 //  Created by Hiromu Nakano on 2022/01/17.
 //
 
-import MHDesign
 import MHPlatform
 import SwiftUI
 
 struct AdvertisementSection {
     @Environment(MHAppRuntime.self)
     private var appRuntime
-    @Environment(\.mhDesignMetrics)
-    private var designMetrics
-
     private let layout: MHNativeAdLayout
 
     init(_ layout: MHNativeAdLayout) {
@@ -27,7 +23,9 @@ extension AdvertisementSection: View {
         if appRuntime.canDisplayAds {
             Section {
                 appRuntime.nativeAdView(layout: layout)
-                    .padding(designMetrics.spacing.inline)
+                    .listRowInsets(.init())
+                    .listRowBackground(Color.clear)
+                    .listRowSeparator(.hidden)
             }
         }
     }

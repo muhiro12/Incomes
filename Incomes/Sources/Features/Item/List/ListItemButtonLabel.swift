@@ -7,7 +7,7 @@ struct ListItemButtonLabel: View {
     private var horizontalSizeClass
 
     var body: some View {
-        NavigationRowLabel {
+        Group {
             if horizontalSizeClass == .regular, !dynamicTypeSize.isAccessibilitySize {
                 ViewThatFits(in: .horizontal) {
                     WideListItem()
@@ -17,5 +17,7 @@ struct ListItemButtonLabel: View {
                 NarrowListItem()
             }
         }
+        .frame(maxWidth: .infinity, alignment: .leading)
+        .contentShape(.rect)
     }
 }

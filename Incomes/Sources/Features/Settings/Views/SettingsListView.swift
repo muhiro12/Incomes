@@ -262,17 +262,27 @@ private extension SettingsListView {
     func notificationSection(
         model: SettingsScreenModel
     ) -> some View {
-        SettingsNotificationSection(
-            notificationSettings: notificationSettingsBinding,
-            isNotificationEnabled: model.isNotificationEnabled,
-            authorizationPresentation: model.authorizationPresentation(
-                for: notificationService.authorizationState
-            ),
-            sendTestNotification: {
-                notificationService.sendTestNotification()
-            },
-            openSystemSettings: openSystemSettings
-        )
+        Section {
+            NavigationLink {
+                Form {
+                    SettingsNotificationSection(
+                        notificationSettings: notificationSettingsBinding,
+                        isNotificationEnabled: model.isNotificationEnabled,
+                        authorizationPresentation: model.authorizationPresentation(
+                            for: notificationService.authorizationState
+                        ),
+                        sendTestNotification: {
+                            notificationService.sendTestNotification()
+                        },
+                        openSystemSettings: openSystemSettings
+                    )
+                }
+                .navigationTitle("Push notification settings")
+                .navigationBarTitleDisplayMode(.inline)
+            } label: {
+                Label("Push notification settings", systemImage: "bell.badge")
+            }
+        }
     }
 
     func dataManagementSection(

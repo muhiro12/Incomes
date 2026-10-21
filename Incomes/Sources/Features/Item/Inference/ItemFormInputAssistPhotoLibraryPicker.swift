@@ -10,10 +10,9 @@ struct ItemFormInputAssistPhotoLibraryPicker: View {
     var body: some View {
         PhotosPicker(selection: $selectedItem, matching: .images) {
             Label("Photo Library", systemImage: "photo.on.rectangle")
-                .frame(maxWidth: .infinity)
+                .frame(maxWidth: .infinity, alignment: .leading)
         }
         .labelStyle(.titleAndIcon)
-        .incomesSecondaryControlStyle()
         .disabled(isImportDisabled)
         .accessibilityHint(accessibilityHint)
     }

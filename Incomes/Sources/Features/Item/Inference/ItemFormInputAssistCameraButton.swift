@@ -14,10 +14,9 @@ struct ItemFormInputAssistCameraButton: View {
                 }
             } label: {
                 Label("Camera", systemImage: "camera")
-                    .frame(maxWidth: .infinity)
+                    .frame(maxWidth: .infinity, alignment: .leading)
             }
             .labelStyle(.titleAndIcon)
-            .incomesSecondaryControlStyle()
             .disabled(isImportDisabled)
             .accessibilityHint(accessibilityHint)
         }

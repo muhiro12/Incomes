@@ -25,7 +25,7 @@ struct LedgerContentView: View {
             } else if let issue {
                 Text(issue.localizedDescription).font(.footnote).padding()
             } else if !LedgerAccessOperations.canEdit(ledgerIdentifier, isPremium: isSubscribeOn) {
-                Text("Read Only: Premium is required to edit this ledger.").font(.footnote).padding()
+                Text("Read Only: A subscription is required to edit this ledger.").font(.footnote).padding()
             }
         }
         .environment(\.ledgerIdentifier, ledgerIdentifier)

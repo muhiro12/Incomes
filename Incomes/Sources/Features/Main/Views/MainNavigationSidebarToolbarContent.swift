@@ -13,6 +13,9 @@ struct MainNavigationSidebarToolbarContent: ToolbarContent {
             Button("Settings", systemImage: "gear", action: openSettings)
         }
         TodayStatusToolbarItem()
+        if #available(iOS 26.0, *) {
+            ToolbarSpacer(.fixed, placement: .topBarTrailing)
+        }
         CreateItemToolbarContent()
     }
 }

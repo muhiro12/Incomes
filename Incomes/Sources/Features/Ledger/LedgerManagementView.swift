@@ -1,3 +1,4 @@
+import MHDesign
 import MHPlatform
 import SwiftData
 import SwiftUI
@@ -10,6 +11,8 @@ struct LedgerManagementView: View {
     private var context
     @Environment(\.dismiss)
     private var dismiss
+    @Environment(\.mhDesignMetrics)
+    private var designMetrics
     @Query(.tags(.typeIs(.ledger)))
     private var metadata: [Tag]
     @Query(.allLedgerItems())
@@ -23,7 +26,6 @@ struct LedgerManagementView: View {
     var body: some View {
         NavigationStack {
             Form {
-                introductionSection
                 ledgersSection
                 creationSection
             }
@@ -62,18 +64,8 @@ struct LedgerManagementView: View {
         )
     }
 
-    private var introductionSection: some View {
-        Section {
-            Text("Ledgers keep planned income, outgo, and balances separate.")
-            Text("All ledgers use the same iCloud account.")
-            Text("Widgets and Apple Watch show the default ledger.")
-            Text("Update every device to Incomes 6.0 or later before using additional ledgers.")
-            Text("Earlier versions combine all ledgers and can remove an item's ledger assignment when editing.")
-        }
-    }
-
     private var ledgersSection: some View {
-        Section("Ledgers") {
+        Section {
             ForEach(ledgers) { ledger in
                 if ledger.id == .default || !ledger.isAvailable {
                     ledgerLabel(ledger)
@@ -85,21 +77,43 @@ struct LedgerManagementView: View {
                     }
                 }
             }
+        } header: {
+            Text("Ledgers")
+        } footer: {
+            VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
+                Text("Ledgers keep planned income, outgo, and balances separate.")
+                Text("All ledgers use the same iCloud account.")
+                Text("Widgets and Apple Watch show the default ledger.")
+            }
         }
     }
 
-    private var creationSection: some View {
+    @ViewBuilder private var creationSection: some View {
         Section {
-            TextField("Ledger Name", text: $newName)
-                .disabled(isCreating)
-            Button("Create Ledger", systemImage: "plus", action: prepareCreation)
-                .disabled(newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
-                .disabled(!isSubscribeOn)
-                .disabled(isCreating)
+            if isSubscribeOn {
+                TextField("Ledger Name", text: $newName)
+                    .disabled(isCreating)
+                Button("Create Ledger", systemImage: "plus", action: prepareCreation)
+                    .disabled(newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
+                    .disabled(isCreating)
+            } else {
+                NavigationLink {
+                    StoreListView()
+                } label: {
+                    Label("Subscription", systemImage: "creditcard")
+                }
+            }
+        } header: {
+            Text("Create Ledger")
         } footer: {
-            VStack(alignment: .leading) {
-                Text("Premium enables creating and editing additional ledgers.")
-                Text("After Premium ends, existing ledgers remain available to view, switch, and export.")
+            VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
+                Text(
+                    """
+                    A subscription enables creating and editing additional ledgers. \
+                    Existing ledgers remain available to view, switch, and export after it ends.
+                    """
+                )
+                Text("Update every device to Incomes 6.0 or later before using additional ledgers.")
             }
         }
     }

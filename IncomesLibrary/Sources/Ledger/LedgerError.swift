@@ -52,7 +52,10 @@ public enum LedgerError: LocalizedError, Equatable, Sendable {
         case .premiumRequired:
             String(
                 localized:
-                    "Premium is required to change additional ledgers. You can still view, select, and export them.",
+                    """
+                    A subscription is required to change additional ledgers. \
+                    You can still view, select, and export them.
+                    """,
                 bundle: .module
             )
         }

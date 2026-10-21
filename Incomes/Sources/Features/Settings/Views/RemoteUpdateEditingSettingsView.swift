@@ -1,8 +1,11 @@
+import MHDesign
 import MHPlatform
 import SwiftUI
 
 /// Keeps the editing exception behind an explanation and a separate confirmation.
 struct RemoteUpdateEditingSettingsView: View {
+    @Environment(\.mhDesignMetrics)
+    private var designMetrics
     @AppStorage(\.allowsUnverifiedEditing)
     private var allowsUnverifiedEditing: Bool
     @State private var isConfirmingEditing = false
@@ -10,17 +13,20 @@ struct RemoteUpdateEditingSettingsView: View {
     var body: some View {
         Form {
             Section("When this helps") {
-                Text("Keep recording income and expenses when you cannot connect to the internet for a long time.")
-                Text("Incomes normally pauses editing when it cannot confirm whether an update is needed.")
+                VStack(alignment: .leading, spacing: designMetrics.spacing.control) {
+                    Text("Keep recording income and expenses when you cannot connect to the internet for a long time.")
+                    Text("Incomes normally pauses editing when it cannot confirm whether an update is needed.")
+                        .font(.subheadline)
+                        .foregroundStyle(.secondary)
+                }
             }
             Section {
                 Text(
                     """
-                    If an important update is needed but cannot be checked, even one addition, edit, or deletion \
-                    may make your records incorrect or unusable. Updating later may not restore them.
+                    If an important update is missed, even one change may make records incorrect or unusable. \
+                    Updating later may not fix this, and the developer cannot restore the affected records for you.
                     """
                 )
-                Text("The developer does not provide repair or recovery for data problems caused by this setting.")
             } header: {
                 Label("Data risks", systemImage: "exclamationmark.triangle")
             }
@@ -47,8 +53,8 @@ struct RemoteUpdateEditingSettingsView: View {
         } message: {
             Text(
                 """
-                Even one change could cause data problems that an update cannot repair. \
-                The developer does not provide data repair or recovery for this setting.
+                Even one change may cause data problems that cannot be repaired. \
+                Allow editing without checking for updates?
                 """
             )
         }

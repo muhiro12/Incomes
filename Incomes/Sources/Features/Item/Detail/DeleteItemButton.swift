@@ -43,6 +43,7 @@ extension DeleteItemButton: View {
                 Text("Delete")
             } icon: {
                 Image(systemName: "trash")
+                    .foregroundStyle(.red)
             }
         }
         .ledgerWriteAccess(owner: item.ledgerIdentifier)

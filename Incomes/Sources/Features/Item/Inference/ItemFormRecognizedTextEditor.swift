@@ -16,6 +16,5 @@ struct ItemFormRecognizedTextEditor: View {
                     .allowsHitTesting(false)
             }
         }
-        .overlay(ItemFormRecognizedTextEditorBorder())
     }
 }

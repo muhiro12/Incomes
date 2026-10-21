@@ -46,18 +46,18 @@ struct ItemFormInputAssistView: View {
         let isProcessing = currentProcessingState != nil
 
         Form {
+            ItemFormInputAssistImportSection(
+                selectedItem: $selectedItem,
+                isImportDisabled: isProcessing
+            ) {
+                importRoute = .camera
+            }
             ItemFormRecognizedTextSection(
                 recognizedText: $scanner.recognizedText,
                 isRecognizedTextEmpty: scanner.recognizedText.isEmpty
             )
             if let currentProcessingState {
                 ItemFormInputAssistProcessingSection(state: currentProcessingState)
-            }
-            ItemFormInputAssistImportSection(
-                selectedItem: $selectedItem,
-                isImportDisabled: isProcessing
-            ) {
-                importRoute = .camera
             }
         }
         .formStyle(.grouped)
