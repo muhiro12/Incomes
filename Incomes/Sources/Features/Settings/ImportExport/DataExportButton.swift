@@ -23,6 +23,9 @@ struct DataExportButton: View {
     @State private var hasExportError = false
     @State private var exportErrorMessage: String?
     @State private var preparationTask: Task<Void, Never>?
+    @State private var isConfirmingPriorities = false
+    @State private var hasAdjustedPriorities = false
+    @State private var hasUnresolvedOrder = false
 
     let title: LocalizedStringKey
 
@@ -38,7 +41,21 @@ struct DataExportButton: View {
                 }
             }
         }
-        .disabled((items.isEmpty && ledgerTags.isEmpty) || isPreparing || isExporting)
+        .disabled((items.isEmpty && ledgerTags.isEmpty) || isPreparing || isExporting || isConfirmingPriorities)
+        .confirmationDialog(
+            "Review export priorities",
+            isPresented: $isConfirmingPriorities,
+            titleVisibility: .visible
+        ) {
+            Button("Export") {
+                isExporting = true
+            }
+            Button("Cancel", role: .cancel) {
+                document = nil
+            }
+        } message: {
+            priorityMessage
+        }
         .fileExporter(
             isPresented: $isExporting,
             document: document,
@@ -79,6 +96,20 @@ struct DataExportButton: View {
 }
 
 private extension DataExportButton {
+    var priorityMessage: Text {
+        if hasUnresolvedOrder, hasAdjustedPriorities {
+            Text(
+                "Priorities change only in this copy. Some tied items may still change order and balances on restore."
+            )
+        } else if hasUnresolvedOrder {
+            Text(
+                "Some tied items may change order and displayed balances on restore. Current data stays unchanged."
+            )
+        } else {
+            Text("File priorities are adjusted to preserve restore order. Your current data stays unchanged.")
+        }
+    }
+
     var logger: MHLogger {
         IncomesLogging.logger(
             logging: logging,
@@ -92,7 +123,10 @@ private extension DataExportButton {
     }
 
     func prepareExport() {
-        let fileItems = ItemExportOperations.fileItems(items: items)
+        let preparation = ItemExportOperations.prepareFile(items: items)
+        hasAdjustedPriorities = preparation.adjustedPriorityCount > .zero
+        hasUnresolvedOrder = preparation.unresolvedDayCount > .zero
+        let fileItems = preparation.items
         let fileLedgers: [IncomesFileLedger]
         do {
             fileLedgers = try ItemExportOperations.fileLedgers(context: context)
@@ -130,7 +164,11 @@ private extension DataExportButton {
                 hasExportError = true
             case .success(let data):
                 document = .init(data: data)
-                isExporting = true
+                if hasAdjustedPriorities || hasUnresolvedOrder {
+                    isConfirmingPriorities = true
+                } else {
+                    isExporting = true
+                }
             }
         }
     }

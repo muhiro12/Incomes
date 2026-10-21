@@ -115,7 +115,7 @@ struct ItemImportDifferenceTests {
             fileItem(day: "2026-03-09", content: "Coffee", outgo: 500)
         ]
         let storeItems = fetchItems(context).map { item in
-            ItemImportDifference.StoreItem(id: item.persistentModelID, item: .init(item: item))
+            ItemImportDifference.StoreItem(id: item.persistentModelID, item: .init(item: item, balance: item.balance))
         }
         let expected = ItemImportComparer.difference(fileItems: fileItems, storeItems: storeItems)
         let reordered = ItemImportComparer.difference(

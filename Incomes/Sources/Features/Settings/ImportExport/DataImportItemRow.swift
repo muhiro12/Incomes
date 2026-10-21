@@ -4,6 +4,7 @@ import SwiftUI
 struct DataImportItemRow: View {
     let item: IncomesFileItem
     var source: LocalizedStringKey?
+    var showsPriority = false
 
     var body: some View {
         HStack(alignment: .firstTextBaseline) {
@@ -41,6 +42,11 @@ private extension DataImportItemRow {
             Text(item.localDate, format: .dateTime.year().month().day())
                 .font(.caption)
                 .foregroundStyle(.secondary)
+            if showsPriority {
+                Text("Priority: \(item.priority)")
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+            }
             if !item.category.isEmpty {
                 Text(item.category)
                     .font(.caption)

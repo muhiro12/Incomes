@@ -9,6 +9,7 @@ enum DataImportCoordinator {
         let contents: IncomesFileContents
         let difference: ItemImportDifference
         let policy: ItemImportPolicy
+        let balancePolicy: ItemImportBalancePolicy
     }
 
     static func apply(
@@ -35,7 +36,8 @@ enum DataImportCoordinator {
                 contents: request.contents,
                 reviewed: request.difference,
                 policy: request.policy,
-                context: context
+                context: context,
+                balancePolicy: request.balancePolicy
             )
             didSave()
             await performFollowUps(

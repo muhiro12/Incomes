@@ -10,7 +10,8 @@ public extension ItemImportOperations {
         contents: IncomesFileContents,
         reviewed difference: ItemImportDifference,
         policy: ItemImportPolicy,
-        context reviewContext: ModelContext
+        context reviewContext: ModelContext,
+        balancePolicy: ItemImportBalancePolicy = .preserveSavedBalances
     ) throws -> MutationResult<ItemImportResult> {
         guard !reviewContext.hasChanges else {
             throw ItemImportError.storeChangedSinceReview
@@ -22,7 +23,8 @@ public extension ItemImportOperations {
                 contents: contents,
                 reviewed: difference,
                 policy: policy,
-                context: context
+                context: context,
+                balancePolicy: balancePolicy
             )
             let createdItems = context.insertedModelsArray.compactMap { model in
                 model as? Item

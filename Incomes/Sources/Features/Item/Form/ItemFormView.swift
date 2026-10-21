@@ -49,7 +49,7 @@ struct ItemFormView: View {
 
     let mode: Mode
     let onCreate: (() -> Void)?
-    let priorityRange = 0...10
+    let priorityRange = ItemFormInput.priorityRange
     let repeatItemsTip = RepeatItemsTip()
 
     init(

@@ -37,7 +37,7 @@ meaning, so each item records its category name. The file contains:
 
 - Every item's date, content, income, outgo, category, priority, repeat ID, and ledger reference.
 - Additional-ledger names and file references, including empty ledgers.
-- The item's running balance, for readers only.
+- The item's saved running balance, retained by default when restoring that item.
 - Settings that describe the records, currently the currency code.
 
 Ledger references are opaque digests derived from native Tag identities. They
@@ -95,9 +95,26 @@ bytes loaded even if the file size changes after selection.
   Numbers are never written as JSON numbers, which would pass through binary
   floating point.
 - An amount must fit the store's precision contract from ADR 0007.
-- `balance` is optional and informative. Import always recalculates balances
-  from the imported items and never trusts this value.
+- `balance` is optional. Import retains supplied balances as saved baselines by
+  default. A difference from recalculation is not proof of an error: the saved
+  balance may already match the person's real money. When the review detects a
+  difference, the person can explicitly choose recalculation instead.
 - `priority` is an integer and `repeatID` is a UUID string.
+
+### Preserving order during export
+
+Native identity breaks ties when items share a ledger, date, priority, and
+description. Those identities change after restoration. For each affected
+ledger-day, export adjusts priorities in the file copy to preserve the source's
+complete chronological order. It uses the editor's existing `0...10` range;
+ascending descriptions can still share a priority. Other ledger-days stay
+unchanged. The person reviews a disclosure before saving the file, and the live
+store, saved balances, and synced priorities do not change.
+
+If the day's order needs more priority levels than the range allows, the entire
+day retains its original priorities. Export and import warn that the order and
+displayed running balances may change on restoration. This bounded fallback
+does not add ordering fields or expand the editor's priority range.
 
 ## Extension rules
 
@@ -153,7 +170,7 @@ The first file version is `2.0.0`. Files were never written for earlier schemas.
    item before anything is written.
 2. Compare the file with the store and show the difference.
 3. Apply the chosen policy only after explicit confirmation. The operation
-   inserts, deletes, removes unused tags, and recalculates balances. The
+   inserts, deletes, removes unused tags, and applies the chosen balance policy. The
    app calls `ItemImportOperations.applyAndSaveWithOutcome`, which saves once
    in an isolated context before the mutation workflow runs follow-ups.
 
@@ -168,11 +185,14 @@ same classification, independent of record order.
 - The comparison covers the store items inside the file's selection.
 - The match key contains `date`, `content`, `income`, `outgo`, `category`, and
   `priority`. `repeatID` is excluded because every edit assigns a new one;
-  `balance` is excluded because it is derived.
+  `balance` is excluded so a balance difference never creates duplicate records.
+  The review snapshot still includes saved balances to detect stale reviews.
 - Items are matched by counting equal keys on both sides. If the file holds
   three equal items and the store holds two, two match and one remains on the
-  file side. Equal items are interchangeable, so the choice of which ones
-  matched cannot change the result.
+  file side. Complete matches, including repeat ID and saved balance, are
+  retained first so duplicate transactions do not exchange saved baselines.
+  Remaining matches use the regular key; balance or recurrence differences
+  alone still do not create duplicate transactions.
 
 After matching, the remaining items are classified:
 
@@ -200,7 +220,8 @@ the remaining decisions stay small.
   The preview lists the items that will be removed and added. Matched items
   stay in place, so their identifiers, links, and series are kept.
 - **Merge** never removes a record unless the person asks for it:
-  - Matched items are left unchanged.
+  - Matched transaction values are left unchanged; affected running balances
+    follow the balance policy below.
   - Each change group keeps the current items by default. The person can instead
     use the file's items, or keep both.
   - Additions are inserted by default and can be excluded one by one.
@@ -212,6 +233,29 @@ not reconcile those identities, so a partial restore into an existing store
 does not guarantee reconstruction of a whole exported series. Import into an
 empty store preserves the file's complete series membership.
 Balances are validated for the final result before any record changes.
+
+### Saved balances
+
+The default policy retains balances supplied by inserted file items. Missing
+file balances and later affected store items are calculated from the preceding
+retained baseline. A priority-only replacement with unchanged transactions in
+a ledger also retains the existing matched balances in that ledger. This
+preserves the file exactly when restoring all its records into an empty store
+without silently rebuilding earlier history.
+
+The review compares this result with recalculation. If they differ, a toggle
+offers recalculation, off by default. It changes only the affected suffix in
+each ledger, starting at the earliest inserted or removed date and retaining
+the preceding saved balance. It does not repair matching earlier records or
+another ledger. A recalculation that exceeds the exact amount boundary is
+disabled; valid saved baselines can still be restored. Choosing another file or
+refreshing a stale review clears the choice.
+
+The priority preparation described above preserves native tie order where the
+existing range permits it. Unresolved ties still use destination model identity.
+Keeping every exported balance therefore does not guarantee the same final
+displayed balance for that group. This is separate from the explicit
+recalculation choice.
 
 When the file's currency differs from the current setting, the confirmation
 offers to adopt it. The option is on by default for an empty store and off

@@ -120,7 +120,7 @@ private extension LedgerImportIdentityTests {
     }
 
     func makeItem(context: ModelContext, owner: LedgerIdentifier, income: Decimal) throws -> Item {
-        try Item.create(
+        let item = try Item.create(
             context: context,
             values: .init(
                 date: Date(timeIntervalSince1970: plannedTimeInterval),
@@ -133,5 +133,7 @@ private extension LedgerImportIdentityTests {
             ),
             repeatID: UUID()
         )
+        item.modify(balance: income)
+        return item
     }
 }

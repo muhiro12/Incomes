@@ -5032,6 +5032,41 @@
         }
       }
     },
+    "Earlier history and the preceding saved balance are kept." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Earlier history and the preceding saved balance are kept."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se conservan el historial anterior y el saldo guardado precedente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "L’historique antérieur et le solde enregistré précédent sont conservés."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "それより前の履歴と、直前の保存残高は維持します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更早的历史记录和此前保存的余额将保留。"
+          }
+        }
+      }
+    },
     "Earlier versions combine all ledgers and can remove an item's ledger assignment when editing." : {
       "localizations" : {
         "en" : {
@@ -5844,6 +5879,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "文件"
+          }
+        }
+      }
+    },
+    "File priorities are adjusted to preserve restore order. Your current data stays unchanged." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "File priorities are adjusted to preserve restore order. Your current data stays unchanged."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se ajustan las prioridades del archivo para conservar el orden al restaurar. Los datos actuales no cambian."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les priorités du fichier sont ajustées pour conserver l’ordre à la restauration. Les données actuelles restent inchangées."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "復元後も並び順を保つため、ファイル内の優先度を調整します。現在のデータは変更しません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "将调整文件中的优先级，以保留恢复后的顺序。当前数据不会更改。"
           }
         }
       }
@@ -11186,6 +11255,40 @@
         }
       }
     },
+    "Priorities change only in this copy. Some tied items may still change order and balances on restore." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Priorities change only in this copy. Some tied items may still change order and balances on restore."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Las prioridades solo cambian en esta copia. Al restaurar, algunos registros empatados aún podrían cambiar de orden y saldo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les priorités changent uniquement dans cette copie. À la restauration, l’ordre et les soldes de certaines opérations à égalité peuvent encore changer."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ファイル内だけで優先度を調整します。一部の同順位の明細は、復元後の並び順や表示残高が変わる可能性があります。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅调整此文件中的优先级。部分同优先级记录在恢复后仍可能改变顺序和显示余额。"
+          }
+        }
+      }
+    },
     "Priority" : {
       "localizations" : {
         "en" : {
@@ -11216,6 +11319,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "优先级"
+          }
+        }
+      }
+    },
+    "Priority: %lld" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Priority: %lld"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prioridad: %lld"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Priorité : %lld"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "優先度：%lld"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "优先级：%lld"
           }
         }
       }
@@ -11726,6 +11863,111 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "重新计算"
+          }
+        }
+      }
+    },
+    "Recalculate imported balances" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recalculate imported balances"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recalcular los saldos importados"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recalculer les soldes importés"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取込後の残高を再計算"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新计算导入后的余额"
+          }
+        }
+      }
+    },
+    "Recalculation exceeds the supported amount range. Saved balances can still be restored." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recalculation exceeds the supported amount range. Saved balances can still be restored."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El cálculo supera el rango de importes admitido. Aún se pueden restaurar los saldos guardados."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le calcul dépasse la plage de montants prise en charge. Les soldes enregistrés peuvent toujours être restaurés."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再計算結果が扱える金額の範囲を超えています。保存済みの残高は復元できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新计算的结果超出了支持的金额范围。仍可恢复已保存的余额。"
+          }
+        }
+      }
+    },
+    "Recalculation starts at the earliest imported change in each ledger." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Recalculation starts at the earliest imported change in each ledger."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El cálculo comienza en el primer cambio importado de cada libro."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le calcul commence à la première modification importée de chaque livre."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再計算は、各帳簿の最も早い取込変更日から行います。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重新计算从各帐簿最早导入更改的日期开始。"
           }
         }
       }
@@ -12614,6 +12856,40 @@
         }
       }
     },
+    "Review export priorities" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Review export priorities"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revisar prioridades de exportación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifier les priorités d’exportation"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "書き出す優先度の確認"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检查导出优先级"
+          }
+        }
+      }
+    },
     "Review orphan tags" : {
       "localizations" : {
         "en" : {
@@ -12984,6 +13260,76 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已保存的收支"
+          }
+        }
+      }
+    },
+    "Saved balances are kept unless you choose recalculation." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved balances are kept unless you choose recalculation."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los saldos guardados se conservan salvo que elijas recalcularlos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les soldes enregistrés sont conservés sauf si vous choisissez de les recalculer."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "再計算を選ばない限り、保存済みの残高を維持します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "除非您选择重新计算，否则将保留已保存的余额。"
+          }
+        }
+      }
+    },
+    "Saved balances differ from recalculation using the recorded income and expenses." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saved balances differ from recalculation using the recorded income and expenses."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los saldos guardados difieren del cálculo basado en los ingresos y gastos registrados."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les soldes enregistrés diffèrent du calcul basé sur les revenus et dépenses saisis."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "保存済みの残高と、記録された入出金からの再計算結果に差があります。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已保存的余额与根据记录的收入和支出重新计算的结果不同。"
           }
         }
       }
@@ -14174,6 +14520,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "已跳过重复: %lld"
+          }
+        }
+      }
+    },
+    "Some tied items may change order and displayed balances on restore. Current data stays unchanged." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Some tied items may change order and displayed balances on restore. Current data stays unchanged."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al restaurar, algunos registros empatados podrían cambiar de orden y saldo mostrado. Los datos actuales no cambian."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À la restauration, l’ordre et les soldes affichés de certaines opérations à égalité peuvent changer. Les données actuelles restent inchangées."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一部の同順位の明細は、復元後の並び順や表示残高が変わる可能性があります。現在のデータは変更しません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "部分同优先级记录在恢复后可能改变顺序和显示余额。当前数据不会更改。"
+          }
+        }
+      }
+    },
+    "Some tied items may change order and displayed balances when restored." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Some tied items may change order and displayed balances when restored."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Al restaurar, algunos registros empatados podrían cambiar de orden y saldo mostrado."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "À la restauration, l’ordre et les soldes affichés de certaines opérations à égalité peuvent changer."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "一部の同順位の明細は、復元後の並び順や表示残高が変わる可能性があります。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "部分同优先级记录在恢复后可能改变顺序和显示余额。"
           }
         }
       }

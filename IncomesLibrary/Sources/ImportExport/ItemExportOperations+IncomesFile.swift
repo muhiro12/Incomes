@@ -4,7 +4,12 @@ import SwiftData
 public extension ItemExportOperations {
     /// Captures every item's file values without changing models, balances, or tags.
     static func fileItems(items: [Item]) -> [IncomesFileItem] {
-        IncomesFileItem.sortedByValue(items.map { item in
+        prepareFile(items: items).items
+    }
+
+    /// Retains native tie order through file-only priorities when the standard range permits it.
+    static func prepareFile(items: [Item]) -> ItemExportPreparation {
+        ItemExportPriorityPlanner.prepare(items.sorted(by: >).map { item in
             IncomesFileItem(item: item, balance: item.balance)
                 .assigning(to: LedgerTagStorage.fileReference(for: item.ledgerIdentifier))
         })

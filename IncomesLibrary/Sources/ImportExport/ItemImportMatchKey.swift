@@ -2,8 +2,8 @@ import Foundation
 
 /// Values that decide whether a file item and a store item are the same record.
 ///
-/// The repeat ID is excluded because every edit assigns a new one, and the
-/// balance is excluded because it is derived.
+/// The repeat ID is excluded because every edit assigns a new one.
+/// Balance differences must not turn matching records into duplicate transactions.
 struct ItemImportMatchKey: Hashable {
     let ledgerIdentifier: LedgerIdentifier
     let date: Date

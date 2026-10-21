@@ -31,7 +31,7 @@ public struct IncomesFileItem: Equatable, Sendable {
     public let priority: Int
     /// Repeat-series identifier, preserved on import.
     public let repeatID: UUID
-    /// Running balance written for readers; import always recalculates it.
+    /// Saved running balance retained on import unless the person chooses recalculation.
     public let balance: Decimal?
 
     public init(
@@ -138,6 +138,20 @@ extension IncomesFileItem {
             repeatID: repeatID,
             balance: balance,
             ledgerIdentifier: identifier
+        )
+    }
+
+    func replacing(priority: Int) -> Self {
+        .init(
+            date: date,
+            content: content,
+            income: income,
+            outgo: outgo,
+            category: category,
+            priority: priority,
+            repeatID: repeatID,
+            balance: balance,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 }

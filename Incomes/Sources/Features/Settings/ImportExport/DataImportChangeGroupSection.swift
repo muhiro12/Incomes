@@ -16,10 +16,10 @@ struct DataImportChangeGroupSection: View {
             }
             .pickerStyle(.segmented)
             ForEach(Array(group.storeItems.enumerated()), id: \.offset) { _, storeItem in
-                DataImportItemRow(item: storeItem.item, source: "Current")
+                DataImportItemRow(item: storeItem.item, source: "Current", showsPriority: showsPriority)
             }
             ForEach(Array(group.fileItems.enumerated()), id: \.offset) { _, item in
-                DataImportItemRow(item: item, source: "In file")
+                DataImportItemRow(item: item, source: "In file", showsPriority: showsPriority)
             }
         } header: {
             Text(verbatim: headerText)
@@ -29,6 +29,10 @@ struct DataImportChangeGroupSection: View {
 }
 
 private extension DataImportChangeGroupSection {
+    var showsPriority: Bool {
+        Set((group.fileItems + group.storeItems.map(\.item)).map(\.priority)).count > 1
+    }
+
     var headerText: String {
         let content = group.id.content.isEmpty ? String(localized: "No description") : group.id.content
         guard let localDate = group.fileItems.first?.localDate else {

@@ -177,6 +177,7 @@ private extension DataImportView {
                     adoptsFileCurrency: $model.adoptsFileCurrency
                 )
             }
+            balanceSection(model: model)
             confirmSection(difference: difference, model: model)
         }
     }
@@ -195,6 +196,7 @@ private extension DataImportView {
             ) {
                 confirm()
             }
+            .disabled(!model.canApplyBalances)
         }
     }
 
@@ -202,6 +204,26 @@ private extension DataImportView {
         let identifiers = ItemImportOperations.mutatedLedgerIdentifiers(difference: difference, policy: model.policy)
         return identifiers.allSatisfy { identifier in
             LedgerAccessOperations.canEdit(identifier, isPremium: isSubscribeOn)
+        }
+    }
+
+    @ViewBuilder
+    func balanceSection(model: DataImportModel) -> some View {
+        @Bindable var model = model
+        switch model.balanceReview {
+        case .success(let review) where review.hasDifferences || review.hasAmbiguousOrder:
+            DataImportBalanceSection(
+                hasDifferences: review.hasDifferences,
+                hasAmbiguousOrder: review.hasAmbiguousOrder,
+                canRecalculate: review.canRecalculate,
+                recalculatesBalances: $model.recalculatesBalances
+            )
+        case .failure(let error):
+            Section("Balances") {
+                Text(error.localizedDescription)
+            }
+        default:
+            EmptyView()
         }
     }
 

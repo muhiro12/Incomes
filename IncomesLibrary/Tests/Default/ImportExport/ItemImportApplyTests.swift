@@ -5,7 +5,7 @@ import Testing
 
 struct ItemImportApplyTests {
     @Test
-    func empty_store_receives_every_item_with_recalculated_balances() throws {
+    func empty_store_receives_every_item_with_its_saved_balances() throws {
         let context = testContext
         let contents = makeContents([
             fileItem(day: "2026-03-08", content: "Salary", income: 300_000, balance: 1),
@@ -23,7 +23,7 @@ struct ItemImportApplyTests {
         #expect(result.outcome.followUpHints == ItemMutationSupport.followUpHints)
         let items = fetchItems(context).sorted(by: >)
         #expect(items.map(\.content) == ["Salary", "Rent"])
-        #expect(items.map(\.balance) == [300_000, 220_000])
+        #expect(items.map(\.balance) == [1, 2])
         #expect(items.last?.category?.name == "Housing")
         #expect(try ItemImportOperations.difference(contents: contents, context: context).isIdentical)
     }

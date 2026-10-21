@@ -18,6 +18,9 @@ public struct ItemFormInput: Equatable {
         case invalidPriority
     }
 
+    /// Standard editor priorities; this does not restrict older stored integer values.
+    public static let priorityRange = 0...10
+
     /// Ledger captured with the draft; changing the current selection cannot redirect it.
     public let ledgerIdentifier: LedgerIdentifier
     /// Selected local date for the item.

@@ -16,7 +16,7 @@ public extension ItemImportOperations {
             storeItems: items.map { item in
                 .init(
                     id: item.persistentModelID,
-                    item: .init(item: item)
+                    item: .init(item: item, balance: item.balance)
                 )
             }
         )

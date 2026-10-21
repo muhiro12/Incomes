@@ -5,6 +5,18 @@ enum ItemImportComparer {
     typealias StoreItem = ItemImportDifference.StoreItem
     typealias ChangeGroup = ItemImportDifference.ChangeGroup
 
+    private struct ExactMatchKey: Hashable {
+        let values: ItemImportMatchKey
+        let repeatID: UUID
+        let balance: Decimal?
+
+        init(_ item: IncomesFileItem) {
+            values = .init(item)
+            repeatID = item.repeatID
+            balance = item.balance
+        }
+    }
+
     static func difference(
         fileItems: [IncomesFileItem],
         storeItems: [StoreItem]
@@ -12,19 +24,25 @@ enum ItemImportComparer {
         let orderedFileItems = IncomesFileItem.sortedByValue(fileItems)
         let orderedStoreItems = sortedStoreItems(storeItems)
 
-        // Equal items are interchangeable, so matching the first ones in a fixed order is exact.
+        // Prefer complete matches so duplicate transactions keep the correct saved balance.
+        let exactCounts = matchedCountsByKey(
+            fileKeys: orderedFileItems.map(ExactMatchKey.init),
+            storeKeys: orderedStoreItems.map { ExactMatchKey($0.item) }
+        )
+        let remainingFileItems = unmatched(orderedFileItems, matchedCounts: exactCounts, key: ExactMatchKey.init)
+        let remainingStoreItems = unmatched(orderedStoreItems, matchedCounts: exactCounts) { ExactMatchKey($0.item) }
         let matchedCounts = matchedCountsByKey(
-            fileItems: orderedFileItems,
-            storeItems: orderedStoreItems
+            fileKeys: remainingFileItems.map(ItemImportMatchKey.init),
+            storeKeys: remainingStoreItems.map { ItemImportMatchKey($0.item) }
         )
         let unmatchedFileItems = unmatched(
-            orderedFileItems,
+            remainingFileItems,
             matchedCounts: matchedCounts
         ) { item in
             ItemImportMatchKey(item)
         }
         let unmatchedStoreItems = unmatched(
-            orderedStoreItems,
+            remainingStoreItems,
             matchedCounts: matchedCounts
         ) { storeItem in
             ItemImportMatchKey(storeItem.item)
@@ -39,7 +57,7 @@ enum ItemImportComparer {
         let changeGroupIDs = Set(fileGroups.keys).intersection(storeGroups.keys)
 
         return .init(
-            matchedCount: matchedCounts.values.reduce(.zero, +),
+            matchedCount: exactCounts.values.reduce(.zero, +) + matchedCounts.values.reduce(.zero, +),
             changeGroups: sortedGroupIDs(changeGroupIDs).map { id in
                 .init(
                     id: id,
@@ -69,14 +87,9 @@ private extension ItemImportComparer {
         }
     }
 
-    static func matchedCountsByKey(
-        fileItems: [IncomesFileItem],
-        storeItems: [StoreItem]
-    ) -> [ItemImportMatchKey: Int] {
-        let fileCounts = counts(of: fileItems.map(ItemImportMatchKey.init))
-        let storeCounts = counts(of: storeItems.map { storeItem in
-            ItemImportMatchKey(storeItem.item)
-        })
+    static func matchedCountsByKey<Key: Hashable>(fileKeys: [Key], storeKeys: [Key]) -> [Key: Int] {
+        let fileCounts = counts(of: fileKeys)
+        let storeCounts = counts(of: storeKeys)
         return fileCounts.reduce(into: [:]) { result, entry in
             let matchedCount = min(entry.value, storeCounts[entry.key] ?? .zero)
             if matchedCount > .zero {
@@ -85,16 +98,16 @@ private extension ItemImportComparer {
         }
     }
 
-    static func counts(of keys: [ItemImportMatchKey]) -> [ItemImportMatchKey: Int] {
+    static func counts<Key: Hashable>(of keys: [Key]) -> [Key: Int] {
         keys.reduce(into: [:]) { result, key in
             result[key, default: .zero] += 1
         }
     }
 
-    static func unmatched<Element>(
+    static func unmatched<Element, Key: Hashable>(
         _ elements: [Element],
-        matchedCounts: [ItemImportMatchKey: Int],
-        key: (Element) -> ItemImportMatchKey
+        matchedCounts: [Key: Int],
+        key: (Element) -> Key
     ) -> [Element] {
         var remainingMatches = matchedCounts
         return elements.filter { element in

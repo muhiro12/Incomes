@@ -8,6 +8,9 @@ struct ItemImportRoundTripTests {
     func export_then_import_into_an_empty_store_reproduces_the_file() throws {
         let source = testContext
         try seed(source)
+        let first = try #require(fetchItems(source).max())
+        first.modify(balance: 17)
+        try source.save()
         let exportedAt = isoDate("2026-09-29T03:04:05Z")
         let exported = try ItemExportOperations.incomesFileData(
             fileItems: ItemExportOperations.fileItems(items: fetchItems(source)),

@@ -24,6 +24,7 @@ final class DataImportModel {
     var policyChoice = PolicyChoice.merge
     var decisions = ItemImportMergeDecisions()
     var adoptsFileCurrency = false
+    var recalculatesBalances = false
 }
 
 extension DataImportModel {
@@ -51,6 +52,25 @@ extension DataImportModel {
         difference.map { difference in
             ItemImportOperations.result(difference: difference, policy: policy)
         }
+    }
+
+    var balanceReview: Result<ItemImportBalanceReview, any Error>? {
+        difference.map { difference in
+            Result {
+                try ItemImportOperations.balanceReview(difference: difference, policy: policy)
+            }
+        }
+    }
+
+    var balancePolicy: ItemImportBalancePolicy {
+        recalculatesBalances ? .recalculate : .preserveSavedBalances
+    }
+
+    var canApplyBalances: Bool {
+        guard case .success(let review) = balanceReview else {
+            return false
+        }
+        return !recalculatesBalances || review.canRecalculate
     }
 
     /// Currency recorded in the file when it differs from the current setting.
@@ -125,7 +145,8 @@ extension DataImportModel {
                 .init(
                     contents: contents,
                     difference: difference,
-                    policy: policy
+                    policy: policy,
+                    balancePolicy: balancePolicy
                 ),
                 context: context,
                 didSave: didSave,
@@ -174,6 +195,7 @@ extension DataImportModel {
         policyChoice = .merge
         decisions = .init()
         adoptsFileCurrency = false
+        recalculatesBalances = false
     }
 
     /// A currency change needs a fresh choice before import can replace that setting.
@@ -181,6 +203,7 @@ extension DataImportModel {
         guard currencyCode == currentCurrencyCode else {
             currentCurrencyCode = currencyCode
             adoptsFileCurrency = false
+            recalculatesBalances = false
             errorMessage = Self.message(for: ItemImportError.storeChangedSinceReview)
             return false
         }
@@ -225,6 +248,7 @@ private extension DataImportModel {
             difference = try ItemImportOperations.difference(contents: contents, context: context)
             decisions = .init()
             adoptsFileCurrency = false
+            recalculatesBalances = false
         } catch {
             errorMessage = Self.message(for: error)
         }

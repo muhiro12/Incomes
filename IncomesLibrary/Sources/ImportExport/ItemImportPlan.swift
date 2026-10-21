@@ -6,6 +6,7 @@ struct ItemImportPlan {
     let removedItemIDs: Set<PersistentIdentifier>
     let result: ItemImportResult
     let ledgerChanges: [ItemImportDifference.LedgerChange]
+    let preservedBalanceItemIDs: Set<PersistentIdentifier>
 }
 
 extension ItemImportPlan {
@@ -53,7 +54,34 @@ extension ItemImportPlan {
                 unchangedCount: difference.matchedCount,
                 changedLedgerCount: ledgerChanges.count
             ),
-            ledgerChanges: ledgerChanges
+            ledgerChanges: ledgerChanges,
+            preservedBalanceItemIDs: Self.preservedBalanceItemIDs(
+                difference: difference,
+                insertedItems: insertedItems,
+                removedItems: removedItems
+            )
         )
+    }
+}
+
+private extension ItemImportPlan {
+    /// Priority-only replacement changes no cash flows, so retained balances are still valid baselines.
+    static func preservedBalanceItemIDs(
+        difference: ItemImportDifference,
+        insertedItems: [IncomesFileItem],
+        removedItems: [ItemImportDifference.StoreItem]
+    ) -> Set<PersistentIdentifier> {
+        let inserted = Dictionary(grouping: insertedItems, by: \.ledgerIdentifier)
+        let removed = Dictionary(grouping: removedItems.map(\.item), by: \.ledgerIdentifier)
+        let owners = Set(inserted.keys).union(removed.keys).filter { identifier in
+            countsIgnoringPriority(inserted[identifier] ?? []) == countsIgnoringPriority(removed[identifier] ?? [])
+        }
+        return Set(difference.reviewedStoreItems.filter { owners.contains($0.item.ledgerIdentifier) }.map(\.id))
+    }
+
+    static func countsIgnoringPriority(_ items: [IncomesFileItem]) -> [ItemImportMatchKey: Int] {
+        items.reduce(into: [:]) { counts, item in
+            counts[ItemImportMatchKey(item.replacing(priority: .zero)), default: .zero] += 1
+        }
     }
 }
