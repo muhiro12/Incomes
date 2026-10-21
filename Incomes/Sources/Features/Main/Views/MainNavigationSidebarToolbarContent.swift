@@ -6,11 +6,13 @@ struct MainNavigationSidebarToolbarContent: ToolbarContent {
     let openSettings: () -> Void
 
     var body: some ToolbarContent {
-        ToolbarItemGroup {
-            if isCompact {
+        ToolbarItem(placement: .topBarLeading) {
+            Button("Settings", systemImage: "gear", action: openSettings)
+        }
+        if isCompact {
+            ToolbarItem(placement: .topBarTrailing) {
                 Button("Search", systemImage: "magnifyingglass", action: openSearch)
             }
-            Button("Settings", systemImage: "gear", action: openSettings)
         }
         TodayStatusToolbarItem()
         if #available(iOS 26.0, *) {

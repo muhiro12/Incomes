@@ -5,4 +5,5 @@ extension EnvironmentValues {
     @Entry var ledgerIsAvailable = true
     @Entry var ledgerIdentifier = LedgerIdentifier.default
     @Entry var ledgerBalances: [PersistentIdentifier: Decimal] = [:]
+    @Entry var selectedLedgerIdentifier: Binding<String>?
 }

@@ -9,8 +9,9 @@ struct SettingsListView {
     private var notificationService
     @Environment(IncomesTipController.self)
     private var tipController
-    @Environment(MHLoggingBootstrap.self)
-    var logging
+
+    @Environment(\.selectedLedgerIdentifier)
+    private var selectedLedgerIdentifier
 
     @Environment(\.scenePhase)
     private var scenePhase
@@ -30,7 +31,6 @@ struct SettingsListView {
 
     @State private var model: SettingsScreenModel = .init()
     @State private var errorMessage: String?
-    @State private var isMutating = false
 
     private let navigateToRoute: (IncomesRoute) -> Void
 
@@ -48,23 +48,18 @@ extension SettingsListView: View {
     var body: some View {
         @Bindable var model = model
 
-        // Sections follow the user's tasks: ledger, display, reminders, item
-        // data, conditional maintenance, about, and the Debug and Shortcuts links.
         List {
             SettingsSubscriptionSection(
                 isSubscribeOn: isSubscribeOn,
                 isICloudOn: $isICloudOn,
                 openSubscription: openSubscription
             )
-            SettingsCurrencySection(currencyCode: $currencyCode)
-            notificationSection(
-                model: model
+            preferencesSection(model: model)
+            SettingsDataNavigationSection(
+                selectedLedgerIdentifier: selectedLedgerIdentifier,
+                duplicateYearItems: duplicateYearItems
             )
-            dataManagementSection(
-                model: model
-            )
-            tagMaintenanceSection(model: model)
-            debugDataSection(model: model)
+            advancedSection(model: model)
             aboutSection
             if isDebugOn {
                 Section {
@@ -99,84 +94,6 @@ extension SettingsListView: View {
             ToolbarItem {
                 CloseButton()
             }
-        }
-        .confirmationDialog(
-            Text("Delete all"),
-            isPresented: destructiveActionBinding(
-                for: .deleteAll,
-                model: model
-            )
-        ) {
-            Button(role: .destructive) {
-                Task {
-                    dataMaintenanceLogger.notice("delete_all.requested")
-                    do {
-                        try await IncomesMutationWorkflow.checkUpdateRequirement()
-                        let owners = Set(try LedgerOperations.ledgers(context: context).map(\.id))
-                        try LedgerMutationAccess.requireEditing(owners)
-                        try await DataMaintenanceOperations.resetAllData(context: context)
-                        Haptic.success.impact()
-                        model.loadStatus(context: context)
-                        model.dismissDestructiveAction()
-                        dataMaintenanceLogger.notice("delete_all.completed")
-                    } catch {
-                        dataMaintenanceLogger.error(
-                            "delete_all.failed",
-                            metadata: IncomesLogging.errorMetadata(error)
-                        )
-                        errorMessage = ErrorMessageOperations.message(from: error)
-                    }
-                }
-            } label: {
-                Text("Delete")
-            }
-            Button(role: .cancel) {
-                model.dismissDestructiveAction()
-            } label: {
-                Text("Cancel")
-            }
-        } message: {
-            Text("Are you sure you want to delete all items?")
-        }
-        .confirmationDialog(
-            Text("Delete debug sample data"),
-            isPresented: destructiveActionBinding(
-                for: .deleteDebugData,
-                model: model
-            )
-        ) {
-            Button(role: .destructive) {
-                IncomesMutationWorkflow.performDataMutation(errorMessage: $errorMessage, isProcessing: $isMutating) {
-                    dataMaintenanceLogger.notice(
-                        "debug_data.delete_confirmed",
-                        metadata: IncomesLogging.metadata(
-                            ("has_debug_data", IncomesLogging.bool(model.hasDebugData))
-                        )
-                    )
-                    do {
-                        try DataMaintenanceOperations.deleteDebugDataAndSave(context: context)
-                    } catch {
-                        dataMaintenanceLogger.error(
-                            "debug_data.delete_failed",
-                            metadata: IncomesLogging.errorMetadata(error)
-                        )
-                        throw error
-                    }
-                    Haptic.success.impact()
-                    model.loadStatus(context: context)
-                    model.dismissDestructiveAction()
-                    dataMaintenanceLogger.notice("debug_data.delete_completed")
-                }
-            } label: {
-                Text("Delete")
-            }
-            Button(role: .cancel) {
-                model.dismissDestructiveAction()
-            } label: {
-                Text("Cancel")
-            }
-        } message: {
-            Text("This will remove debug sample items and tags. Continue?")
         }
         .task {
             model.apply(notificationSettings: notificationSettings)
@@ -259,40 +176,61 @@ private extension SettingsListView {
         )
     }
 
-    func notificationSection(
-        model: SettingsScreenModel
-    ) -> some View {
-        Section {
-            NavigationLink {
-                Form {
-                    SettingsNotificationSection(
-                        notificationSettings: notificationSettingsBinding,
-                        isNotificationEnabled: model.isNotificationEnabled,
-                        authorizationPresentation: model.authorizationPresentation(
-                            for: notificationService.authorizationState
-                        ),
-                        sendTestNotification: {
-                            notificationService.sendTestNotification()
-                        },
-                        openSystemSettings: openSystemSettings
-                    )
-                }
-                .navigationTitle("Push notification settings")
-                .navigationBarTitleDisplayMode(.inline)
-            } label: {
-                Label("Push notification settings", systemImage: "bell.badge")
+    func notificationLink(model: SettingsScreenModel) -> some View {
+        NavigationLink {
+            Form {
+                SettingsNotificationSection(
+                    notificationSettings: notificationSettingsBinding,
+                    isNotificationEnabled: model.isNotificationEnabled,
+                    authorizationPresentation: model.authorizationPresentation(
+                        for: notificationService.authorizationState
+                    ),
+                    sendTestNotification: {
+                        notificationService.sendTestNotification()
+                    },
+                    openSystemSettings: openSystemSettings
+                )
             }
+            .navigationTitle("Push notification settings")
+            .navigationBarTitleDisplayMode(.inline)
+        } label: {
+            Label("Push notification settings", systemImage: "bell.badge")
         }
     }
 
-    func dataManagementSection(
-        model: SettingsScreenModel
-    ) -> some View {
-        SettingsDataManagementSection(
-            canDeleteAll: canDeleteAllLedgers,
-            duplicateYearItems: duplicateYearItems,
-            deleteAllItems: deleteAllItemsAction(model: model)
-        )
+    func preferencesSection(model: SettingsScreenModel) -> some View {
+        Section("Preferences") {
+            Picker("Currency Code", selection: $currencyCode) {
+                ForEach(CurrencyCode.allCases, id: \.rawValue) { code in
+                    Text(code.displayName)
+                }
+            }
+            notificationLink(model: model)
+        }
+    }
+
+    func advancedSection(model: SettingsScreenModel) -> some View {
+        Section("Advanced") {
+            NavigationLink {
+                RemoteUpdateEditingSettingsView()
+            } label: {
+                Label("Offline Editing", systemImage: "wifi.slash")
+            }
+            NavigationLink {
+                SettingsMaintenanceList(
+                    model: model,
+                    canDeleteAll: canDeleteAllLedgers,
+                    openDuplicateTags: {
+                        navigateToRoute(.duplicateTags)
+                    },
+                    openOrphanTags: {
+                        navigateToRoute(.orphanTags)
+                    }
+                )
+            } label: {
+                Label("Maintenance", systemImage: "wrench.and.screwdriver")
+            }
+        }
     }
 
     func resetTips() {
@@ -300,38 +238,6 @@ private extension SettingsListView {
             try tipController.resetTips(hasAnyItems: !yearTags.isEmpty)
         } catch {
             assertionFailure(error.localizedDescription)
-        }
-    }
-
-    func tagMaintenanceSection(
-        model: SettingsScreenModel
-    ) -> some View {
-        SettingsTagMaintenanceSection(
-            hasDuplicateTags: model.hasDuplicateTags,
-            hasOrphanTags: model.hasOrphanTags,
-            openDuplicateTags: {
-                navigateToRoute(.duplicateTags)
-            },
-            openOrphanTags: {
-                navigateToRoute(.orphanTags)
-            }
-        )
-    }
-
-    func debugDataSection(
-        model: SettingsScreenModel
-    ) -> some View {
-        SettingsDebugDataSection(
-            hasDebugData: model.hasDebugData,
-            deleteDebugData: debugDataDeleteAction(model: model)
-        )
-    }
-
-    func debugDataDeleteAction(
-        model: SettingsScreenModel
-    ) -> () -> Void {
-        {
-            promptDeleteDebugData(model: model)
         }
     }
 
@@ -343,45 +249,6 @@ private extension SettingsListView {
     func openSubscription() {
         tipController.donateDidOpenSubscription()
         navigateToRoute(.settingsSubscription)
-    }
-
-    func deleteAllItemsAction(
-        model: SettingsScreenModel
-    ) -> () -> Void {
-        {
-            Haptic.warning.impact()
-            dataMaintenanceLogger.notice("delete_all.prompt_presented")
-            model.presentDestructiveAction(.deleteAll)
-        }
-    }
-
-    func promptDeleteDebugData(
-        model: SettingsScreenModel
-    ) {
-        Haptic.warning.impact()
-        dataMaintenanceLogger.notice(
-            "debug_data.delete_requested",
-            metadata: IncomesLogging.metadata(
-                ("has_debug_data", IncomesLogging.bool(model.hasDebugData))
-            )
-        )
-        model.presentDestructiveAction(.deleteDebugData)
-    }
-
-    func destructiveActionBinding(
-        for action: SettingsScreenModel.DestructiveAction,
-        model: SettingsScreenModel
-    ) -> Binding<Bool> {
-        .init(
-            get: {
-                model.isPresenting(action)
-            },
-            set: { isPresented in
-                if !isPresented {
-                    model.dismissDestructiveAction()
-                }
-            }
-        )
     }
 
     func openSystemSettings() {

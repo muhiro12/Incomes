@@ -83,8 +83,18 @@ struct LedgerWorkspaceView: View {
                 }
             }
             .id(identifier)
+            .environment(\.selectedLedgerIdentifier, $selectedIdentifier)
             .sheet(isPresented: $isManagementPresented) {
-                LedgerManagementView(selectedIdentifier: $selectedIdentifier)
+                NavigationStack {
+                    LedgerManagementView(selectedIdentifier: $selectedIdentifier)
+                        .toolbar {
+                            ToolbarItem(placement: .confirmationAction) {
+                                Button("Done") {
+                                    isManagementPresented = false
+                                }
+                            }
+                        }
+                }
             }
 
         case .failure(let error):

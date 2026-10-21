@@ -32,6 +32,7 @@ struct NarrowListItemStandardLayout: View {
                     .foregroundStyle(.secondary)
             }
             Spacer()
+            Divider()
             Text((ledgerBalances[item.persistentModelID]?.asCurrency ?? ItemSummaryOperations.unavailableAmountText))
                 .lineLimit(1)
                 .fixedSize(horizontal: true, vertical: false)

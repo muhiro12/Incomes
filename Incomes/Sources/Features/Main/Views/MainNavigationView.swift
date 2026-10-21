@@ -93,7 +93,6 @@ struct MainNavigationView: View {
             }
             .navigationTitle(ledgerMenu?.selectedName ?? "Incomes")
             .toolbar {
-                ToolbarItem(placement: .topBarLeading) { ledgerMenu }
                 MainNavigationSidebarToolbarContent(
                     isCompact: horizontalSizeClass == .compact,
                     openSearch: {

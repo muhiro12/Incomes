@@ -11,6 +11,7 @@ struct SettingsNavigationView: View {
     @Binding private var incomingDestination: SettingsNavigationDestination?
 
     @State private var path: [SettingsNavigationDestination] = []
+    @State private var isSubscriptionPresented = false
 
     private let navigateToRoute: (IncomesRoute) -> Void
 
@@ -28,6 +29,9 @@ struct SettingsNavigationView: View {
         }
         .onChange(of: incomingDestination) {
             applyIncomingDestinationIfNeeded()
+        }
+        .sheet(isPresented: $isSubscriptionPresented) {
+            SubscriptionSheet()
         }
     }
 
@@ -95,7 +99,11 @@ private extension SettingsNavigationView {
         guard let incomingDestination else {
             return
         }
-        path = navigationPath(for: incomingDestination)
+        if incomingDestination == .subscription {
+            isSubscriptionPresented = true
+        } else {
+            path = navigationPath(for: incomingDestination)
+        }
         self.incomingDestination = nil
     }
 

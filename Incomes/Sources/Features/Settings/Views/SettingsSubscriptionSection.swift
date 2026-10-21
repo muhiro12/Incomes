@@ -9,25 +9,23 @@ struct SettingsSubscriptionSection: View {
     private let subscriptionTip = SubscriptionTip()
 
     var body: some View {
-        if isSubscribeOn {
-            Section {
+        Section {
+            Button(action: openSubscription) {
+                Label("Subscription", systemImage: "creditcard")
+            }
+            .buttonStyle(.plain)
+            .accessibilityHint(Text("Opens subscription settings."))
+            .popoverTip(isSubscribeOn ? nil : subscriptionTip, arrowEdge: .top)
+            if isSubscribeOn {
                 Toggle(isOn: $isICloudOn) {
                     Text("iCloud Sync")
                 }
-            } footer: {
+            }
+        } footer: {
+            if isSubscribeOn {
                 Text(
                     "Restart Incomes to apply changes. The current iCloud sync setting remains active until then."
                 )
-            }
-        } else {
-            Section {
-                SettingsNavigationRowButton(
-                    title: "Subscription",
-                    systemImage: "creditcard",
-                    accessibilityHint: "Opens subscription settings.",
-                    action: openSubscription
-                )
-                .popoverTip(subscriptionTip, arrowEdge: .top)
             }
         }
     }

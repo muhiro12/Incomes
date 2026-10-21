@@ -432,7 +432,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "メイン"
+            "value" : "基本の帳簿"
           }
         },
         "zh-Hans" : {
@@ -1018,6 +1018,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "系统"
+          }
+        }
+      }
+    },
+    "The Monthly Plan is required to change additional ledgers. You can still view, select, and export them." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Monthly Plan is required to change additional ledgers. You can still view, select, and export them."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se necesita el Monthly Plan para modificar libros adicionales. Puedes seguir consultándolos, seleccionándolos y exportándolos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le Monthly Plan est nécessaire pour modifier les registres supplémentaires. Vous pouvez toujours les consulter, les sélectionner et les exporter."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "追加した帳簿の変更には月間プランが必要です。閲覧・切り替え・書き出しは引き続き利用できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "修改其他账簿需要 Monthly Plan。你仍可查看、选择和导出这些账簿。"
           }
         }
       }

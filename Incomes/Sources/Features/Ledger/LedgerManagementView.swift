@@ -9,8 +9,6 @@ struct LedgerManagementView: View {
 
     @Environment(\.modelContext)
     private var context
-    @Environment(\.dismiss)
-    private var dismiss
     @Environment(\.mhDesignMetrics)
     private var designMetrics
     @Query(.tags(.typeIs(.ledger)))
@@ -22,35 +20,48 @@ struct LedgerManagementView: View {
     @State private var errorMessage: String?
     @State private var isCompatibilityNoticePresented = false
     @State private var isCreating = false
+    @State private var isSubscriptionPresented = false
 
     var body: some View {
-        NavigationStack {
-            Form {
-                ledgersSection
-                creationSection
+        Form {
+            if ledgers.count > 1 {
+                selectionSection
             }
-            .navigationTitle("Manage Ledgers")
-            .toolbar {
-                ToolbarItem(placement: .confirmationAction) {
-                    Button("Done") { dismiss() }
+            ledgersSection
+            creationSection
+        }
+        .navigationTitle("Manage Ledgers")
+        .navigationBarTitleDisplayMode(.inline)
+        .sheet(isPresented: $isSubscriptionPresented) {
+            SubscriptionSheet()
+        }
+        .alert(
+            "Ledger Unavailable",
+            isPresented: .init(get: { errorMessage != nil }, set: { if !$0 { errorMessage = nil } })
+        ) {
+            Button("OK") { errorMessage = nil }
+        } message: {
+            Text(errorMessage ?? "")
+        }
+        .alert("Update Every Device", isPresented: $isCompatibilityNoticePresented) {
+            Button("All Devices Are Updated", action: createLedger)
+            Button("Cancel", role: .cancel) {
+                // Keep the draft name when the notice is cancelled.
+            }
+        } message: {
+            compatibilityNotice
+        }
+    }
+
+    private var selectionSection: some View {
+        Section {
+            Picker("Switch Ledger", selection: $selectedIdentifier) {
+                ForEach(ledgers) { ledger in
+                    Text(selectionTitle(ledger))
+                        .tag(ledger.id.rawValue)
                 }
             }
-            .alert(
-                "Ledger Unavailable",
-                isPresented: .init(get: { errorMessage != nil }, set: { if !$0 { errorMessage = nil } })
-            ) {
-                Button("OK") { errorMessage = nil }
-            } message: {
-                Text(errorMessage ?? "")
-            }
-            .alert("Update Every Device", isPresented: $isCompatibilityNoticePresented) {
-                Button("All Devices Are Updated", action: createLedger)
-                Button("Cancel", role: .cancel) {
-                    // Keep the draft name when the notice is cancelled.
-                }
-            } message: {
-                compatibilityNotice
-            }
+            .pickerStyle(.menu)
         }
     }
 
@@ -97,10 +108,8 @@ struct LedgerManagementView: View {
                     .disabled(newName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty)
                     .disabled(isCreating)
             } else {
-                NavigationLink {
-                    StoreListView()
-                } label: {
-                    Label("Subscription", systemImage: "creditcard")
+                Button("Subscription", systemImage: "creditcard") {
+                    isSubscriptionPresented = true
                 }
             }
         } header: {
@@ -109,7 +118,7 @@ struct LedgerManagementView: View {
             VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
                 Text(
                     """
-                    A subscription enables creating and editing additional ledgers. \
+                    The Monthly Plan enables creating and editing additional ledgers. \
                     Existing ledgers remain available to view, switch, and export after it ends.
                     """
                 )
@@ -126,15 +135,19 @@ struct LedgerManagementView: View {
 
     private func ledgerLabel(_ ledger: LedgerRecord) -> some View {
         VStack(alignment: .leading) {
-            Text(LedgerSelectionTitle.title(
-                identifier: ledger.id,
-                name: ledger.name,
-                names: Dictionary(uniqueKeysWithValues: ledgers.map { ($0.id, $0.name) })
-            ))
+            Text(selectionTitle(ledger))
             if let issue = ledger.issue {
                 Text(issue.localizedDescription).foregroundStyle(.red)
             }
         }
+    }
+
+    private func selectionTitle(_ ledger: LedgerRecord) -> String {
+        LedgerSelectionTitle.title(
+            identifier: ledger.id,
+            name: ledger.name,
+            names: Dictionary(uniqueKeysWithValues: ledgers.map { ($0.id, $0.name) })
+        )
     }
 
     private func prepareCreation() {

@@ -1,6 +1,6 @@
 import MHPlatform
 
-extension SettingsListView {
+extension SettingsMaintenanceList {
     var dataMaintenanceLogger: MHLogger {
         IncomesLogging.logger(
             logging: logging,

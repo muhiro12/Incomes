@@ -1,9 +1,7 @@
 import SwiftUI
 
 struct SettingsDataManagementSection: View {
-    var canDeleteAll = true
     let duplicateYearItems: () -> Void
-    let deleteAllItems: () -> Void
 
     var body: some View {
         Section {
@@ -18,15 +16,6 @@ struct SettingsDataManagementSection: View {
             } label: {
                 Label("Import data", systemImage: "square.and.arrow.down")
             }
-            NavigationLink {
-                RemoteUpdateEditingSettingsView()
-            } label: {
-                Label("Offline Editing", systemImage: "wifi.slash")
-            }
-            Button(role: .destructive, action: deleteAllItems) {
-                Text("Delete all")
-            }
-            .disabled(!canDeleteAll)
         } header: {
             Text("Manage items")
         }

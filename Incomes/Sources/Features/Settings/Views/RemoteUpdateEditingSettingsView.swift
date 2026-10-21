@@ -1,24 +1,20 @@
-import MHDesign
 import MHPlatform
 import SwiftUI
 
 /// Keeps the editing exception behind an explanation and a separate confirmation.
 struct RemoteUpdateEditingSettingsView: View {
-    @Environment(\.mhDesignMetrics)
-    private var designMetrics
     @AppStorage(\.allowsUnverifiedEditing)
     private var allowsUnverifiedEditing: Bool
     @State private var isConfirmingEditing = false
 
     var body: some View {
         Form {
-            Section("When this helps") {
-                VStack(alignment: .leading, spacing: designMetrics.spacing.control) {
-                    Text("Keep recording income and expenses when you cannot connect to the internet for a long time.")
-                    Text("Incomes normally pauses editing when it cannot confirm whether an update is needed.")
-                        .font(.subheadline)
-                        .foregroundStyle(.secondary)
-                }
+            Section {
+                Text("Keep recording income and expenses when you cannot connect to the internet for a long time.")
+            } header: {
+                Text("When this helps")
+            } footer: {
+                Text("Incomes normally pauses editing when it cannot confirm whether an update is needed.")
             }
             Section {
                 Text(

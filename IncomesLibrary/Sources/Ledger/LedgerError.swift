@@ -53,7 +53,7 @@ public enum LedgerError: LocalizedError, Equatable, Sendable {
             String(
                 localized:
                     """
-                    A subscription is required to change additional ledgers. \
+                    The Monthly Plan is required to change additional ledgers. \
                     You can still view, select, and export them.
                     """,
                 bundle: .module

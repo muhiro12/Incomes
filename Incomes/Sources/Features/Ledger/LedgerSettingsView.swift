@@ -36,7 +36,7 @@ struct LedgerSettingsView: View {
             } footer: {
                 if !LedgerAccessOperations.canEdit(identifier, isPremium: isSubscribeOn) {
                     VStack(alignment: .leading) {
-                        Text("Read Only: A subscription is required to edit this ledger.")
+                        Text("Read Only: The Monthly Plan is required to edit this ledger.")
                         Text(
                             """
                             After your subscription ends, existing ledgers remain available to view, switch, and export.

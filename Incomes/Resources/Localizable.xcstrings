@@ -644,6 +644,40 @@
         }
       }
     },
+    "Advanced" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Advanced"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avanzado"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Avancé"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "詳細設定"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "高级设置"
+          }
+        }
+      }
+    },
     "Affected Dates" : {
       "localizations" : {
         "en" : {
@@ -2301,7 +2335,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "追加の帳簿を作成する前に、すべての端末のIncomesを6.0以降へ更新してください。以前のバージョンでは帳簿が区別されず、編集すると項目の所属帳簿が失われることがあります。更新できない端末がある場合は、メインの帳簿だけを使用してください。"
+            "value" : "追加の帳簿を作成する前に、すべての端末のIncomesを6.0以降へ更新してください。以前のバージョンでは帳簿が区別されず、編集すると項目の所属帳簿が失われることがあります。更新できない端末がある場合は、基本の帳簿だけを使用してください。"
           }
         },
         "zh-Hans" : {
@@ -4080,6 +4114,40 @@
         }
       }
     },
+    "Data Management" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data Management"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestión de datos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gestion des données"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "データ管理"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "数据管理"
+          }
+        }
+      }
+    },
     "Data risks" : {
       "localizations" : {
         "en" : {
@@ -4443,7 +4511,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "メイン"
+            "value" : "基本の帳簿"
           }
         },
         "zh-Hans" : {
@@ -8399,6 +8467,40 @@
         }
       }
     },
+    "Ledgers and Data" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ledgers and Data"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Libros y datos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Registres et données"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "帳簿とデータ"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "账簿与数据"
+          }
+        }
+      }
+    },
     "Ledgers keep planned income, outgo, and balances separate." : {
       "localizations" : {
         "en" : {
@@ -8599,6 +8701,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "最低余额: %@"
+          }
+        }
+      }
+    },
+    "Maintenance" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maintenance"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mantenimiento"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Maintenance"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "データの整理・削除"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "数据整理与删除"
           }
         }
       }
@@ -10156,7 +10292,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "通知はメインの帳簿の項目を対象にします。"
+            "value" : "通知は基本の帳簿の項目を対象にします。"
           }
         },
         "zh-Hans" : {
@@ -11493,6 +11629,40 @@
         }
       }
     },
+    "Preferences" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preferences"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Preferencias"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Préférences"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使い方の設定"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "偏好设置"
+          }
+        }
+      }
+    },
     "Premium enables creating and editing additional ledgers." : {
       "localizations" : {
         "en" : {
@@ -12305,6 +12475,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "只读：编辑此账簿需要 Premium。"
+          }
+        }
+      }
+    },
+    "Read Only: The Monthly Plan is required to edit this ledger." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Read Only: The Monthly Plan is required to edit this ledger."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Solo lectura: se necesita el Monthly Plan para editar este libro."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Lecture seule : le Monthly Plan est nécessaire pour modifier ce registre."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "閲覧のみ：この帳簿の編集には月間プランが必要です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "只读：编辑此账簿需要 Monthly Plan。"
           }
         }
       }
@@ -15510,6 +15714,40 @@
         }
       }
     },
+    "The Monthly Plan enables creating and editing additional ledgers. Existing ledgers remain available to view, switch, and export after it ends." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Monthly Plan enables creating and editing additional ledgers. Existing ledgers remain available to view, switch, and export after it ends."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El Monthly Plan permite crear y editar libros adicionales. Cuando termina, puedes seguir consultando, seleccionando y exportando los libros existentes."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le Monthly Plan permet de créer et de modifier des registres supplémentaires. Après sa fin, vous pouvez toujours consulter, sélectionner et exporter les registres existants."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "月間プランで帳簿を追加・編集できます。終了後も、既存の帳簿の閲覧・切り替え・書き出しは利用できます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Monthly Plan 支持创建和编辑其他账簿。方案结束后，仍可查看、切换和导出现有账簿。"
+          }
+        }
+      }
+    },
     "The developer does not provide repair or recovery for data problems caused by this setting." : {
       "localizations" : {
         "en" : {
@@ -18022,7 +18260,7 @@
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "ウィジェットとApple Watchにはメインの帳簿が表示されます。"
+            "value" : "ウィジェットとApple Watchには基本の帳簿が表示されます。"
           }
         },
         "zh-Hans" : {
