@@ -106,6 +106,7 @@ private extension MonthlySummaryPopover {
         }
         .font(.footnote)
         .foregroundStyle(.secondary)
+        .fixedSize(horizontal: false, vertical: true)
     }
 
     var popoverIdealWidth: CGFloat {
