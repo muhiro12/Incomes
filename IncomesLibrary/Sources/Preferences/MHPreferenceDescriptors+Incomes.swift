@@ -2,6 +2,15 @@ import MHPlatformCore
 
 /// App-owned preference descriptors backed by `UserDefaults`.
 public extension MHPreferenceDescriptors {
+    /// Explicit device-local permission to edit while update requirements are unavailable.
+    var allowsUnverifiedEditing: MHBoolPreferenceDescriptor {
+        .init(
+            storageKey: IncomesUserDefaultsKeys.Standard.allowsUnverifiedEditing.rawValue,
+            defaultSelection: .standard,
+            default: false
+        )
+    }
+
     /// Subscription state persisted in the standard defaults domain.
     var isSubscribeOn: MHBoolPreferenceDescriptor {
         .init(

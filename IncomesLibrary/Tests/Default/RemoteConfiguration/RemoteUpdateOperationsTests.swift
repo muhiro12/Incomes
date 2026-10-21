@@ -269,7 +269,8 @@ extension RemoteUpdateOperationsTests {
         scheduledRequirements: [MHRemoteUpdateSchedule.Requirement] = [],
         publishedVersion: String? = "6.1",
         store: MHRemoteUpdateStore? = nil,
-        configurationData: Data? = nil
+        configurationData: Data? = nil,
+        allowsUnverifiedEditing: @escaping () -> Bool = { false }
     ) throws -> Fixture {
         let clock = Clock()
         let minimumVersion = try #require(MHAppVersion(minimumVersion))
@@ -303,7 +304,11 @@ extension RemoteUpdateOperationsTests {
                 publishedVersion.flatMap(MHAppVersion.init)
             }
         )
-        return .init(operations: .init(controller: controller), provider: provider, clock: clock)
+        return .init(
+            operations: .init(controller: controller, allowsUnverifiedEditing: allowsUnverifiedEditing),
+            provider: provider,
+            clock: clock
+        )
     }
 
     func makePlan(

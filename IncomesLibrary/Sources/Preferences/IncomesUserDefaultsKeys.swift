@@ -4,6 +4,7 @@ public enum IncomesUserDefaultsKeys {
         case isSubscribeOn = "a018f613"
         case isICloudOn = "X7b9C4tZ"
         case isDebugOn = "a1B2c3D4"
+        case allowsUnverifiedEditing = "u8E4q2Nr"
         case currencyCode = "R8k2Z3tL"
         case lastLaunchedAppVersion = "j4N7v2Qk"
         case notificationSettings = "A3b9Z1xQ"

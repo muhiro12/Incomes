@@ -52,8 +52,10 @@ struct IncomesPreferenceLifecycleTests {
 
         let consentKey = "IABTCF_TCString"
         let currencyKey = IncomesUserDefaultsKeys.Standard.currencyCode.rawValue
+        let editingKey = IncomesUserDefaultsKeys.Standard.allowsUnverifiedEditing.rawValue
         userDefaults.set("stored-consent", forKey: consentKey)
         userDefaults.set("JPY", forKey: currencyKey)
+        userDefaults.set(true, forKey: editingKey)
         userDefaults.set("obsolete", forKey: "unknown-key")
 
         let registry = IncomesPreferenceLifecycle.makeRegistry(
@@ -69,6 +71,7 @@ struct IncomesPreferenceLifecycleTests {
 
         #expect(userDefaults.string(forKey: consentKey) == "stored-consent")
         #expect(userDefaults.string(forKey: currencyKey) == "JPY")
+        #expect(userDefaults.bool(forKey: editingKey))
         #expect(report.removedStorageKeys == ["unknown-key"])
     }
 }

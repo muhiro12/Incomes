@@ -17,10 +17,14 @@ enum IncomesRemoteUpdateConfiguration {
             return .init(configurationError: MHRemoteUpdateController.Failure.invalidConfiguration)
         }
         do {
-            return .init(controller: try .init(
-                appStoreID: appStoreID,
-                configurationURL: configurationURL
-            ))
+            return .init(
+                controller: try .init(
+                    appStoreID: appStoreID,
+                    configurationURL: configurationURL
+                )
+            ) {
+                MHPreferenceStore().bool(for: \.allowsUnverifiedEditing)
+            }
         } catch {
             return .init(configurationError: error)
         }

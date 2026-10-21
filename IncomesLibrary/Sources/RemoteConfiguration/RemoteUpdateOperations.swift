@@ -12,26 +12,32 @@ public final class RemoteUpdateOperations {
     /// The latest diagnostic snapshot, shared by presentation and mutation adapters.
     public private(set) var evaluation: MHRemoteUpdateEvaluation?
 
-    /// The decision from the same observed instant; unavailable is never permission to write.
+    /// Observed update status; an explicit local exception does not change the evidence.
     public var decision: MHRemoteUpdateDecision {
         evaluation?.decision ?? .unavailable
     }
 
     private let controller: MHRemoteUpdateController?
     private let configurationError: (any Error)?
+    private let allowsUnverifiedEditing: () -> Bool
 
     /// Disables networking and update enforcement for previews and isolated environments.
     public init() {
         isEnabled = false
         controller = nil
         configurationError = nil
+        allowsUnverifiedEditing = { false }
     }
 
     /// Enables enforcement using one package-owned controller for this environment.
-    public init(controller: MHRemoteUpdateController) {
+    public init(
+        controller: MHRemoteUpdateController,
+        allowsUnverifiedEditing: @escaping () -> Bool = { false }
+    ) {
         isEnabled = true
         self.controller = controller
         configurationError = nil
+        self.allowsUnverifiedEditing = allowsUnverifiedEditing
     }
 
     /// Keeps a failed configuration blocking instead of implicitly allowing mutations.
@@ -39,6 +45,7 @@ public final class RemoteUpdateOperations {
         isEnabled = true
         controller = nil
         self.configurationError = configurationError
+        allowsUnverifiedEditing = { false }
     }
 
     /// Restores and refreshes evidence using the package's standard recovery sequence.
@@ -56,7 +63,7 @@ public final class RemoteUpdateOperations {
         return preparation
     }
 
-    /// Confirms permission immediately before a user-requested data write and its success effects.
+    /// Checks update evidence and the current local exception immediately before a data write.
     public func checkMutationAllowed() async throws {
         try Task.checkCancellation()
         guard isEnabled else {
@@ -66,17 +73,22 @@ public final class RemoteUpdateOperations {
             throw RemoteUpdateError.policyUnavailable
         }
         do {
-            try await controller.checkOperationAllowed()
+            try await controller.checkOperationAllowed(
+                for: allowsUnverifiedEditing() ? .allowWhenUnavailable : .requireConfirmation
+            )
             evaluation = await controller.evaluation()
             try Task.checkCancellation()
-            try decision.checkOperationAllowed(whenUnavailable: .block)
+            try decision.checkOperationAllowed(whenUnavailable: allowsUnverifiedEditing() ? .allow : .block)
         } catch {
             evaluation = await controller.evaluation()
             if error is CancellationError || Task.isCancelled {
                 throw CancellationError()
             }
-            if (error as? MHRemoteUpdateOperationError) == .updateRequired {
+            if (error as? MHRemoteUpdateOperationError) == .updateRequired || decision == .updateRequired {
                 throw RemoteUpdateError.updateRequired
+            }
+            if allowsUnverifiedEditing(), decision == .unavailable {
+                return
             }
             throw RemoteUpdateError.policyUnavailable
         }

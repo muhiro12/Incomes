@@ -46,6 +46,7 @@ private extension IncomesPreferenceLifecycle {
             descriptors.isSubscribeOn,
             descriptors.isICloudOn,
             descriptors.isDebugOn,
+            descriptors.allowsUnverifiedEditing,
             descriptors.currencyCode,
             descriptors.lastLaunchedAppVersion,
             descriptors.notificationSettings,

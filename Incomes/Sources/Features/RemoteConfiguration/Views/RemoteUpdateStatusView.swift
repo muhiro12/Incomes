@@ -5,6 +5,9 @@ import SwiftUI
 struct RemoteUpdateStatusView: View {
     @Environment(\.mhDesignMetrics)
     private var designMetrics
+    @AppStorage(\.allowsUnverifiedEditing)
+    private var allowsUnverifiedEditing: Bool
+    @State private var showsEditingSettings = false
 
     let decision: MHRemoteUpdateDecision
     let isLoading: Bool
@@ -12,27 +15,45 @@ struct RemoteUpdateStatusView: View {
     let openStore: () -> Void
 
     var body: some View {
-        if decision != .notRequired {
-            VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
-                Text(title)
-                    .font(.headline)
-                Text(message)
-                    .font(.subheadline)
-                HStack {
-                    Button("Check Again") {
-                        retry()
+        Group {
+            if decision != .notRequired {
+                VStack(alignment: .leading, spacing: designMetrics.spacing.inline) {
+                    Text(title)
+                        .font(.headline)
+                    Text(message)
+                        .font(.subheadline)
+                    HStack {
+                        Button("Check Again") {
+                            retry()
+                        }
+                        .disabled(isLoading)
+                        Button("Open App Store") {
+                            openStore()
+                        }
                     }
-                    .disabled(isLoading)
-                    Button("Open App Store") {
-                        openStore()
+                    .buttonStyle(.bordered)
+                    if decision == .unavailable {
+                        Button("Offline Editing") {
+                            showsEditingSettings = true
+                        }
+                        .buttonStyle(.bordered)
                     }
                 }
-                .buttonStyle(.bordered)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .padding()
+                .background(.regularMaterial)
+                .accessibilityElement(children: .contain)
             }
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .padding()
-            .background(.regularMaterial)
-            .accessibilityElement(children: .contain)
+        }
+        .sheet(isPresented: $showsEditingSettings) {
+            NavigationStack {
+                RemoteUpdateEditingSettingsView()
+                    .toolbar {
+                        ToolbarItem {
+                            CloseButton()
+                        }
+                    }
+            }
         }
     }
 
@@ -41,6 +62,9 @@ struct RemoteUpdateStatusView: View {
     }
 
     private var message: String {
+        if decision == .unavailable, allowsUnverifiedEditing {
+            return String(localized: "Editing is allowed without checking for updates.")
+        }
         let error: RemoteUpdateError = decision == .updateRequired ? .updateRequired : .policyUnavailable
         return error.localizedDescription
     }

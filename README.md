@@ -213,8 +213,16 @@ is needed.
 `prepare()` runs at startup and foreground entry. Only a validated network fetch
 renews policy evidence, with up to 30 days of offline reuse. App Store publication
 evidence has its separate 24-hour lifetime. Storage is source-scoped in
-Application Support. Missing, incompatible, or expired evidence blocks protected
-writes, and invalid setup never falls back to the old endpoint. The controller
+Application Support. By default, missing, incompatible, or expired evidence
+blocks protected writes, and invalid setup never falls back to the old endpoint.
+Settings includes a dedicated Offline Editing screen explaining its benefit and
+data risks. Explicit confirmation enables a device-local exception for unavailable
+update evidence. Confirmed required updates still block while the evidence remains
+valid. Unreceived or expired requirements can be bypassed; even one write may cause
+data problems that a later update cannot repair. Developer-provided data repair
+or recovery is not offered for this exception. The setting defaults to off and
+does not disable refreshes or change iCloud sync. It is read again before each
+mutation, including headless App Intents. The controller
 restores retained evidence on the first operation check, so a background App
 Intent can use still-valid permission offline without an app-owned preparation
 flag. Read-only evaluations expose one decision, reason, revision, active minimum,

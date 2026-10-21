@@ -18,6 +18,11 @@ struct SettingsDataManagementSection: View {
             } label: {
                 Label("Import data", systemImage: "square.and.arrow.down")
             }
+            NavigationLink {
+                RemoteUpdateEditingSettingsView()
+            } label: {
+                Label("Offline Editing", systemImage: "wifi.slash")
+            }
             Button(role: .destructive, action: deleteAllItems) {
                 Text("Delete all")
             }

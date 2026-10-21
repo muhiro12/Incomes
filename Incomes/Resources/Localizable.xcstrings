@@ -951,6 +951,108 @@
         }
       }
     },
+    "Allow Editing" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow Editing"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permitir editar"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoriser les modifications"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "編集を許可"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允许编辑"
+          }
+        }
+      }
+    },
+    "Allow editing when updates cannot be checked" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow editing when updates cannot be checked"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Permitir editar si no se pueden comprobar las actualizaciones"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoriser les modifications si les mises à jour ne peuvent pas être vérifiées"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "更新を確認できなくても編集する"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "无法检查更新时允许编辑"
+          }
+        }
+      }
+    },
+    "Allow editing without checking for updates?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Allow editing without checking for updates?"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Permitir editar sin comprobar las actualizaciones?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autoriser les modifications sans vérifier les mises à jour ?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "確認できないときの編集を許可しますか？"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "允许在无法检查更新时编辑吗？"
+          }
+        }
+      }
+    },
     "Already Negative From" : {
       "localizations" : {
         "en" : {
@@ -3910,6 +4012,40 @@
         }
       }
     },
+    "Data risks" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Data risks"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Riesgos para los datos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Risques pour les données"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "データへのリスク"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "数据风险"
+          }
+        }
+      }
+    },
     "Date" : {
       "localizations" : {
         "en" : {
@@ -5169,6 +5305,40 @@
         }
       }
     },
+    "Editing is allowed without checking for updates." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Editing is allowed without checking for updates."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se permite editar sin comprobar las actualizaciones."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les modifications sont autorisées sans vérification des mises à jour."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アップデートを確認できなくても編集できる設定です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已允许在无法检查更新时编辑。"
+          }
+        }
+      }
+    },
     "Enable push notifications" : {
       "localizations" : {
         "en" : {
@@ -5505,6 +5675,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "错误：%@"
+          }
+        }
+      }
+    },
+    "Even one change could cause data problems that an update cannot repair. The developer does not provide data repair or recovery for this setting." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Even one change could cause data problems that an update cannot repair. The developer does not provide data repair or recovery for this setting."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Un solo cambio podría causar problemas de datos que una actualización no pueda reparar. El desarrollador no ofrece reparación ni recuperación de datos por el uso de este ajuste."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Une seule modification peut causer des problèmes de données qu’une mise à jour ne peut pas réparer. Le développeur ne propose pas de réparation ni de récupération des données pour ce réglage."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1回の変更でも、後からアップデートしても元に戻せない問題が起こるおそれがあります。この設定によるデータの問題について、開発元による修復・復元の対応は提供していません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "即使只进行一次更改，也可能造成更新应用也无法修复的数据问题。对于使用此设置导致的数据问题，开发者不提供修复或恢复服务。"
           }
         }
       }
@@ -6325,6 +6529,40 @@
         }
       }
     },
+    "If an important update is needed but cannot be checked, even one addition, edit, or deletion may make your records incorrect or unusable. Updating later may not restore them." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If an important update is needed but cannot be checked, even one addition, edit, or deletion may make your records incorrect or unusable. Updating later may not restore them."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si hace falta una actualización importante y no se puede comprobar, una sola adición, modificación o eliminación podría dejar tus registros incorrectos o inutilizables. Actualizar después podría no recuperarlos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si une mise à jour importante est nécessaire sans pouvoir être vérifiée, un seul ajout, une seule modification ou suppression peut rendre vos données incorrectes ou inutilisables. Une mise à jour ultérieure peut ne pas les restaurer."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "重要なアップデートが必要でも、その情報を確認できない場合があります。その状態では、1回の追加・編集・削除でも記録が正しく扱えなくなるおそれがあります。後からアップデートしても、元に戻せない場合があります。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "如果需要重要更新却无法检查，即使只进行一次添加、编辑或删除，也可能使记录出错或无法使用。之后更新应用也可能无法恢复。"
+          }
+        }
+      }
+    },
     "Import" : {
       "localizations" : {
         "en" : {
@@ -6899,6 +7137,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "Incomes 无法打开 %@"
+          }
+        }
+      }
+    },
+    "Incomes normally pauses editing when it cannot confirm whether an update is needed." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incomes normally pauses editing when it cannot confirm whether an update is needed."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Normalmente, Incomes suspende la edición si no puede confirmar si hace falta actualizar la app."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incomes suspend normalement les modifications lorsqu’il ne peut pas vérifier si une mise à jour est nécessaire."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通常、アップデートが必要か確認できない場合は、記録の編集を一時停止します。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "通常，Incomes 无法确认是否需要更新时，会暂停编辑。"
           }
         }
       }
@@ -7579,6 +7851,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "保留当前"
+          }
+        }
+      }
+    },
+    "Keep recording income and expenses when you cannot connect to the internet for a long time." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Keep recording income and expenses when you cannot connect to the internet for a long time."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sigue registrando ingresos y gastos cuando no puedas conectarte a internet durante mucho tiempo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Continuez à noter vos revenus et dépenses lorsque vous ne pouvez pas vous connecter à Internet pendant longtemps."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "長期間インターネットに接続できないときも、収入や支出の記録を続けられます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "长时间无法连接互联网时，您仍可继续记录收入和支出。"
           }
         }
       }
@@ -9857,6 +10163,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "确定"
+          }
+        }
+      }
+    },
+    "Offline Editing" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Offline Editing"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edición sin conexión"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Modification hors ligne"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "接続できないときの編集"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "离线编辑"
           }
         }
       }
@@ -15000,6 +15340,40 @@
         }
       }
     },
+    "The developer does not provide repair or recovery for data problems caused by this setting." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The developer does not provide repair or recovery for data problems caused by this setting."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El desarrollador no ofrece reparación ni recuperación para los problemas de datos causados por este ajuste."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le développeur ne propose pas de réparation ni de récupération des données pour les problèmes causés par ce réglage."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "この設定の利用によって生じたデータの問題について、開発元による修復・復元の対応は提供していません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "对于使用此设置导致的数据问题，开发者不提供修复或恢复服务。"
+          }
+        }
+      }
+    },
     "The file can restore all items in Incomes. Keep it private; it includes your financial records." : {
       "localizations" : {
         "en" : {
@@ -17383,6 +17757,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "我们将从此文本中提取日期、金额、类别和优先级。"
+          }
+        }
+      }
+    },
+    "When Incomes knows an update is required, editing stays paused. This setting is saved only on this device. iCloud sync stays unchanged." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When Incomes knows an update is required, editing stays paused. This setting is saved only on this device. iCloud sync stays unchanged."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si Incomes confirma que es necesario actualizar, la edición sigue suspendida. Este ajuste se guarda solo en este dispositivo. La sincronización con iCloud no cambia."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Si Incomes confirme qu’une mise à jour est nécessaire, les modifications restent suspendues. Ce réglage est enregistré uniquement sur cet appareil. La synchronisation iCloud reste inchangée."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "アップデートが必要と確認できている間は、編集できません。この設定はこの端末だけに保存され、iCloud同期の設定は変わりません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incomes 确认需要更新时，仍会暂停编辑。此设置仅保存在本设备上，不会更改 iCloud 同步设置。"
+          }
+        }
+      }
+    },
+    "When this helps" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When this helps"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cuándo resulta útil"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quand cette option est utile"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "こんなときに使えます"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "适用情况"
           }
         }
       }
