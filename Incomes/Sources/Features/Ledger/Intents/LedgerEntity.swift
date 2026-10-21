@@ -22,7 +22,7 @@ struct LedgerEntity: AppEntity {
 
     init(_ ledger: LedgerRecord, names: [LedgerIdentifier: String] = [:]) {
         id = ledger.id.rawValue
-        name = ledger.name
         displayTitle = LedgerSelectionTitle.title(identifier: ledger.id, name: ledger.name, names: names)
+        name = ledger.name
     }
 }
