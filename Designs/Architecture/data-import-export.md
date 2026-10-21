@@ -1,7 +1,8 @@
 # Data import and export
 
-The ownership-aware file format is 3.0.0. Legacy 2.0.0 files remain readable
-and always describe the default book. File versions are independent of the
+The ownership-aware file format is 3.0.0. The earlier development payload 2.0.0
+remains readable within the canonical format identifier and always describes the
+default book. Neither payload was shipped in 5.12. File versions are independent of the
 SwiftData schema: adding book ownership to the file does not add stored model
 attributes.
 
@@ -54,7 +55,12 @@ or iCloud state, logs, or device information.
 
 The file is UTF-8 JSON with sorted keys and indentation, so the same records
 always produce the same bytes. The file extension is `incomes`, and its type
-`com.muhiro12.incomes.data` conforms to `public.json`.
+`com.muhiro12.Incomes.data` conforms to `public.json`.
+
+The former `com.muhiro12.incomes.data` spelling from unreleased development
+builds is intentionally rejected, without an alias or migration. This changes
+the file header and declared type, not the on-device store. The payload version
+is unchanged because its fields and representation are unchanged.
 
 Reading and writing share a 32 MiB limit. Export refuses a larger payload so it
 cannot produce a file this version cannot restore. The URL reader bounds the
@@ -63,7 +69,7 @@ bytes loaded even if the file size changes after selection.
 ```json
 {
   "exportedAt": "2026-09-29T03:04:05Z",
-  "format": "com.muhiro12.incomes.data",
+  "format": "com.muhiro12.Incomes.data",
   "items": [
     {
       "balance": "120000",

@@ -1,6 +1,6 @@
 {
   "exportedAt" : "2026-09-29T00:00:00Z",
-  "format" : "com.muhiro12.incomes.data",
+  "format" : "com.muhiro12.Incomes.data",
   "items" : [
     {
       "balance" : "-85000",

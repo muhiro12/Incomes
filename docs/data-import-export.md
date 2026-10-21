@@ -77,11 +77,11 @@ Import refuses, without changing data, a file that:
 ## File representation
 
 The file is UTF-8 JSON with sorted keys, and its type
-`com.muhiro12.incomes.data` conforms to `public.json`.
+`com.muhiro12.Incomes.data` conforms to `public.json`.
 
 | Key | Meaning |
 | --- | --- |
-| `format` | Always `com.muhiro12.incomes.data`. |
+| `format` | Always `com.muhiro12.Incomes.data`. |
 | `schemaVersion` | Portable file version, currently `3.0.0`. |
 | `exportedAt` | ISO 8601 UTC time of the export. |
 | `selection` | Covered account IDs and any additional record filters. |
@@ -105,7 +105,10 @@ Derived year, month, and description tags are represented by their underlying
 fields. Debug tags, unused tags, identifiers local to the store, subscription
 and iCloud settings, and diagnostics are not written.
 
-Legacy `2.0.0` files remain readable and refer only to the default account.
+The earlier development payload `2.0.0` remains readable within the canonical
+format identifier and refers only to the default account. File import and export
+are new in 6.0; neither payload was shipped in 5.12. Files using the former
+`com.muhiro12.incomes.data` development spelling are not supported.
 Account names can change and need not be unique; portable identities keep
 same-name accounts separate during export and restoration. The file version
 can change without adding fields to the SwiftData store.

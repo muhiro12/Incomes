@@ -27,6 +27,34 @@ struct ItemImportPersistenceTests {
     }
 
     @Test
+    func refusing_an_unreleased_file_identifier_preserves_saved_records_and_identity() throws {
+        try withStore { url in
+            let contents = try fixtureContents()
+            let createdIDs = try importContents(contents, at: url)
+            let validData = try ItemExportOperations.incomesFileData(
+                fileItems: contents.items,
+                currencyCode: contents.currencyCode ?? "",
+                exportedAt: contents.exportedAt
+            )
+            var object = try #require(JSONSerialization.jsonObject(with: validData) as? [String: Any])
+            object["format"] = "com.muhiro12.incomes.data"
+            let rejectedData = try JSONSerialization.data(withJSONObject: object)
+            #expect(throws: ItemImportError.unrecognizedFormat) {
+                try ItemImportOperations.read(data: rejectedData)
+            }
+
+            let container = try ModelContainerFactory.make(
+                configuration: .init(url: url, cloudKitDatabase: .none)
+            )
+            let items = fetchItems(container.mainContext)
+            #expect(ItemExportOperations.fileItems(items: items) == contents.items)
+            #expect(try Set(items.map { item in
+                try PersistentIdentifierCoder.encode(item.persistentModelID)
+            }) == createdIDs)
+        }
+    }
+
+    @Test
     func pending_edits_are_neither_saved_nor_rolled_back() throws {
         try withStore { url in
             let contents = try fixtureContents()

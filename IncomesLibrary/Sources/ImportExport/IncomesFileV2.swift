@@ -1,9 +1,6 @@
 import Foundation
 
-/// Frozen payload of files written by schema 2.0.0.
-///
-/// Never edit this shape after release. A later schema adds its own payload and
-/// converts this one forward.
+/// Earlier development payload, also supplying the current file's scalar fields.
 struct IncomesFileV2: Codable {
     struct Selection: Codable {
         let filters: [Filter]

@@ -9,7 +9,7 @@ enum IncomesFileCodec {
     }
 
     /// Format identifier stored in every file; also the file's uniform type identifier.
-    static let format = "com.muhiro12.incomes.data"
+    static let format = "com.muhiro12.Incomes.data"
     /// Largest file accepted for import: 32 MiB.
     static let maximumByteCount = 33_554_432
     // File ownership changed without changing the persisted SwiftData model shape.

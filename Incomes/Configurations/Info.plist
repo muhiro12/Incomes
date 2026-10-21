@@ -272,7 +272,7 @@
 			<key>UTTypeDescription</key>
 			<string>Incomes Data</string>
 			<key>UTTypeIdentifier</key>
-			<string>com.muhiro12.incomes.data</string>
+			<string>com.muhiro12.Incomes.data</string>
 			<key>UTTypeTagSpecification</key>
 			<dict>
 				<key>public.filename-extension</key>

@@ -30,7 +30,7 @@ struct IncomesFileCodecTests {
                 "exportedAt", "format", "items", "schemaVersion", "selection", "settings", "ledgers"
             ]
         )
-        #expect(object["format"] as? String == "com.muhiro12.incomes.data")
+        #expect(object["format"] as? String == "com.muhiro12.Incomes.data")
         #expect(object["schemaVersion"] as? String == "3.0.0")
         #expect(object["exportedAt"] as? String == "2026-09-29T03:04:05Z")
         let selection = try #require(object["selection"] as? [String: Any])
@@ -116,6 +116,16 @@ struct IncomesFileCodecTests {
             #expect(throws: ItemImportError.unrecognizedFormat) {
                 try ItemImportOperations.read(data: Data(input))
             }
+        }
+    }
+
+    @Test
+    func the_unreleased_lowercase_namespace_is_not_an_alias() throws {
+        let data = try modified { object in
+            object["format"] = "com.muhiro12.incomes.data"
+        }
+        #expect(throws: ItemImportError.unrecognizedFormat) {
+            try ItemImportOperations.read(data: data)
         }
     }
 
