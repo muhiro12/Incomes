@@ -111,6 +111,9 @@ ascending descriptions can still share a priority. Other ledger-days stay
 unchanged. The person reviews a disclosure before saving the file, and the live
 store, saved balances, and synced priorities do not change.
 
+Using every priority value does not itself exhaust capacity: neighboring items
+with ascending descriptions can share a value to leave room for a native tie.
+
 If the day's order needs more priority levels than the range allows, the entire
 day retains its original priorities. Export and import warn that the order and
 displayed running balances may change on restoration. This bounded fallback

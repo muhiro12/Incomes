@@ -135,6 +135,34 @@ struct ItemExportPriorityTests {
     }
 
     @Test
+    func a_full_priority_range_can_be_reused_when_descriptions_leave_room() throws {
+        let context = try makeContext()
+        let priorities = Array(ItemFormInput.priorityRange.reversed()) + [0]
+        let descriptions = (0..<11).map { String(format: "Item %02d", $0) } + ["Item 10"]
+        let items = try seed(context: context, priorities: priorities, descriptions: descriptions)
+        let originalPriorities = items.map(\.priority)
+        let preparation = ItemExportOperations.prepareFile(items: items)
+        #expect(Set(originalPriorities) == Set(ItemFormInput.priorityRange))
+        #expect(preparation.adjustedPriorityCount == 1)
+        #expect(preparation.unresolvedDayCount == 0)
+        #expect(preparation.items.map(\.repeatID) == items.map(\.repeatID))
+        #expect(preparation.items.allSatisfy { ItemFormInput.priorityRange.contains($0.priority) })
+        #expect(items.map(\.priority) == originalPriorities)
+        #expect(!context.hasChanges)
+
+        let destination = try makeContext()
+        let contents = try decoded(preparation)
+        let difference = try ItemImportOperations.difference(contents: contents, context: destination)
+        _ = try ItemImportOperations.applyAndSaveWithOutcome(
+            contents: contents, reviewed: difference, policy: .replace, context: destination
+        )
+        let reader = ModelContext(destination.container)
+        let restored = try reader.fetch(FetchDescriptor<Item>.allLedgerItems()).sorted(by: >)
+        #expect(restored.map(\.repeatID) == items.map(\.repeatID))
+        #expect(restored.map(\.balance) == items.map(\.balance))
+    }
+
+    @Test
     func more_than_eleven_items_can_share_priorities_when_descriptions_resolve_their_order() throws {
         let context = try makeContext()
         let descriptions = (0..<20).map { String(format: "Item %02d", $0) } + ["Item 10"]
