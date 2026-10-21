@@ -1,6 +1,13 @@
+import SwiftData
 import SwiftUI
 
 extension ItemFormView {
+    struct InitialContextIdentity: Equatable {
+        let mode: Mode
+        let itemID: PersistentIdentifier?
+        let tagID: PersistentIdentifier?
+    }
+
     var incomeBinding: Binding<String> {
         .init(
             get: {
@@ -23,10 +30,12 @@ extension ItemFormView {
         )
     }
 
-    var initialContextTaskID: String {
-        let itemID = item.map { String(describing: $0.persistentModelID) } ?? ""
-        let tagID = tag.map { String(describing: $0.persistentModelID) } ?? ""
-        return "\(mode)-\(itemID)-\(tagID)"
+    var initialContextTaskID: InitialContextIdentity {
+        .init(
+            mode: mode,
+            itemID: item?.persistentModelID,
+            tagID: tag?.persistentModelID
+        )
     }
 
     var primaryActionAccessibilityHint: LocalizedStringKey {

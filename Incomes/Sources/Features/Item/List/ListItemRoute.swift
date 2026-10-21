@@ -1,9 +1,9 @@
-enum ListItemRoute: String, Identifiable {
+enum ListItemRoute: Hashable, Identifiable {
     case detail
     case edit
     case duplicate
 
-    var id: String {
-        rawValue
+    var id: Self {
+        self
     }
 }

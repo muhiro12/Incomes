@@ -1,8 +1,8 @@
-enum ItemFormSheetRoute: String, Equatable, Identifiable {
+enum ItemFormSheetRoute: Hashable, Identifiable {
     case assist
     case balanceProjection
 
-    var id: String {
-        rawValue
+    var id: Self {
+        self
     }
 }

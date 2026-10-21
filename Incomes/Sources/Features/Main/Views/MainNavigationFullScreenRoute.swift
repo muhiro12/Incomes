@@ -5,11 +5,11 @@
 //  Created by Codex on 2026/03/05.
 //
 
-enum MainNavigationFullScreenRoute: String, Identifiable {
+enum MainNavigationFullScreenRoute: Hashable, Identifiable {
     case duplicateTags
     case orphanTags
 
-    var id: String {
-        rawValue
+    var id: Self {
+        self
     }
 }

@@ -3,7 +3,13 @@ import SwiftData
 
 /// Logical category bucket used by user-facing category filters and suggestions.
 public struct CategoryFacet: Identifiable, Hashable {
-    public let id: String
+    /// In-memory identity that cannot collide with a user-supplied category name.
+    public enum Identifier: Hashable, Sendable {
+        case uncategorized
+        case named(String)
+    }
+
+    public let id: Identifier
     public let displayName: String
     public let storedNames: [String]
     public let itemIDs: [PersistentIdentifier]
@@ -14,7 +20,7 @@ public struct CategoryFacet: Identifiable, Hashable {
     }
 
     public init(
-        id: String,
+        id: Identifier,
         displayName: String,
         storedNames: [String],
         itemIDs: [PersistentIdentifier]

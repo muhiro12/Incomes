@@ -75,6 +75,31 @@ struct CategoryFacetOperationsTests {
     }
 
     @Test
+    func a_category_named_like_the_former_internal_marker_stays_separate_from_uncategorized() throws {
+        let uncategorizedItem = try createItem(content: "Uncategorized", category: "")
+        let namedItem = try createItem(content: "Named", category: "__others__")
+        let facets = try CategoryFacetOperations.facets(context: context, othersDisplayName: japaneseOthers)
+        let uncategorized = try #require(facets.first { $0.id == .uncategorized })
+        let named = try #require(facets.first { $0.id == .named("__others__") })
+
+        #expect(Set(uncategorized.itemIDs) == [uncategorizedItem.persistentModelID])
+        #expect(Set(named.itemIDs) == [namedItem.persistentModelID])
+        #expect(named.displayName == "__others__")
+        #expect(named.storedNames == ["__others__"])
+        #expect(namedItem.category?.name == "__others__")
+    }
+
+    @Test
+    func item_relationships_keep_the_category_name_when_the_tag_list_is_incomplete() throws {
+        let item = try createItem(content: "Travel", category: "Holiday")
+        let facets = CategoryFacetOperations.facets(tags: [], items: [item], othersDisplayName: japaneseOthers)
+
+        #expect(facets.count == 1)
+        #expect(facets.first?.id == .named("Holiday"))
+        #expect(facets.first?.displayName == "Holiday")
+    }
+
+    @Test
     func filteredFacets_matches_localized_others_display_name() throws {
         let item = try createItem(
             content: "Blank",

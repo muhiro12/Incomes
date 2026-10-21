@@ -12,7 +12,10 @@ import SwiftUI
 import TipKit
 
 struct ItemFormView: View {
-    enum Mode { case create, edit }
+    enum Mode: Equatable {
+        case create
+        case edit
+    }
 
     @Environment(Tag.self)
     var tag: Tag?

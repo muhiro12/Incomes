@@ -38,6 +38,7 @@ struct MonthlySummaryGenerationInputTests {
         #expect(input.localeIdentifier == "ja_JP")
         #expect(input.snapshots.map(\.content) == ["Salary", "Rent"])
         #expect(input.snapshots.map(\.category) == ["Work", "Housing"])
+        #expect(input.snapshots.map(\.id) == [currentItem.persistentModelID, previousItem.persistentModelID])
     }
 
     @Test

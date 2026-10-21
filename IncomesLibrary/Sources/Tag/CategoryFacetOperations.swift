@@ -27,7 +27,7 @@ public enum CategoryFacetOperations {
         othersDisplayName: String = Self.defaultOthersDisplayName
     ) -> [CategoryFacet] {
         let itemIDsByKey = Dictionary(grouping: items) { item in
-            CategoryNameSupport.canonicalKey(
+            CategoryNameSupport.identifier(
                 forStoredName: item.category?.name
             )
         }
@@ -36,7 +36,7 @@ public enum CategoryFacetOperations {
         }
 
         let storedNamesByKey = Dictionary(grouping: tags) { tag in
-            CategoryNameSupport.canonicalKey(
+            CategoryNameSupport.identifier(
                 forStoredName: tag.name
             )
         }
@@ -51,7 +51,13 @@ public enum CategoryFacetOperations {
         return keys
             .map { key in
                 let storedNames = storedNamesByKey[key] ?? []
-                let representativeName = storedNames.first
+                let representativeName: String?
+                switch key {
+                case .uncategorized:
+                    representativeName = nil
+                case .named(let name):
+                    representativeName = name
+                }
                 return CategoryFacet(
                     id: key,
                     displayName: CategoryNameSupport.displayName(
@@ -62,16 +68,7 @@ public enum CategoryFacetOperations {
                     itemIDs: itemIDsByKey[key] ?? []
                 )
             }
-            .sorted { lhs, rhs in
-                let result = lhs.displayName.localizedStandardCompare(
-                    rhs.displayName
-                )
-                if result != .orderedSame {
-                    return result == .orderedAscending
-                }
-
-                return lhs.id < rhs.id
-            }
+            .sorted(by: areInDisplayOrder)
     }
 
     /// Returns the user-facing display name for a stored category value.
@@ -157,6 +154,22 @@ public enum CategoryFacetOperations {
 }
 
 private extension CategoryFacetOperations {
+    static func areInDisplayOrder(_ lhs: CategoryFacet, _ rhs: CategoryFacet) -> Bool {
+        let result = lhs.displayName.localizedStandardCompare(rhs.displayName)
+        if result != .orderedSame {
+            return result == .orderedAscending
+        }
+
+        switch (lhs.id, rhs.id) {
+        case let (.named(left), .named(right)):
+            return left < right
+        case (.uncategorized, .named):
+            return true
+        default:
+            return false
+        }
+    }
+
     static func matches(
         facet: CategoryFacet,
         query: String,
@@ -175,7 +188,7 @@ private extension CategoryFacetOperations {
             return true
         }
 
-        if facet.id == CategoryNameSupport.canonicalKey(forStoredName: nil) {
+        if facet.id == .uncategorized {
             return CategoryNameSupport.matchesOthersDisplayName(
                 query: query,
                 othersDisplayName: othersDisplayName

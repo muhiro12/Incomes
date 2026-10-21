@@ -5,8 +5,6 @@ enum CategoryNameSupport {
     /// Legacy stored name that also represents uncategorized items.
     static let othersStoredName = "Others"
 
-    private static let othersCanonicalKey = "__others__"
-
     /// User-facing label for uncategorized entries in the active locale.
     static var localizedOthersDisplayName: String {
         String(localized: "Others")
@@ -77,14 +75,14 @@ enum CategoryNameSupport {
 }
 
 extension CategoryNameSupport {
-    static func canonicalKey(
+    static func identifier(
         forStoredName storedName: String?
-    ) -> String {
+    ) -> CategoryFacet.Identifier {
         if isOthersLike(storedName) {
-            return othersCanonicalKey
+            return .uncategorized
         }
 
-        return storedName ?? ""
+        return .named(storedName ?? "")
     }
 
     private static func isOthersInput(

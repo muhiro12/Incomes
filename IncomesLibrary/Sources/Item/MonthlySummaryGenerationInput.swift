@@ -12,8 +12,8 @@ import SwiftData
 public struct MonthlySummaryGenerationInput: Equatable, Sendable {
     /// Snapshot of an item field set that can affect generated summary content.
     public struct SourceSnapshot: Equatable, Sendable {
-        /// Stable item identity represented as text for equality checks.
-        public let id: String
+        /// Native store-local identity used only for input equality checks.
+        public let id: PersistentIdentifier
         /// Item date used by summary queries.
         public let date: Date
         /// Item content text.
@@ -27,7 +27,7 @@ public struct MonthlySummaryGenerationInput: Equatable, Sendable {
 
         /// Creates a source snapshot.
         public init(
-            id: String,
+            id: PersistentIdentifier,
             date: Date,
             content: String,
             income: Decimal,
@@ -66,7 +66,7 @@ public struct MonthlySummaryGenerationInput: Equatable, Sendable {
 private extension MonthlySummaryGenerationInput {
     static func snapshot(for item: Item) -> SourceSnapshot {
         .init(
-            id: String(describing: item.persistentModelID),
+            id: item.persistentModelID,
             date: item.utcDate,
             content: item.content,
             income: item.income,

@@ -12,11 +12,11 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct ItemFormInputAssistView: View {
-    enum ImportRoute: String, Identifiable {
+    enum ImportRoute: Hashable, Identifiable {
         case camera
 
-        var id: String {
-            rawValue
+        var id: Self {
+            self
         }
     }
 
