@@ -6,13 +6,12 @@ public struct UpcomingPaymentNotificationPresentation: Sendable {
         case active
     }
 
-    public static let requestIdentifierPrefix = "upcoming-payment:"
-    public static let previewRequestIdentifierPrefix = "upcoming-payment-preview:"
+    public static let requestIdentifierPrefix = UpcomingPaymentNotificationIdentifiers.requestIdentifierPrefix
+    public static let previewRequestIdentifierPrefix =
+        UpcomingPaymentNotificationIdentifiers.previewRequestIdentifierPrefix
     /// Request identifier prefixes managed by upcoming payment reminders.
-    public static let managedRequestIdentifierPrefixes: [String] = [
-        requestIdentifierPrefix,
-        previewRequestIdentifierPrefix
-    ]
+    public static let managedRequestIdentifierPrefixes =
+        UpcomingPaymentNotificationIdentifiers.managedRequestIdentifierPrefixes
 
     public let requestIdentifier: String
     public let primaryRouteURL: URL

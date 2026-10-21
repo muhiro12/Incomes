@@ -183,7 +183,7 @@ struct IncomesMonthWidget {
     }
 
     // MARK: - Helpers
-    private let kind = "com.muhiro12.Incomes.Widgets.Month"
+    private let kind = IncomesWidgetIdentifiers.month
 
     private static func monthTitle(from date: Date) -> String {
         Formatting.monthTitle(from: date)

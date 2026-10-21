@@ -1,17 +1,18 @@
 import Foundation
 @testable import IncomesLibrary
+import MHPlatformCore
 import Testing
 
 struct NotificationRoutePayloadTests {
     @Test
-    func actionIdentifiers_preserveNotificationActionValues() {
+    func actionIdentifiers_useCanonicalNotificationActionValues() {
         #expect(
             NotificationRoutePayload.viewItemActionIdentifier ==
-                "upcoming-payment.view-item"
+                "viewUpcomingPaymentItem"
         )
         #expect(
             NotificationRoutePayload.viewMonthActionIdentifier ==
-                "upcoming-payment.view-month"
+                "viewUpcomingPaymentMonth"
         )
     }
 
@@ -36,41 +37,15 @@ struct NotificationRoutePayloadTests {
             ] == secondaryRouteURL
         )
         #expect(payload.metadata["itemIdentifier"] == "rent")
-        #expect(payload.metadata["notificationKind"] == "upcoming-payment")
-    }
-
-    @Test
-    func legacyFallbackRouteURL_returns_month_route_for_legacy_view_month_action() throws {
-        let secondaryRouteURL = try url("incomes://month?year=2026&month=1")
-        let userInfo: [AnyHashable: Any] = [
-            "secondaryDeepLinkURL": secondaryRouteURL.absoluteString
-        ]
-
-        let fallbackURL = NotificationRoutePayload.legacyFallbackRouteURL(
-            userInfo: userInfo,
-            actionIdentifier: NotificationRoutePayload.viewMonthActionIdentifier
-        )
-
-        #expect(fallbackURL == secondaryRouteURL)
-    }
-
-    @Test
-    func legacyFallbackRouteURL_ignores_modern_action_route_payloads() throws {
-        let secondaryRouteURL = try url("incomes://month?year=2026&month=1")
-        let userInfo: [AnyHashable: Any] = [
-            "secondaryDeepLinkURL": secondaryRouteURL.absoluteString,
-            "actionRouteURLs": [
-                NotificationRoutePayload.viewMonthActionIdentifier:
-                    secondaryRouteURL.absoluteString
-            ]
-        ]
-
-        let fallbackURL = NotificationRoutePayload.legacyFallbackRouteURL(
-            userInfo: userInfo,
-            actionIdentifier: NotificationRoutePayload.viewMonthActionIdentifier
-        )
-
-        #expect(fallbackURL == nil)
+        #expect(payload.metadata["notificationKind"] == "upcomingPayment")
+        #expect(MHNotificationRouteResolver.resolveRouteURL(
+            payload: payload,
+            response: .init(actionIdentifier: NotificationRoutePayload.viewItemActionIdentifier)
+        ) == primaryRouteURL)
+        #expect(MHNotificationRouteResolver.resolveRouteURL(
+            payload: payload,
+            response: .init(actionIdentifier: NotificationRoutePayload.viewMonthActionIdentifier)
+        ) == secondaryRouteURL)
     }
 }
 
@@ -88,10 +63,10 @@ private extension NotificationRoutePayloadTests {
         targetContentIdentifier: String
     ) -> UpcomingPaymentNotificationPresentation {
         .init(
-            requestIdentifier: "upcoming-payment:\(targetContentIdentifier)",
+            requestIdentifier: "upcomingPayment.\(targetContentIdentifier)",
             primaryRouteURL: primaryRouteURL,
             secondaryRouteURL: secondaryRouteURL,
-            threadIdentifier: "upcoming-payment:2026-01",
+            threadIdentifier: "upcomingPayment.2026-01",
             targetContentIdentifier: targetContentIdentifier,
             summaryArgument: "Rent",
             summaryArgumentCount: 1,

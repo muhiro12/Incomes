@@ -138,6 +138,37 @@ The `create` and `createWithOutcome` APIs continue to stage changes for library
 composition. They do not establish a durable success boundary. This contract is
 limited to new item creation; other mutations need their own save contract.
 
+## Identifier Boundaries
+
+Choose identity and spelling by lifetime and reader, rather than applying one
+string style to every boundary:
+
+- Keep persisted `TagType` values, app-owned UserDefaults keys, and the existing
+  notification-settings coding keys as fixed eight-character identifiers. Swift
+  symbols describe their meaning; changing a symbol does not rename stored data.
+- Watch messages and exported record fields use meaningful lowerCamelCase names.
+  Independently updated peers must continue to agree on their wire fields.
+- Notification request, category, action, and content-kind names use meaningful
+  lowerCamelCase in `UpcomingPaymentNotificationIdentifiers`. Refresh matches only
+  the current payment-reminder namespaces. Old pending or delivered notifications
+  may expire without replacement or special routing; do not add old-ID aliases,
+  migration flags, or old-payload route guessing for cosmetic normalization.
+- Widget kinds retain their published reverse-DNS names in
+  `IncomesWidgetIdentifiers`; registration and timeline reloads use the same
+  constants. Bundle, App Group, CloudKit, and Store product IDs are not cosmetic
+  naming opportunities.
+- The Incomes file format uses `com.muhiro12.Incomes.data`. It is new in 6.0;
+  development builds' former lowercase product spelling is not a reader alias.
+- Existing URL paths retain their established lowercase and kebab-case spelling.
+  Sharing and saved shortcuts outlive the running app.
+- Screen-only enum routes use typed identity (`id: Self`) instead of inventing
+  string contracts. Request UUIDs and draft IDs stay stable for their operation
+  or draft; do not regenerate them while reading an `id` property.
+
+Native persistent identities, file-scoped ledger references, and the default
+ledger role serve different scopes. Keep that distinction; naming cleanup must
+not add a second persisted identity system.
+
 ## App Intent Mapping
 
 App Intents must follow the same business path:
@@ -343,8 +374,8 @@ product rationale lives in the
    - `IncomesLibrary/Sources/Notification/NotificationRoutePayload.swift`
    - `IncomesLibrary/Sources/Notification/UpcomingPaymentNotificationPresentation.swift`
    Minimal plan:
-   - Keep payload codec, metadata keys, action route identifiers, legacy month
-     fallback logic, and upcoming-payment request identifier matching in
+   - Keep payload codec, metadata keys, action route identifiers, and current
+     request identifier matching in
      `IncomesLibrary`.
    - Keep `UNUserNotificationCenter` categories, authorization, scheduling,
      and content assembly in `NotificationService`.

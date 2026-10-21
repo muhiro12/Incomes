@@ -14,7 +14,6 @@ import UserNotifications
 @Observable
 final class NotificationService: NSObject {
     private enum NotificationConstant {
-        static let upcomingPaymentActions = "upcoming-payment.actions"
         static let upcomingPayments = 20
     }
 
@@ -249,7 +248,7 @@ private extension NotificationService {
         MHNotificationOrchestrator.registerCategories(
             [
                 .init(
-                    identifier: NotificationConstant.upcomingPaymentActions,
+                    identifier: UpcomingPaymentNotificationIdentifiers.categoryIdentifier,
                     actions: [
                         .init(
                             identifier: NotificationRoutePayload.viewItemActionIdentifier,
@@ -277,7 +276,7 @@ private extension NotificationService {
             localized: "Due on \(presentation.dueDate.formatted(.dateTime.weekday().month().day()))"
         )
         content.sound = .default
-        content.categoryIdentifier = NotificationConstant.upcomingPaymentActions
+        content.categoryIdentifier = UpcomingPaymentNotificationIdentifiers.categoryIdentifier
         content.threadIdentifier = presentation.threadIdentifier
         content.targetContentIdentifier = presentation.targetContentIdentifier
         content.relevanceScore = presentation.relevanceScore

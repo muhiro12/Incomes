@@ -8,20 +8,20 @@ struct UpcomingPaymentNoticeTests {
             for: "item"
         )
 
-        #expect(identifier == "upcoming-payment:item")
+        #expect(identifier == "upcomingPayment.item")
     }
 
     @Test
     func targetContentIdentifier_removesScheduledIdentifierPrefixOnly() {
         #expect(
             UpcomingPaymentNotificationPresentation.targetContentIdentifier(
-                fromRequestIdentifier: "upcoming-payment:item"
+                fromRequestIdentifier: "upcomingPayment.item"
             ) == "item"
         )
         #expect(
             UpcomingPaymentNotificationPresentation.targetContentIdentifier(
-                fromRequestIdentifier: "upcoming-payment-preview:item"
-            ) == "upcoming-payment-preview:item"
+                fromRequestIdentifier: "upcomingPaymentPreview.item"
+            ) == "upcomingPaymentPreview.item"
         )
         #expect(
             UpcomingPaymentNotificationPresentation.targetContentIdentifier(
@@ -36,7 +36,7 @@ struct UpcomingPaymentNoticeTests {
             UpcomingPaymentNotificationPresentation.threadIdentifier(
                 year: 2_026,
                 month: 1
-            ) == "upcoming-payment:2026-01"
+            ) == "upcomingPayment.2026-01"
         )
     }
 

@@ -133,7 +133,7 @@ struct IncomesUpcomingWidget {
         }
     }
 
-    private let kind = "com.muhiro12.Incomes.Widgets.Upcoming"
+    private let kind = IncomesWidgetIdentifiers.upcoming
 }
 
 extension IncomesUpcomingWidget: Widget {

@@ -235,9 +235,9 @@ private extension UpcomingPaymentPresentationTests {
         secondPresentation: UpcomingPaymentNotificationPresentation,
         thirdPresentation: UpcomingPaymentNotificationPresentation
     ) {
-        #expect(firstPresentation.threadIdentifier == "upcoming-payment:2024-01")
-        #expect(secondPresentation.threadIdentifier == "upcoming-payment:2024-01")
-        #expect(thirdPresentation.threadIdentifier == "upcoming-payment:2024-02")
+        #expect(firstPresentation.threadIdentifier == "upcomingPayment.2024-01")
+        #expect(secondPresentation.threadIdentifier == "upcomingPayment.2024-01")
+        #expect(thirdPresentation.threadIdentifier == "upcomingPayment.2024-02")
         #expect(firstPresentation.summaryArgument == "Rent")
         #expect(firstPresentation.summaryArgumentCount == 1)
         #expect(firstPresentation.badgeCount == 1)

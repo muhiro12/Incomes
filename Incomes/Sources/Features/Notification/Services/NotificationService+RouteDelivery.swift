@@ -22,18 +22,12 @@ extension NotificationService {
         let responseContext = MHNotificationResponseContext(
             actionIdentifier: response.actionIdentifier
         )
-        let legacyFallbackRouteURL = NotificationRoutePayload.legacyFallbackRouteURL(
-            userInfo: userInfo,
-            actionIdentifier: responseContext.actionIdentifier
-        )
         let deliveredOutcome = await MHNotificationOrchestrator.deliverRouteURL(
             payload: payload,
             response: responseContext,
             destination: routeDestination,
             clearPendingURLWhenNoRoute: true
-        ) { _, _ in
-            legacyFallbackRouteURL
-        }
+        )
 
         switch deliveredOutcome.source {
         case .payload:
@@ -47,7 +41,7 @@ extension NotificationService {
             notificationLogger.warning(
                 "notification_route.resolved",
                 metadata: IncomesLogging.metadata(
-                    ("route_source", "legacy_fallback")
+                    ("route_source", "fallback")
                 )
             )
         case .noRoute:
