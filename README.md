@@ -49,6 +49,12 @@ Models.
 
 - Drill into periods or categories using search targets and tag summaries backed
   by SwiftData queries and chart-ready aggregates.
+- Generate a monthly summary on request using the on-device model behind Apple
+  Intelligence. Calculated fallback text is identified separately, and generated
+  prose never changes saved amounts or balances.
+- Generative features require iOS 26 or later, a compatible device, and Apple
+  Intelligence ready in a supported language. Their App Intent adapters remain
+  undiscoverable while the system experience is qualified.
 
 ### Notifications and schedules
 
@@ -78,7 +84,7 @@ Models.
   same Monthly Plan entitlement as the app.
 - Scope item creation, queries, display, and yearly duplication to an optional
   ledger; omitting it preserves the default book used by existing Shortcuts.
-- Keep backup execution, ownership recovery, and experimental AI adapters
+- Keep backup execution, ownership recovery, and AI adapters
   undiscoverable while their system experience is qualified; see
   [the exposure follow-up](https://github.com/muhiro12/Incomes/issues/410).
 

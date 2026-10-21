@@ -15884,6 +15884,41 @@
         }
       }
     },
+    "Text generation could not be completed. Showing calculated totals instead." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Text generation could not be completed. Showing calculated totals instead."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo generar el texto. Se muestran los totales calculados."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La génération du texte n’a pas abouti. Les totaux calculés sont affichés à la place."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文章を生成できなかったため、計算した集計結果を表示しています。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未能完成文字生成，现显示计算得出的汇总。"
+          }
+        }
+      }
+    },
     "The Monthly Plan enables creating and editing additional ledgers. Existing ledgers remain available to view, switch, and export after it ends." : {
       "localizations" : {
         "en" : {
@@ -18199,6 +18234,41 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "在打开项目之前，可先用标签或金额区间缩小结果范围。"
+          }
+        }
+      }
+    },
+    "Uses the on-device model behind Apple Intelligence. Check generated text against your items." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Uses the on-device model behind Apple Intelligence. Check generated text against your items."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa el modelo en el dispositivo de Apple Intelligence. Comprueba el texto generado con tus registros."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilise le modèle embarqué d’Apple Intelligence. Vérifiez le texte généré à l’aide de vos opérations."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Apple Intelligenceの端末内モデルを使用します。生成された文章は、元の項目と照らし合わせて確認してください。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用 Apple Intelligence 的设备端模型。请对照原始记录核对生成的文字。"
           }
         }
       }

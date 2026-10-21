@@ -40,6 +40,6 @@ struct GenerateMonthlySummaryIntent: AppIntent {
             logger: intentLogger,
             ledgerIdentifier: LedgerIntentSupport.identifier(for: ledger, context: modelContainer.mainContext)
         )
-        return .result(value: summary)
+        return .result(value: summary.text)
     }
 }

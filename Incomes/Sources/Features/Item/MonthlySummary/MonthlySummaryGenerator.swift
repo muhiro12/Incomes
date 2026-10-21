@@ -35,7 +35,7 @@ enum MonthlySummaryGenerator {
         locale: Locale,
         logger: MHLogger? = nil,
         ledgerIdentifier: LedgerIdentifier = .default
-    ) async throws -> String {
+    ) async throws -> MonthlySummaryResult {
         let languageCode = MonthlySummaryOperations.languageCode(for: locale)
         let metadata = generationMetadata(
             languageCode: languageCode,
@@ -77,7 +77,7 @@ enum MonthlySummaryGenerator {
         currencyCode: String,
         locale: Locale,
         logger: MHLogger? = nil
-    ) async throws -> String {
+    ) async throws -> MonthlySummaryResult {
         let languageCode = MonthlySummaryOperations.languageCode(for: locale)
         let metadata = generationMetadata(
             languageCode: languageCode,
@@ -127,7 +127,7 @@ private extension MonthlySummaryGenerator {
         model: SystemLanguageModel,
         narrativeContext: MonthlySummaryOperations.Context,
         runtime: GenerationRuntime
-    ) async throws -> String {
+    ) async throws -> MonthlySummaryResult {
         let monthTitle = Formatting.monthTitle(
             from: runtime.date,
             locale: runtime.locale
@@ -143,7 +143,7 @@ private extension MonthlySummaryGenerator {
                 "monthly_summary.generated",
                 metadata: runtime.metadata
             )
-            return summary
+            return .init(text: summary, isModelGenerated: true)
         } catch let error as MonthlySummaryGenerationError {
             return try generationErrorSummary(
                 error,
@@ -245,7 +245,7 @@ private extension MonthlySummaryGenerator {
         locale: Locale,
         reason: String,
         runtime: GenerationRuntime
-    ) -> String {
+    ) -> MonthlySummaryResult {
         runtime.logger?.notice(
             "monthly_summary.fallback_used",
             metadata: runtime.metadata.merging(
@@ -254,10 +254,13 @@ private extension MonthlySummaryGenerator {
                 current
             }
         )
-        return fallbackSummary(
-            monthTitle: monthTitle,
-            narrativeContext: narrativeContext,
-            locale: locale
+        return .init(
+            text: fallbackSummary(
+                monthTitle: monthTitle,
+                narrativeContext: narrativeContext,
+                locale: locale
+            ),
+            isModelGenerated: false
         )
     }
 
@@ -266,7 +269,7 @@ private extension MonthlySummaryGenerator {
         monthTitle: String,
         narrativeContext: MonthlySummaryOperations.Context,
         runtime: GenerationRuntime
-    ) throws -> String {
+    ) throws -> MonthlySummaryResult {
         switch error {
         case .generationFailed:
             return loggedFallbackSummary(

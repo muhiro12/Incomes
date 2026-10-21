@@ -20,8 +20,6 @@ struct YearMonthItemListView {
 
     @AppStorage(\.isSubscribeOn)
     private var isSubscribeOn
-    @AppStorage(\.isDebugOn)
-    private var isDebugOn
 }
 
 extension YearMonthItemListView: View {
@@ -44,8 +42,7 @@ extension YearMonthItemListView: View {
                     )
                 }
             }
-            if isDebugOn,
-               let monthDate,
+            if let monthDate,
                let summaryItemsDescriptor {
                 if #available(iOS 26.0, *) {
                     MonthlySummarySection(
@@ -53,6 +50,7 @@ extension YearMonthItemListView: View {
                         currentItemsDescriptor: summaryItemsDescriptor,
                         ledgerIdentifier: ledgerIdentifier
                     )
+                    .id(ledgerIdentifier)
                 }
             }
         }

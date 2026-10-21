@@ -2,46 +2,26 @@ import SwiftUI
 
 @available(iOS 26.0, *)
 struct MonthlySummaryToolbarButton: View {
-    let generatedSummary: String?
-    let isGenerating: Bool
-    @Binding var isPopoverPresented: Bool
-    let generateInitialSummary: () -> Void
-    let generateSummary: () -> Void
+    @State private var isPopoverPresented = false
+
+    let date: Date
+    let currentItems: [Item]
+    let previousItems: [Item]
 
     var body: some View {
         Button {
             isPopoverPresented = true
-            generateInitialSummary()
         } label: {
-            if isWaitingForInitialSummary {
-                ProgressView()
-                    .controlSize(.small)
-            } else {
-                Image(systemName: "sparkles")
-            }
+            Image(systemName: "sparkles")
         }
-        .accessibilityLabel(accessibilityLabel)
+        .accessibilityLabel(Text("Monthly Summary"))
         .popover(isPresented: $isPopoverPresented, arrowEdge: .top) {
             MonthlySummaryPopover(
-                generatedSummary: generatedSummary,
-                isGenerating: isGenerating,
-                generateSummary: generateSummary
+                date: date,
+                currentItems: currentItems,
+                previousItems: previousItems
             )
             .presentationCompactAdaptation(.popover)
         }
-    }
-}
-
-@available(iOS 26.0, *)
-private extension MonthlySummaryToolbarButton {
-    var isWaitingForInitialSummary: Bool {
-        isGenerating && generatedSummary == nil
-    }
-
-    var accessibilityLabel: Text {
-        if isWaitingForInitialSummary {
-            return Text("Generating Summary")
-        }
-        return Text("Monthly Summary")
     }
 }
