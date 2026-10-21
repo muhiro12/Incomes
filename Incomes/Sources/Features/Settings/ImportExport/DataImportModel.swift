@@ -146,7 +146,8 @@ extension DataImportModel {
                     contents: contents,
                     difference: difference,
                     policy: policy,
-                    balancePolicy: balancePolicy
+                    balancePolicy: balancePolicy,
+                    reviewedCurrencyCode: currentCurrencyCode
                 ),
                 context: context,
                 didSave: didSave,

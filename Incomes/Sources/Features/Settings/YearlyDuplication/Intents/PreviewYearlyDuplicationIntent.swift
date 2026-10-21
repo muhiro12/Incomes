@@ -6,6 +6,17 @@ struct PreviewYearlyDuplicationIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Preview Yearly Duplication", table: "AppIntents")
     static let isDiscoverable = false
 
+    static var parameterSummary: some ParameterSummary {
+        Summary {
+            \.$sourceYear
+            \.$targetYear
+            \.$includeSingleItems
+            \.$minimumRepeatItemCount
+            \.$skipExistingItems
+            \.$ledger
+        }
+    }
+
     @Parameter(title: "Source Year")
     private var sourceYear: Int
     @Parameter(title: "Target Year")
@@ -16,6 +27,9 @@ struct PreviewYearlyDuplicationIntent: AppIntent {
     private var minimumRepeatItemCount: Int
     @Parameter(title: "Skip Existing Items", default: true)
     private var skipExistingItems: Bool
+
+    @Parameter(title: "Ledger")
+    private var ledger: LedgerEntity?
 
     @Dependency private var modelContainer: ModelContainer
     @Dependency private var logging: MHLoggingBootstrap
@@ -39,7 +53,8 @@ struct PreviewYearlyDuplicationIntent: AppIntent {
                 context: modelContainer.mainContext,
                 sourceYear: sourceYear,
                 targetYear: targetYear,
-                options: duplicationOptions
+                options: duplicationOptions,
+                ledgerIdentifier: LedgerIntentSupport.identifier(for: ledger, context: modelContainer.mainContext)
             )
             logger.notice(
                 "preview_yearly_duplication.completed",

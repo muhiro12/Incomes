@@ -6,6 +6,17 @@ struct ApplyYearlyDuplicationIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Apply Yearly Duplication", table: "AppIntents")
     static let isDiscoverable = false
 
+    static var parameterSummary: some ParameterSummary {
+        Summary {
+            \.$sourceYear
+            \.$targetYear
+            \.$includeSingleItems
+            \.$minimumRepeatItemCount
+            \.$skipExistingItems
+            \.$ledger
+        }
+    }
+
     @Parameter(title: "Source Year")
     private var sourceYear: Int
     @Parameter(title: "Target Year")
@@ -16,6 +27,9 @@ struct ApplyYearlyDuplicationIntent: AppIntent {
     private var minimumRepeatItemCount: Int
     @Parameter(title: "Skip Existing Items", default: true)
     private var skipExistingItems: Bool
+
+    @Parameter(title: "Ledger")
+    private var ledger: LedgerEntity?
 
     @Dependency private var modelContainer: ModelContainer
     @Dependency private var logging: MHLoggingBootstrap
@@ -36,11 +50,15 @@ struct ApplyYearlyDuplicationIntent: AppIntent {
         )
         do {
             try await IncomesMutationWorkflow.checkUpdateRequirement()
+            try LedgerMutationAccess.requireEditing([LedgerIntentSupport.identifier(
+                for: ledger, context: modelContainer.mainContext
+            )])
             let result = try YearlyDuplicationAutomationOperations.apply(
                 context: modelContainer.mainContext,
                 sourceYear: sourceYear,
                 targetYear: targetYear,
-                options: duplicationOptions
+                options: duplicationOptions,
+                ledgerIdentifier: LedgerIntentSupport.identifier(for: ledger, context: modelContainer.mainContext)
             )
             logger.notice(
                 "apply_yearly_duplication.completed",

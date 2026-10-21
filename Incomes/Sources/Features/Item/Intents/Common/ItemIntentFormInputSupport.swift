@@ -8,7 +8,8 @@ enum ItemIntentFormInputSupport {
         income: IntentCurrencyAmount,
         outgo: IntentCurrencyAmount,
         category: String,
-        priority: Int? = nil
+        priority: Int? = nil,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) -> ItemFormInput {
         if let priority {
             return .init(
@@ -17,7 +18,8 @@ enum ItemIntentFormInputSupport {
                 income: income.amount,
                 outgo: outgo.amount,
                 category: category,
-                priority: priority
+                priority: priority,
+                ledgerIdentifier: ledgerIdentifier
             )
         }
         return .init(
@@ -25,7 +27,8 @@ enum ItemIntentFormInputSupport {
             content: content,
             income: income.amount,
             outgo: outgo.amount,
-            category: category
+            category: category,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 

@@ -17,6 +17,17 @@ enum MainNavigationRouteExecutor {
              .duplicateTags,
              .orphanTags:
             return try executeStaticRoute(route, context: context, ledgerIdentifier: ledgerIdentifier)
+        case .ledger:
+            return try fallbackHomeDestination(
+                context: context,
+                ledgerIdentifier: MainNavigationOperations.ledgerIdentifier(forExternalRoute: route, context: context)
+            )
+        case let .ledgerMonth(_, year, month):
+            return try executeDateRoute(
+                .month(year: year, month: month),
+                context: context,
+                ledgerIdentifier: MainNavigationOperations.ledgerIdentifier(forExternalRoute: route, context: context)
+            )
         case .yearSummary,
              .year,
              .month:
@@ -35,7 +46,7 @@ private extension MainNavigationRouteExecutor {
         ledgerIdentifier: LedgerIdentifier
     ) throws -> MainNavigationRouteOutcome {
         switch route {
-        case .home:
+        case .home, .ledger:
             return try fallbackHomeDestination(context: context, ledgerIdentifier: ledgerIdentifier)
         case .settings:
             return .settings

@@ -10,9 +10,12 @@ enum ItemIntentShowResultSupport {
     @MainActor
     static func singleItem(
         _ item: Item?,
-        defaultDate: Date
+        defaultDate: Date,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) -> some ProvidesDialog & ShowsSnippetView {
-        let defaultOpenIntent = IncomesIntentRouteOpener.monthIntent(for: defaultDate)
+        let defaultOpenIntent = IncomesIntentRouteOpener.monthIntent(
+            for: defaultDate, ledgerIdentifier: ledgerIdentifier
+        )
         guard let item else {
             return .result(
                 opensIntent: defaultOpenIntent,
@@ -20,11 +23,14 @@ enum ItemIntentShowResultSupport {
             )
         }
         return .result(
-            opensIntent: IncomesIntentRouteOpener.monthIntent(for: item.localDate),
+            opensIntent: IncomesIntentRouteOpener.monthIntent(
+                for: item.localDate, ledgerIdentifier: item.ledgerIdentifier
+            ),
             dialog: itemContentDialog(for: item)
         ) {
             IntentItemSection()
                 .environment(item)
+                .environment(\.ledgerIdentifier, item.ledgerIdentifier)
         }
     }
 
@@ -33,9 +39,12 @@ enum ItemIntentShowResultSupport {
         _ items: [Item],
         defaultDate: Date,
         modelContainer: ModelContainer,
-        successOpenDate: Date? = nil
+        successOpenDate: Date? = nil,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) -> some ProvidesDialog & ShowsSnippetView {
-        let defaultOpenIntent = IncomesIntentRouteOpener.monthIntent(for: defaultDate)
+        let defaultOpenIntent = IncomesIntentRouteOpener.monthIntent(
+            for: defaultDate, ledgerIdentifier: ledgerIdentifier
+        )
         guard let firstItem = items.first else {
             return .result(
                 opensIntent: defaultOpenIntent,
@@ -43,15 +52,20 @@ enum ItemIntentShowResultSupport {
             )
         }
         return .result(
-            opensIntent: IncomesIntentRouteOpener.monthIntent(for: successOpenDate ?? firstItem.localDate),
+            opensIntent: IncomesIntentRouteOpener.monthIntent(
+                for: successOpenDate ?? firstItem.localDate, ledgerIdentifier: ledgerIdentifier
+            ),
             dialog: monthDialog(for: defaultDate)
         ) {
             IntentItemListSection(items)
                 .modelContainer(modelContainer)
+                .environment(\.ledgerIdentifier, ledgerIdentifier)
                 .environment(
                     \.ledgerBalances,
-                    (try? LedgerBalanceOperations.snapshot(context: modelContainer.mainContext))?.balances
-                        ?? [:]
+                    (try? LedgerBalanceOperations.snapshot(
+                        context: modelContainer.mainContext, ledgerIdentifier: ledgerIdentifier
+                    ))?.balances
+                    ?? [:]
                 )
         }
     }
@@ -60,9 +74,10 @@ enum ItemIntentShowResultSupport {
     static func chartList(
         _ items: [Item],
         defaultDate: Date,
-        modelContainer: ModelContainer
+        modelContainer: ModelContainer,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) -> some ProvidesDialog & ShowsSnippetView {
-        let openIntent = IncomesIntentRouteOpener.monthIntent(for: defaultDate)
+        let openIntent = IncomesIntentRouteOpener.monthIntent(for: defaultDate, ledgerIdentifier: ledgerIdentifier)
         guard !items.isEmpty else {
             return .result(
                 opensIntent: openIntent,
@@ -73,12 +88,15 @@ enum ItemIntentShowResultSupport {
             opensIntent: openIntent,
             dialog: monthDialog(for: defaultDate)
         ) {
-            IntentChartSectionGroup(.items(.idsAre(items.map(\.id))))
+            IntentChartSectionGroup(.items(.idsAre(items.map(\.id)), ledgerIdentifier: ledgerIdentifier))
                 .modelContainer(modelContainer)
+                .environment(\.ledgerIdentifier, ledgerIdentifier)
                 .environment(
                     \.ledgerBalances,
-                    (try? LedgerBalanceOperations.snapshot(context: modelContainer.mainContext))?.balances
-                        ?? [:]
+                    (try? LedgerBalanceOperations.snapshot(
+                        context: modelContainer.mainContext, ledgerIdentifier: ledgerIdentifier
+                    ))?.balances
+                    ?? [:]
                 )
         }
     }

@@ -2,6 +2,10 @@ import AppIntents
 import Foundation
 
 enum ItemIntentCurrencySupport {
+    static func amount(from amount: Decimal) -> IntentCurrencyAmount {
+        .init(amount: amount, currencyCode: IncomesCurrencyPreference.preferredCurrencyCode())
+    }
+
     static func amount(from amount: Decimal?) -> IntentCurrencyAmount? {
         guard let amount else {
             return nil

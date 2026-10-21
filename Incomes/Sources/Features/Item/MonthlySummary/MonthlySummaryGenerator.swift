@@ -33,7 +33,8 @@ enum MonthlySummaryGenerator {
         date: Date,
         currencyCode: String,
         locale: Locale,
-        logger: MHLogger? = nil
+        logger: MHLogger? = nil,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) async throws -> String {
         let languageCode = MonthlySummaryOperations.languageCode(for: locale)
         let metadata = generationMetadata(
@@ -52,7 +53,8 @@ enum MonthlySummaryGenerator {
         let narrativeContext = try resolvedNarrativeContext(
             context: context,
             date: date,
-            currencyCode: currencyCode
+            currencyCode: currencyCode,
+            ledgerIdentifier: ledgerIdentifier
         )
 
         return try await generatedOrFallbackSummary(
@@ -171,13 +173,15 @@ private extension MonthlySummaryGenerator {
     private static func resolvedNarrativeContext(
         context: ModelContext,
         date: Date,
-        currencyCode: String
+        currencyCode: String,
+        ledgerIdentifier: LedgerIdentifier
     ) throws -> MonthlySummaryOperations.Context {
         do {
             return try MonthlySummaryOperations.loadContext(
                 context: context,
                 date: date,
-                currencyCode: currencyCode
+                currencyCode: currencyCode,
+                ledgerIdentifier: ledgerIdentifier
             )
         } catch MonthlySummaryOperations.LoadingError.invalidYearMonth {
             throw MonthlySummaryGenerationError.invalidYearMonth

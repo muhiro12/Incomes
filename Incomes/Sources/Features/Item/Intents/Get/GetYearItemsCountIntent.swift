@@ -4,8 +4,18 @@ import SwiftData
 struct GetYearItemsCountIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Get Year Items Count", table: "AppIntents")
 
+    static var parameterSummary: some ParameterSummary {
+        Summary {
+            \.$date
+            \.$ledger
+        }
+    }
+
     @Parameter(title: "Date", kind: .date)
     private var date: Date
+
+    @Parameter(title: "Ledger")
+    private var ledger: LedgerEntity?
 
     @Dependency private var modelContainer: ModelContainer
 
@@ -14,7 +24,8 @@ struct GetYearItemsCountIntent: AppIntent {
         .result(
             value: try ItemQueryOperations.yearItemsCount(
                 context: modelContainer.mainContext,
-                date: date
+                date: date,
+                ledgerIdentifier: LedgerIntentSupport.identifier(for: ledger, context: modelContainer.mainContext)
             )
         )
     }

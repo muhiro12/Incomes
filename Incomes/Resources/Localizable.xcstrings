@@ -1801,6 +1801,40 @@
         }
       }
     },
+    "Assign the selected unassigned items to this ledger and recalculate its affected balances?" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assign the selected unassigned items to this ledger and recalculate its affected balances?"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "選択した所属未設定の項目をこの帳簿に割り当て、影響する範囲の残高を再計算しますか？"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Asignar los elementos seleccionados a este libro y recalcular los saldos afectados?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Affecter les éléments sélectionnés à ce registre et recalculer les soldes concernés ?"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "要将所选的未分配项目归入此账簿，并重新计算受影响的余额吗？"
+          }
+        }
+      }
+    },
     "Assign to Ledger" : {
       "localizations" : {
         "en" : {
@@ -6801,6 +6835,40 @@
         }
       }
     },
+    "Import Policy" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import Policy"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取込方法"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Método de importación"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Méthode d’importation"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导入方式"
+          }
+        }
+      }
+    },
     "Import another file" : {
       "localizations" : {
         "en" : {
@@ -6967,6 +7035,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "导入方式"
+          }
+        }
+      }
+    },
+    "Import: add %lld, remove %lld, keep %lld, ledger changes %lld." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import: add %lld, remove %lld, keep %lld, ledger changes %lld."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "取込予定：追加%lld件、削除%lld件、維持%lld件、帳簿の変更%lld件。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importación: añadir %lld, eliminar %lld, conservar %lld, cambios de libros %lld."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Importation : %lld ajouts, %lld suppressions, %lld éléments conservés, %lld modifications de registres."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "导入：新增%lld项，删除%lld项，保留%lld项，账簿变更%lld项。"
+          }
+        }
+      }
+    },
+    "Imported %lld items." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Imported %lld items."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld件の項目を取り込みました。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Se importaron %lld elementos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld éléments importés."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "已导入%lld个项目。"
           }
         }
       }
@@ -8973,6 +9109,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "合并"
+          }
+        }
+      }
+    },
+    "Merge keeps current items in conflicting groups. Replace uses the file inside its selection." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Merge keeps current items in conflicting groups. Replace uses the file inside its selection."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "結合では競合するグループの現在の項目を維持します。置換では、ファイルの対象範囲をファイルの内容に合わせます。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La combinación conserva los elementos actuales en los grupos con conflictos. Reemplazar usa el archivo dentro de su selección."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La fusion conserve les éléments actuels des groupes en conflit. Le remplacement utilise le fichier dans sa sélection."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "合并会保留冲突组中的当前项目。替换会在文件指定的范围内使用文件内容。"
           }
         }
       }
@@ -17859,6 +18029,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "使用 %@ 作为货币"
+          }
+        }
+      }
+    },
+    "Use Currency from File" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use Currency from File"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ファイルの通貨を使う"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar moneda del archivo"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser la devise du fichier"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用文件中的货币"
+          }
+        }
+      }
+    },
+    "Use currency from file: %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use currency from file: %@."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ファイルの通貨を使います：%@。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usar moneda del archivo: %@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utiliser la devise du fichier : %@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "使用文件中的货币：%@。"
           }
         }
       }

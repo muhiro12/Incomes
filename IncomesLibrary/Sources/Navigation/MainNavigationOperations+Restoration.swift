@@ -54,6 +54,8 @@ private extension MainNavigationOperations {
              .month:
             true
         case .home,
+             .ledger,
+             .ledgerMonth,
              .settings,
              .settingsSubscription,
              .settingsLicense,

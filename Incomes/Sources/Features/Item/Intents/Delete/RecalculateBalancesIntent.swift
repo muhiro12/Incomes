@@ -6,8 +6,18 @@ struct RecalculateBalancesIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Recalculate Balances", table: "AppIntents")
     static let isDiscoverable = false
 
+    static var parameterSummary: some ParameterSummary {
+        Summary {
+            \.$date
+            \.$ledger
+        }
+    }
+
     @Parameter(title: "Date", kind: .date)
     private var date: Date
+
+    @Parameter(title: "Ledger")
+    private var ledger: LedgerEntity?
 
     @Dependency private var modelContainer: ModelContainer
     @Dependency private var logging: MHLoggingBootstrap
@@ -26,10 +36,12 @@ struct RecalculateBalancesIntent: AppIntent {
         )
         do {
             try await IncomesMutationWorkflow.checkUpdateRequirement()
-            try LedgerMutationAccess.requireEditing([.default])
+            let identifier = try LedgerIntentSupport.identifier(for: ledger, context: modelContainer.mainContext)
+            try LedgerMutationAccess.requireEditing([identifier])
             try ItemBalanceOperations.recalculateAndSave(
                 context: modelContainer.mainContext,
-                date: date
+                date: date,
+                ledgerIdentifier: identifier
             )
             logger.notice("recalculate_balances.completed")
             return .result()

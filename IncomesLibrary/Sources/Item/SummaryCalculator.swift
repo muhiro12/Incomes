@@ -18,8 +18,14 @@ enum SummaryCalculator {
     ///   - context: A `ModelContext` to query items from.
     ///   - date: Any date inside the target month.
     /// - Returns: The aggregated monthly totals.
-    static func monthlyTotals(context: ModelContext, date: Date) throws -> MonthlyTotals {
-        let items = try ItemQueryOperations.items(context: context, date: date)
+    static func monthlyTotals(
+        context: ModelContext,
+        date: Date,
+        ledgerIdentifier: LedgerIdentifier = .default
+    ) throws -> MonthlyTotals {
+        let items = try ItemQueryOperations.items(
+            context: context, date: date, ledgerIdentifier: ledgerIdentifier
+        )
 
         return try monthlyTotals(for: items)
     }
@@ -40,11 +46,16 @@ enum SummaryCalculator {
     /// - Returns: Deterministically sorted category comparisons.
     static func categoryComparison(
         context: ModelContext,
-        date: Date
+        date: Date,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> [CategoryComparison] {
-        let currentItems = try ItemQueryOperations.items(context: context, date: date)
+        let currentItems = try ItemQueryOperations.items(
+            context: context, date: date, ledgerIdentifier: ledgerIdentifier
+        )
         let previousMonthDate = MonthlySummaryDateSupport.previousMonthDate(from: date)
-        let previousItems = try ItemQueryOperations.items(context: context, date: previousMonthDate)
+        let previousItems = try ItemQueryOperations.items(
+            context: context, date: previousMonthDate, ledgerIdentifier: ledgerIdentifier
+        )
 
         return try categoryComparison(
             currentItems: currentItems,

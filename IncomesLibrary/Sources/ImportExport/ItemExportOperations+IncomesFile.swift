@@ -2,6 +2,12 @@ import Foundation
 import SwiftData
 
 public extension ItemExportOperations {
+    /// Captures a complete multi-ledger export for non-UI surfaces without exposing fetch rules.
+    static func prepareFile(context: ModelContext) throws -> ItemExportPreparation {
+        try LedgerOperations.requireCompleteOwnership(context: context)
+        return prepareFile(items: try context.fetch(.allLedgerItems()))
+    }
+
     /// Captures every item's file values without changing models, balances, or tags.
     static func fileItems(items: [Item]) -> [IncomesFileItem] {
         prepareFile(items: items).items

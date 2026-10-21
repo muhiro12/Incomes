@@ -12,6 +12,18 @@ import SwiftData
 struct CreateItemIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Create Item", table: "AppIntents")
 
+    static var parameterSummary: some ParameterSummary {
+        Summary {
+            \.$date
+            \.$content
+            \.$income
+            \.$outgo
+            \.$category
+            \.$repeatCount
+            \.$ledger
+        }
+    }
+
     @Parameter(title: "Date", kind: .date)
     private var date: Date
     @Parameter(title: "Content")
@@ -26,6 +38,9 @@ struct CreateItemIntent: AppIntent {
     @Parameter(title: "Repeat", default: 1, inclusiveRange: (1, 60)) // swiftlint:disable:this no_magic_numbers
     private var repeatCount: Int
 
+    @Parameter(title: "Ledger")
+    private var ledger: LedgerEntity?
+
     @Dependency private var modelContainer: ModelContainer
     @Dependency private var notificationService: NotificationService
     @Dependency private var logging: MHLoggingBootstrap
@@ -36,7 +51,8 @@ struct CreateItemIntent: AppIntent {
             content: content,
             income: income,
             outgo: outgo,
-            category: category
+            category: category,
+            ledgerIdentifier: ledger?.identifier ?? .default
         )
     }
 

@@ -127,13 +127,15 @@ public enum MonthlySummaryOperations {
         context: ModelContext,
         date: Date,
         currencyCode: String,
-        categoryComparisonLimit: Int = defaultCategoryComparisonLimit
+        categoryComparisonLimit: Int = defaultCategoryComparisonLimit,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> Context {
         try MonthlySummaryNarrativeContextLoader.load(
             context: context,
             date: date,
             currencyCode: currencyCode,
-            categoryComparisonLimit: categoryComparisonLimit
+            categoryComparisonLimit: categoryComparisonLimit,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 

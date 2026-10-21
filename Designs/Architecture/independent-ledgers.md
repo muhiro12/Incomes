@@ -92,9 +92,31 @@ balances before mutation, then saves relationships and balances together. Premiu
 is required for an additional-book destination, not the default book.
 
 The app selects books per window. Existing unqualified month/year routes,
-Widgets, Watch snapshots, and ordinary Shortcut creation retain the default
-book. An explicit Item route resolves the Item's current book. The companion
-surfaces label the default-book scope; broader selection can follow separately.
+Widgets, Watch snapshots, and Shortcuts with an omitted ledger retain the default
+book. Optional `LedgerEntity` parameters scope creation, retrieval, relative
+queries, recalculation, yearly duplication, tag membership, and monthly summaries
+without changing saved actions that omit the parameter. An explicit Item route
+resolves the Item's current book. `ledger?id=<identifier>` opens a selected book,
+including an empty one. Its optional `month=yyyy-MM` query preserves the date
+when opening ledger-scoped item/chart snippets. Unavailable identities fall back
+to the default book.
+The companion surfaces continue to label their default-book scope.
+
+### App Intent exposure
+
+Ledger listing, opening, creation, rename, balance retrieval, and import preview
+are discoverable. Creation and rename use the same entitlement boundary as the
+app; creation repeats the all-devices-updated notice before saving. The first
+book's rename protection also applies to Intents. `LedgerEntity` reuses the
+existing default role and store-local Tag identity; it adds no model ID or
+preference key. Cross-device identity remains a separate issue (#409).
+
+Backup export/import, unassigned-item retrieval/assignment, and experimental
+natural-language search have implemented adapters with `isDiscoverable = false`.
+Their system review, authentication, and discovery qualification is tracked in
+[#410](https://github.com/muhiro12/Incomes/issues/410). Hidden actions still check
+update requirements and entitlement and use the canonical save boundaries.
+Existing hidden AI/maintenance actions retain their discovery settings.
 
 Premium expiry preserves view, selection, and export access. The default book
 stays editable; additional-book mutations require Premium at the adapter

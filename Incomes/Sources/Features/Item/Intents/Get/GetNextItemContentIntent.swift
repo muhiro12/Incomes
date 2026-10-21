@@ -11,8 +11,18 @@ import SwiftData
 struct GetNextItemContentIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Get Next Item Content", table: "AppIntents")
 
+    static var parameterSummary: some ParameterSummary {
+        Summary {
+            \.$date
+            \.$ledger
+        }
+    }
+
     @Parameter(title: "Date", kind: .date)
     private var date: Date
+
+    @Parameter(title: "Ledger")
+    private var ledger: LedgerEntity?
 
     @Dependency private var modelContainer: ModelContainer
 
@@ -22,7 +32,8 @@ struct GetNextItemContentIntent: AppIntent {
             value: try ItemRelativeQueryOperations.content(
                 context: modelContainer.mainContext,
                 date: date,
-                direction: .next
+                direction: .next,
+                ledgerIdentifier: LedgerIntentSupport.identifier(for: ledger, context: modelContainer.mainContext)
             )
         )
     }

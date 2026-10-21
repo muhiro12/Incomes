@@ -25,8 +25,15 @@ extension IncomesRoute: MHDeepLinkRoute {
                 return nil
             }
             return self
-        case .item(let itemID):
+        case .item(let itemID), .ledger(let itemID):
             guard !itemID.isEmpty else {
+                return nil
+            }
+            return self
+        case let .ledgerMonth(identifier, year, month):
+            guard !identifier.isEmpty,
+                  YearMonthComponentRules.isValidYear(year),
+                  YearMonthComponentRules.isValidMonth(month) else {
                 return nil
             }
             return self
@@ -76,6 +83,13 @@ extension IncomesRoute: MHDeepLinkRoute {
                     .init(name: "id", value: itemID)
                 ] : []
             )
+        case .ledger(let identifier):
+            .init(pathComponents: ["ledger"], queryItems: [.init(name: "id", value: identifier)])
+        case let .ledgerMonth(identifier, year, month):
+            .init(pathComponents: ["ledger"], queryItems: [
+                .init(name: "id", value: identifier),
+                .init(name: "month", value: String(format: "%04d-%02d", year, month))
+            ])
         case .search(let query):
             .init(
                 pathComponents: ["search"],
@@ -139,11 +153,8 @@ extension IncomesRoute: MHDeepLinkRoute {
             return Self.parseMonthRoute(
                 from: routeSegments
             )
-        case "item":
-            return Self.parseItemRoute(
-                from: routeSegments,
-                queryItems: queryItems
-            )
+        case "item", "ledger":
+            return parseEntityRoute(destination: destination, from: routeSegments, queryItems: queryItems)
         case "search":
             return Self.parseSearchRoute(
                 from: routeSegments,
@@ -152,6 +163,36 @@ extension IncomesRoute: MHDeepLinkRoute {
         default:
             return nil
         }
+    }
+
+    private static func parseEntityRoute(
+        destination: String,
+        from segments: ArraySlice<String>,
+        queryItems: [URLQueryItem]
+    ) -> IncomesRoute? {
+        if destination == "ledger" {
+            return parseLedgerRoute(from: segments, queryItems: queryItems)
+        }
+        return parseItemRoute(from: segments, queryItems: queryItems)
+    }
+
+    private static func parseLedgerRoute(
+        from segments: ArraySlice<String>,
+        queryItems: [URLQueryItem]
+    ) -> IncomesRoute? {
+        guard segments.isEmpty,
+              let identifier = queryItems.first(where: { $0.name == "id" })?.value,
+              !identifier.isEmpty else {
+            return nil
+        }
+        if let month = queryItems.first(where: { $0.name == "month" })?.value {
+            guard let route = parseMonthRoute(from: ArraySlice([month])),
+                  case let .month(year, month) = route else {
+                return nil
+            }
+            return .ledgerMonth(identifier, year: year, month: month)
+        }
+        return .ledger(identifier)
     }
 
     private static func parseRouteWithoutSegments(

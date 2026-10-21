@@ -11,8 +11,18 @@ import SwiftData
 struct GetNextItemDateIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Get Next Item Date", table: "AppIntents")
 
+    static var parameterSummary: some ParameterSummary {
+        Summary {
+            \.$date
+            \.$ledger
+        }
+    }
+
     @Parameter(title: "Date", kind: .date)
     private var date: Date
+
+    @Parameter(title: "Ledger")
+    private var ledger: LedgerEntity?
 
     @Dependency private var modelContainer: ModelContainer
 
@@ -22,7 +32,8 @@ struct GetNextItemDateIntent: AppIntent {
             value: try ItemRelativeQueryOperations.localDate(
                 context: modelContainer.mainContext,
                 date: date,
-                direction: .next
+                direction: .next,
+                ledgerIdentifier: LedgerIntentSupport.identifier(for: ledger, context: modelContainer.mainContext)
             )
         )
     }

@@ -7,6 +7,19 @@ struct CreateScheduledItemIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Create Scheduled Item", table: "AppIntents")
     static let isDiscoverable = false
 
+    static var parameterSummary: some ParameterSummary {
+        Summary {
+            \.$date
+            \.$content
+            \.$income
+            \.$outgo
+            \.$category
+            \.$priority
+            \.$repeatMonths
+            \.$ledger
+        }
+    }
+
     @Parameter(title: "Date", kind: .date)
     private var date: Date
     @Parameter(title: "Content")
@@ -22,6 +35,9 @@ struct CreateScheduledItemIntent: AppIntent {
     @Parameter(title: "Repeat Months", default: "")
     private var repeatMonths: String
 
+    @Parameter(title: "Ledger")
+    private var ledger: LedgerEntity?
+
     @Dependency private var modelContainer: ModelContainer
     @Dependency private var notificationService: NotificationService
     @Dependency private var logging: MHLoggingBootstrap
@@ -33,7 +49,8 @@ struct CreateScheduledItemIntent: AppIntent {
             income: income,
             outgo: outgo,
             category: category,
-            priority: priority
+            priority: priority,
+            ledgerIdentifier: ledger?.identifier ?? .default
         )
     }
 

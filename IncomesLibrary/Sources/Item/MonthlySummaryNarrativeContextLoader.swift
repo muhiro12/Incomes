@@ -14,7 +14,8 @@ enum MonthlySummaryNarrativeContextLoader {
         context: ModelContext,
         date: Date,
         currencyCode: String,
-        categoryComparisonLimit: Int = defaultCategoryComparisonLimit
+        categoryComparisonLimit: Int = defaultCategoryComparisonLimit,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> MonthlySummaryOperations.Context {
         try LedgerOperations.requireCompleteOwnership(context: context)
         let currentYearMonth = try yearMonth(from: date)
@@ -22,15 +23,18 @@ enum MonthlySummaryNarrativeContextLoader {
         let previousYearMonth = try yearMonth(from: previousDate)
         let currentTotals = try SummaryCalculator.monthlyTotals(
             context: context,
-            date: date
+            date: date,
+            ledgerIdentifier: ledgerIdentifier
         )
         let previousTotals = try SummaryCalculator.monthlyTotals(
             context: context,
-            date: previousDate
+            date: previousDate,
+            ledgerIdentifier: ledgerIdentifier
         )
         let categoryComparisons = try SummaryCalculator.categoryComparison(
             context: context,
-            date: date
+            date: date,
+            ledgerIdentifier: ledgerIdentifier
         )
         .prefix(max(.zero, categoryComparisonLimit))
         .map { comparison in

@@ -97,17 +97,10 @@ struct DataExportButton: View {
 
 private extension DataExportButton {
     var priorityMessage: Text {
-        if hasUnresolvedOrder, hasAdjustedPriorities {
-            Text(
-                "Priorities change only in this copy. Some tied items may still change order and balances on restore."
-            )
-        } else if hasUnresolvedOrder {
-            Text(
-                "Some tied items may change order and displayed balances on restore. Current data stays unchanged."
-            )
-        } else {
-            Text("File priorities are adjusted to preserve restore order. Your current data stays unchanged.")
-        }
+        Text(DataExportPriorityNotice.message(
+            hasAdjustedPriorities: hasAdjustedPriorities,
+            hasUnresolvedOrder: hasUnresolvedOrder
+        ) ?? "")
     }
 
     var logger: MHLogger {

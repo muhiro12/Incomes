@@ -12,5 +12,7 @@ public enum IncomesRoute: Equatable, Sendable {
     case year(Int)
     case month(year: Int, month: Int)
     case item(String)
+    case ledger(String)
+    case ledgerMonth(String, year: Int, month: Int)
     case search(query: String?)
 }

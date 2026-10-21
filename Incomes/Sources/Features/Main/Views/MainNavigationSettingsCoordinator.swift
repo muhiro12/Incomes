@@ -43,6 +43,8 @@ extension IncomesRoute {
              .settingsDebug:
             return true
         case .home,
+             .ledger,
+             .ledgerMonth,
              .yearSummary,
              .yearlyDuplication,
              .duplicateTags,

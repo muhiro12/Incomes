@@ -22,18 +22,21 @@ public enum ItemRelativeQueryOperations {
     public static func item(
         context: ModelContext,
         date: Date,
-        direction: Direction
+        direction: Direction,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> Item? {
         switch direction {
         case .next:
             try ItemQueryOperations.nextItem(
                 context: context,
-                date: date
+                date: date,
+                ledgerIdentifier: ledgerIdentifier
             )
         case .previous:
             try ItemQueryOperations.previousItem(
                 context: context,
-                date: date
+                date: date,
+                ledgerIdentifier: ledgerIdentifier
             )
         }
     }
@@ -42,18 +45,21 @@ public enum ItemRelativeQueryOperations {
     public static func items(
         context: ModelContext,
         date: Date,
-        direction: Direction
+        direction: Direction,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> [Item] {
         switch direction {
         case .next:
             try ItemQueryOperations.nextItems(
                 context: context,
-                date: date
+                date: date,
+                ledgerIdentifier: ledgerIdentifier
             )
         case .previous:
             try ItemQueryOperations.previousItems(
                 context: context,
-                date: date
+                date: date,
+                ledgerIdentifier: ledgerIdentifier
             )
         }
     }
@@ -62,12 +68,14 @@ public enum ItemRelativeQueryOperations {
     public static func content(
         context: ModelContext,
         date: Date,
-        direction: Direction
+        direction: Direction,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> String? {
         let item = try item(
             context: context,
             date: date,
-            direction: direction
+            direction: direction,
+            ledgerIdentifier: ledgerIdentifier
         )
         return item?.content
     }
@@ -76,12 +84,14 @@ public enum ItemRelativeQueryOperations {
     public static func localDate(
         context: ModelContext,
         date: Date,
-        direction: Direction
+        direction: Direction,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> Date? {
         let item = try item(
             context: context,
             date: date,
-            direction: direction
+            direction: direction,
+            ledgerIdentifier: ledgerIdentifier
         )
         return item?.localDate
     }
@@ -90,12 +100,14 @@ public enum ItemRelativeQueryOperations {
     public static func netIncome(
         context: ModelContext,
         date: Date,
-        direction: Direction
+        direction: Direction,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> Decimal? {
         let item = try item(
             context: context,
             date: date,
-            direction: direction
+            direction: direction,
+            ledgerIdentifier: ledgerIdentifier
         )
         return item?.netIncome
     }

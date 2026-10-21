@@ -5,6 +5,16 @@ struct SuggestYearlyDuplicationIntent: AppIntent {
     static let title: LocalizedStringResource = .init("Suggest Yearly Duplication", table: "AppIntents")
 
     // swiftlint:disable no_magic_numbers
+    static var parameterSummary: some ParameterSummary {
+        Summary {
+            \.$minimumGroupCount
+            \.$includeSingleItems
+            \.$minimumRepeatItemCount
+            \.$skipExistingItems
+            \.$ledger
+        }
+    }
+
     @Parameter(title: "Minimum Group Count", default: 3, inclusiveRange: (1, 60))
     private var minimumGroupCount: Int
     @Parameter(title: "Include Single Items", default: false)
@@ -15,6 +25,9 @@ struct SuggestYearlyDuplicationIntent: AppIntent {
     @Parameter(title: "Skip Existing Items", default: true)
     private var skipExistingItems: Bool
 
+    @Parameter(title: "Ledger")
+    private var ledger: LedgerEntity?
+
     @Dependency private var modelContainer: ModelContainer
 
     @MainActor
@@ -23,7 +36,8 @@ struct SuggestYearlyDuplicationIntent: AppIntent {
             value: try YearlyDuplicationAutomationOperations.suggestionText(
                 context: modelContainer.mainContext,
                 minimumGroupCount: minimumGroupCount,
-                options: duplicationOptions
+                options: duplicationOptions,
+                ledgerIdentifier: LedgerIntentSupport.identifier(for: ledger, context: modelContainer.mainContext)
             )
         )
     }

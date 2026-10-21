@@ -66,13 +66,15 @@ public enum YearlyDuplicationAutomationOperations {
         context: ModelContext,
         sourceYear: Int,
         targetYear: Int,
-        options: YearlyItemDuplicationOptions
+        options: YearlyItemDuplicationOptions,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> ApplyResult {
         let plan = try YearlyItemDuplicationPlanOperations.plan(
             context: context,
             sourceYear: sourceYear,
             targetYear: targetYear,
-            options: options
+            options: options,
+            ledgerIdentifier: ledgerIdentifier
         )
         let result = try YearlyItemDuplicationApplyOperations.applyAndSaveWithOutcome(
             plan: plan,
@@ -90,13 +92,15 @@ public enum YearlyDuplicationAutomationOperations {
         context: ModelContext,
         sourceYear: Int,
         targetYear: Int,
-        options: YearlyItemDuplicationOptions
+        options: YearlyItemDuplicationOptions,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> PreviewResult {
         let plan = try YearlyItemDuplicationPlanOperations.plan(
             context: context,
             sourceYear: sourceYear,
             targetYear: targetYear,
-            options: options
+            options: options,
+            ledgerIdentifier: ledgerIdentifier
         )
         return .init(
             summaryText: YearlyDuplicationPresentationOperations.summaryText(for: plan),
@@ -107,9 +111,13 @@ public enum YearlyDuplicationAutomationOperations {
     }
 
     /// Returns available source years for yearly duplication.
-    public static func sourceYears(context: ModelContext) throws -> [Int] {
+    public static func sourceYears(
+        context: ModelContext,
+        ledgerIdentifier: LedgerIdentifier = .default
+    ) throws -> [Int] {
         try YearlyItemDuplicationSelectionOperations.availableSourceYears(
-            context: context
+            context: context,
+            ledgerIdentifier: ledgerIdentifier
         )
     }
 
@@ -128,14 +136,16 @@ public enum YearlyDuplicationAutomationOperations {
     public static func suggestionText(
         context: ModelContext,
         minimumGroupCount: Int,
-        options: YearlyItemDuplicationOptions
+        options: YearlyItemDuplicationOptions,
+        ledgerIdentifier: LedgerIdentifier = .default
     ) throws -> String? {
         let targetYears = YearlyItemDuplicationSelectionOperations.targetYears()
         let suggestion = try YearlyItemDuplicationSelectionOperations.suggestion(
             context: context,
             targetYears: targetYears,
             minimumGroupCount: minimumGroupCount,
-            options: options
+            options: options,
+            ledgerIdentifier: ledgerIdentifier
         )
         guard let suggestion else {
             return nil

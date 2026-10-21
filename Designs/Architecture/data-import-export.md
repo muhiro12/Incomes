@@ -308,3 +308,22 @@ received every cloud change, so an apparently empty store may not be empty:
   extension rules above.
 - Sharing with other people and AI assistants needs privacy copy and a public
   format specification.
+
+## App Intent adapters
+
+`PreviewDataImportIntent` reads and validates the same file and reports the
+planned merge/replace counts without writing. `ExportDataIntent` returns an
+`IntentFile` from the canonical export preparation and asks for confirmation
+when file-only priorities need disclosure. `ImportDataIntent` requires an
+explicit confirmation, preserves saved balances by default, and revalidates the
+reviewed store and currency after suspension. It calls `DataImportCoordinator`
+so entitlement, update checks, durable save, and follow-ups match the app.
+
+File parameters accept JSON, to which the registered `.incomes` type conforms;
+the existing codec still validates the exact format, version, and size. Export
+and import execution remain hidden pending bulk-disclosure authentication and
+system conflict-review qualification in
+[#410](https://github.com/muhiro12/Incomes/issues/410). Import's coarse merge
+policy retains current conflict groups; item-by-item conflict selection remains
+in the app. These adapters do not add a persisted review token or another backup
+format.

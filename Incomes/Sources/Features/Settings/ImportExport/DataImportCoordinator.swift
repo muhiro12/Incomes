@@ -10,6 +10,7 @@ enum DataImportCoordinator {
         let difference: ItemImportDifference
         let policy: ItemImportPolicy
         let balancePolicy: ItemImportBalancePolicy
+        var reviewedCurrencyCode: String?
     }
 
     static func apply(
@@ -31,6 +32,7 @@ enum DataImportCoordinator {
                 policy: request.policy
             )
             try LedgerMutationAccess.requireEditing(identifiers)
+            try validateCurrency(for: request)
             // Keep typed validation errors intact so the screen can refresh a stale review.
             let mutation = try ItemImportOperations.applyAndSaveWithOutcome(
                 contents: request.contents,
@@ -71,6 +73,13 @@ enum DataImportCoordinator {
 }
 
 private extension DataImportCoordinator {
+    static func validateCurrency(for request: Request) throws {
+        if let reviewed = request.reviewedCurrencyCode,
+           (MHPreferenceStore().string(for: \.currencyCode) ?? "") != reviewed {
+            throw ItemImportError.storeChangedSinceReview
+        }
+    }
+
     static func performFollowUps(
         for mutation: MutationResult<ItemImportResult>,
         refreshNotificationSchedule: @escaping IncomesMutationWorkflow.NotificationScheduleRefresher,
