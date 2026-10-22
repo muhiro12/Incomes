@@ -10,7 +10,7 @@ struct MonthlySummaryToolbarContent: ToolbarContent {
 
     var body: some ToolbarContent {
         if isVisible {
-            ToolbarItem(placement: placement) {
+            ToolbarItem(id: "monthlySummary", placement: placement) {
                 MonthlySummaryToolbarButton(
                     generatedSummary: generatedSummary,
                     isGenerating: isGenerating,
@@ -20,7 +20,9 @@ struct MonthlySummaryToolbarContent: ToolbarContent {
             }
             ToolbarSpacer(.fixed, placement: placement)
         }
-        CreateItemToolbarContent()
+        ToolbarItem(id: "monthlySummaryCreateItem", placement: placement) {
+            CreateItemButton(presentation: .toolbar)
+        }
     }
 
     private var placement: ToolbarItemPlacement {
