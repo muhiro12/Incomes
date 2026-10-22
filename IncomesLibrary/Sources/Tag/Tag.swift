@@ -68,7 +68,7 @@ extension IncomesSchemaV2 {
             let tag = Tag()
             context.insert(tag)
             tag.typeID = TagType.defaultLedger.rawValue
-            tag.name = "Default Ledger"
+            tag.name = LedgerTagStorage.defaultLedgerStoredName
             return tag
         }
 

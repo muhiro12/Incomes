@@ -8,6 +8,8 @@ struct LedgerSettingsView: View {
 
     @Environment(\.modelContext)
     private var context
+    @Query(.tags(.ledgerMetadata))
+    private var metadata: [Tag]
     let identifier: LedgerIdentifier
     @State private var name = ""
     @State private var errorMessage: String?
@@ -18,19 +20,17 @@ struct LedgerSettingsView: View {
             Section {
                 TextField("Ledger Name", text: $name)
                     .ledgerWriteAccess(owner: identifier)
-                Button("Rename") {
-                    let newName = name
-                    IncomesMutationWorkflow.performDataMutation(
-                        errorMessage: $errorMessage,
-                        isProcessing: $isMutating
-                    ) {
-                        try LedgerMutationAccess.requireEditing([identifier])
-                        try LedgerOperations.rename(identifier, to: newName, context: context)
-                    }
+                    .disabled(isMutating)
+                Button("Rename", action: rename)
+                    .disabled(
+                        !LedgerAccessOperations.canEdit(identifier, isPremium: isSubscribeOn)
+                            || isMutating
+                            || name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                    )
+                if identifier == .default, ledger?.isNameCustomized == true {
+                    Button("Use Default Name", action: resetDefaultName)
+                        .disabled(isMutating)
                 }
-                .disabled(
-                    !LedgerAccessOperations.canEdit(identifier, isPremium: isSubscribeOn)
-                )
             } header: {
                 Text("Ledger Name")
             } footer: {
@@ -47,8 +47,8 @@ struct LedgerSettingsView: View {
             }
         }
         .navigationTitle("Ledger Settings")
-        .task {
-            name = (try? LedgerOperations.ledger(identifier, context: context).name) ?? ""
+        .task(id: identifier) {
+            name = ledger?.name ?? ""
         }
         .alert(
             "Ledger Unavailable",
@@ -57,6 +57,28 @@ struct LedgerSettingsView: View {
             Button("OK") { errorMessage = nil }
         } message: {
             Text(errorMessage ?? "")
+        }
+    }
+
+    private var ledger: LedgerRecord? {
+        _ = metadata.map(\.name)
+        return try? LedgerOperations.ledger(identifier, context: context)
+    }
+
+    private func rename() {
+        let newName = name
+        IncomesMutationWorkflow.performDataMutation(errorMessage: $errorMessage, isProcessing: $isMutating) {
+            try LedgerMutationAccess.requireEditing([identifier])
+            try LedgerOperations.rename(identifier, to: newName, context: context)
+            name = try LedgerOperations.ledger(identifier, context: context).name
+        }
+    }
+
+    private func resetDefaultName() {
+        IncomesMutationWorkflow.performDataMutation(errorMessage: $errorMessage, isProcessing: $isMutating) {
+            try LedgerMutationAccess.requireEditing([identifier])
+            try LedgerOperations.resetDefaultName(context: context)
+            name = try LedgerOperations.ledger(identifier, context: context).name
         }
     }
 }

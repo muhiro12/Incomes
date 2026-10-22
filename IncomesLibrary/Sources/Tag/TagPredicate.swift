@@ -12,6 +12,8 @@ import SwiftData
 public enum TagPredicate {
     /// Matches every tag.
     case all
+    /// Matches both additional-ledger metadata and the default-ledger role.
+    case ledgerMetadata
     /// Matches no tags.
     case matchingNone
     /// Matches a tag with the specified persistent identifier.
@@ -29,6 +31,12 @@ public enum TagPredicate {
 
     var value: Predicate<Tag> {
         switch self {
+        case .ledgerMetadata:
+            let additional = TagType.ledger.rawValue
+            let standard = TagType.defaultLedger.rawValue
+            return #Predicate { tag in
+                tag.typeID == additional || tag.typeID == standard
+            }
         case .all:
             let reserved = TagType.ledger.rawValue
             let standard = TagType.defaultLedger.rawValue

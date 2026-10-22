@@ -23,6 +23,14 @@ longer-lived judgment behind that scope.
   and file reference, independently of a particular Tag's native identity.
   Separately created default Tags describe this same role, including during sync;
   they do not create independent standard books or require distributed uniqueness.
+- The default book can have a custom name without changing its reserved role.
+  Renaming updates every local default Tag in one save; resetting restores the
+  legacy stored name `Default Ledger`, displayed in the current app language.
+  A legacy or empty name uses the system label. If sync delivers different
+  custom names on separate default Tags, readers choose the first sorted custom
+  name without rewriting or merging Tags; an explicit rename updates them all.
+  The existing Incomes file format still carries the reserved default reference,
+  without exporting or restoring its custom display name.
 - An additional ledger is one Tag. `typeID` stores the single raw value of
   `TagType.ledger`, just as other Tag kinds do. `name` stores only its editable
   name. Neither field embeds an identifier or a structured payload.
@@ -107,8 +115,8 @@ The companion surfaces continue to label their default-book scope.
 Ledger listing, opening, creation, rename, balance retrieval, and import preview
 are discoverable. Creation and rename use the same entitlement boundary as the
 app; creation repeats the all-devices-updated notice before saving. The first
-book's rename protection also applies to Intents. `LedgerEntity` reuses the
-existing default role and store-local Tag identity; it adds no model ID or
+book remains editable without a subscription, including renaming. `LedgerEntity`
+reuses the existing default role and store-local Tag identity; it adds no model ID or
 preference key. Cross-device identity remains a separate issue (#409).
 
 Backup export/import, unassigned-item retrieval/assignment, and experimental

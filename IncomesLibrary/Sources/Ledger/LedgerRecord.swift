@@ -5,6 +5,8 @@ public struct LedgerRecord: Identifiable, Equatable, Sendable {
     public let id: LedgerIdentifier
     public let name: String
     public let issue: LedgerError?
+    /// True when a user-provided name replaces the localized system name.
+    public let isNameCustomized: Bool
 
     /// Missing or conflicting metadata never becomes the original ledger.
     public var isAvailable: Bool {
@@ -14,10 +16,12 @@ public struct LedgerRecord: Identifiable, Equatable, Sendable {
     init(
         id: LedgerIdentifier,
         name: String,
-        issue: LedgerError? = nil
+        issue: LedgerError? = nil,
+        isNameCustomized: Bool = false
     ) {
         self.id = id
         self.name = name
         self.issue = issue
+        self.isNameCustomized = isNameCustomized
     }
 }

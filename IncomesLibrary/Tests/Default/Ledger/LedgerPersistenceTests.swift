@@ -6,6 +6,52 @@ import Testing
 
 @MainActor
 struct LedgerPersistenceTests {
+    @Test(arguments: [false, true])
+    func defaultNameSurvivesReopeningAndResetKeepsFinancialValues(autosaveEnabled: Bool) throws {
+        let directory = try persistentTestDirectory(fileManager: .default)
+        let url = directory.appendingPathComponent("default-name.store")
+        let itemID: PersistentIdentifier
+        let systemName: String
+        do {
+            let container = try ModelContainerFactory.make(
+                configuration: .init(url: url, cloudKitDatabase: .none)
+            )
+            let context = ModelContext(container)
+            let item = try makeItem(context: context, owner: .default, income: 100)
+            item.modify(balance: 900)
+            try context.save()
+            itemID = item.id
+            systemName = try LedgerOperations.ledger(.default, context: context).name
+            context.autosaveEnabled = autosaveEnabled
+            try LedgerOperations.rename(.default, to: "Household", context: context)
+            #expect(context.autosaveEnabled == autosaveEnabled)
+            #expect(!context.hasChanges)
+        }
+        do {
+            let container = try ModelContainerFactory.make(
+                configuration: .init(url: url, cloudKitDatabase: .none)
+            )
+            let context = ModelContext(container)
+            #expect(try LedgerOperations.ledger(.default, context: context).name == "Household")
+            let item = try #require(try ItemQueryOperations.item(context: context, persistentID: itemID))
+            #expect(item.ledgerIdentifier == .default && item.balance == 900)
+            try LedgerOperations.resetDefaultName(context: context)
+        }
+        let container = try ModelContainerFactory.readOnly(at: url)
+        let context = ModelContext(container)
+        let restored = try LedgerOperations.ledger(.default, context: context)
+        #expect(restored.name == systemName && !restored.isNameCustomized)
+        let item = try #require(try ItemQueryOperations.item(context: context, persistentID: itemID))
+        #expect(item.ledgerIdentifier == .default && item.balance == 900)
+        #expect(throws: CocoaError(.fileWriteNoPermission)) {
+            try LedgerOperations.rename(.default, to: "Blocked", context: context)
+        }
+        #expect(throws: CocoaError(.fileWriteNoPermission)) {
+            try LedgerOperations.resetDefaultName(context: context)
+        }
+        #expect(!context.hasChanges)
+    }
+
     @Test
     func reopenedReadOnlyStoreKeepsRenamedAndEmptyBooksWithoutAnOwnershipColumn() throws {
         let directory = try persistentTestDirectory(fileManager: .default)

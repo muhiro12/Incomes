@@ -10,7 +10,7 @@ public enum LedgerOperations {
 
     /// Includes empty ledgers and surfaces unassigned or conflicting Item membership.
     public static func ledgers(context: ModelContext) throws -> [LedgerRecord] {
-        let tags = try context.fetch(.tags(.typeIs(.ledger)))
+        let tags = try context.fetch(.tags(.ledgerMetadata))
         var identifiers = Set(tags.compactMap(LedgerTagStorage.identifier(for:)))
         let items = try context.fetch(.allLedgerItems())
         for identifier in [LedgerIdentifier.unassigned, .conflicting]
@@ -29,16 +29,14 @@ public enum LedgerOperations {
 
     /// Resolves the Tag's store-local identity without matching an editable name.
     public static func ledger(_ identifier: LedgerIdentifier, context: ModelContext) throws -> LedgerRecord {
-        record(identifier: identifier, tags: try context.fetch(.tags(.typeIs(.ledger))))
+        record(identifier: identifier, tags: try context.fetch(.tags(.ledgerMetadata)))
     }
 
     /// Creates and saves one empty book without changing any existing Items.
     public static func create(context: ModelContext, name: String) throws -> LedgerRecord {
         try requireCleanContext(context)
         let name = try validatedName(name)
-        guard try context.fetch(.tags(.nameIs(name, type: .ledger))).isEmpty else {
-            throw LedgerError.duplicateName
-        }
+        try requireUniqueName(name, excluding: nil, context: context)
         let autosaveEnabled = context.autosaveEnabled
         context.autosaveEnabled = false
         defer {
@@ -50,21 +48,29 @@ public enum LedgerOperations {
             guard let identifier = LedgerTagStorage.identifier(for: tag) else {
                 throw LedgerError.invalidIdentifier
             }
-            return .init(id: identifier, name: name)
+            return .init(id: identifier, name: name, isNameCustomized: true)
         } catch {
             context.rollback()
             throw error
         }
     }
 
-    /// Renames additional-book metadata without replacing its relationships or identity.
+    /// Renames book metadata without replacing its relationships or identity.
     public static func rename(_ identifier: LedgerIdentifier, to name: String, context: ModelContext) throws {
         try requireCleanContext(context)
         let name = try validatedName(name)
-        let metadata = try metadataForMutation(identifier, context: context)
-        guard try context.fetch(.tags(.nameIs(name, type: .ledger))).allSatisfy({ $0.id == metadata.id }) else {
-            throw LedgerError.duplicateName
+        if identifier == .default {
+            if name == String(localized: "Default Ledger", bundle: .module)
+                || name == LedgerTagStorage.defaultLedgerStoredName {
+                try resetDefaultName(context: context)
+            } else {
+                try requireUniqueName(name, excluding: identifier, context: context)
+                try saveDefaultName(name, context: context)
+            }
+            return
         }
+        let metadata = try metadataForMutation(identifier, context: context)
+        try requireUniqueName(name, excluding: identifier, context: context)
         let autosaveEnabled = context.autosaveEnabled
         context.autosaveEnabled = false
         defer {
@@ -79,6 +85,12 @@ public enum LedgerOperations {
         }
     }
 
+    /// Restores the localized system name without changing ownership or financial values.
+    public static func resetDefaultName(context: ModelContext) throws {
+        try requireCleanContext(context)
+        try saveDefaultName(LedgerTagStorage.defaultLedgerStoredName, context: context)
+    }
+
     /// Entitlement remains adapter-owned; missing or conflicting books refuse mutation.
     public static func requireAvailable(_ identifier: LedgerIdentifier, context: ModelContext) throws {
         if let issue = try ledger(identifier, context: context).issue {
@@ -88,6 +100,41 @@ public enum LedgerOperations {
 }
 
 extension LedgerOperations {
+    private static func requireUniqueName(
+        _ name: String,
+        excluding identifier: LedgerIdentifier?,
+        context: ModelContext
+    ) throws {
+        let tags = try context.fetch(.tags(.ledgerMetadata))
+        let matchesDefaultName = identifier != .default && record(identifier: .default, tags: tags).name == name
+        guard !matchesDefaultName, tags.allSatisfy({ tag in
+            tag.type != .ledger || LedgerTagStorage.identifier(for: tag) == identifier || tag.name != name
+        }) else {
+            throw LedgerError.duplicateName
+        }
+    }
+
+    private static func saveDefaultName(_ name: String, context: ModelContext) throws {
+        let autosaveEnabled = context.autosaveEnabled
+        context.autosaveEnabled = false
+        defer {
+            context.autosaveEnabled = autosaveEnabled
+        }
+        do {
+            var tags = try context.fetch(.tags(.typeIs(.defaultLedger)))
+            if tags.isEmpty {
+                tags = [try Tag.defaultLedger(context: context)]
+            }
+            for tag in tags {
+                tag.rename(storedName: name)
+            }
+            try context.save()
+        } catch {
+            context.rollback()
+            throw error
+        }
+    }
+
     @discardableResult
     static func importMetadata(_ value: IncomesFileLedger, context: ModelContext) throws -> Tag {
         guard value.id != .default, value.id != .conflicting, value.id != .unassigned,
@@ -145,7 +192,12 @@ extension LedgerOperations {
 
     static func record(identifier: LedgerIdentifier, tags: [Tag]) -> LedgerRecord {
         if identifier == .default {
-            return .init(id: identifier, name: String(localized: "Default Ledger", bundle: .module))
+            let customName = LedgerTagStorage.customDefaultLedgerName(in: tags)
+            return .init(
+                id: identifier,
+                name: customName ?? String(localized: "Default Ledger", bundle: .module),
+                isNameCustomized: customName != nil
+            )
         }
         if identifier == .unassigned {
             return .init(
@@ -176,7 +228,7 @@ extension LedgerOperations {
                 issue: .unavailable
             )
         }
-        return .init(id: identifier, name: metadata.name)
+        return .init(id: identifier, name: metadata.name, isNameCustomized: true)
     }
 
     static func validatedName(_ name: String) throws -> String {

@@ -11,7 +11,7 @@ struct LedgerManagementView: View {
     private var context
     @Environment(\.mhDesignMetrics)
     private var designMetrics
-    @Query(.tags(.typeIs(.ledger)))
+    @Query(.tags(.ledgerMetadata))
     private var metadata: [Tag]
     @Query(.allLedgerItems())
     private var items: [Item]
@@ -78,7 +78,7 @@ struct LedgerManagementView: View {
     private var ledgersSection: some View {
         Section {
             ForEach(ledgers) { ledger in
-                if ledger.id == .default || !ledger.isAvailable {
+                if !ledger.isAvailable {
                     ledgerLabel(ledger)
                 } else {
                     NavigationLink {

@@ -4,6 +4,15 @@ import SwiftData
 
 /// Additional books use native Tag identity; standard Tags share the reserved default role.
 enum LedgerTagStorage {
+    static let defaultLedgerStoredName = "Default Ledger"
+
+    static func customDefaultLedgerName(in tags: [Tag]) -> String? {
+        tags.filter { $0.type == .defaultLedger }
+            .map { $0.name.trimmingCharacters(in: .whitespacesAndNewlines) }
+            .filter { !$0.isEmpty && $0 != defaultLedgerStoredName }
+            .min()
+    }
+
     static func identifier(for tag: Tag) -> LedgerIdentifier? {
         if tag.type == .defaultLedger {
             return .default

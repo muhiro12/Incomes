@@ -9,7 +9,7 @@ struct LedgerWorkspaceView: View {
 
     @Environment(\.modelContext)
     private var context
-    @Query(.tags(.typeIs(.ledger)))
+    @Query(.tags(.ledgerMetadata))
     private var metadata: [Tag]
     @Query(.allLedgerItems())
     private var items: [Item]
