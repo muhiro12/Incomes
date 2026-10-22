@@ -20,9 +20,6 @@ struct SettingsSubscriptionSection: View {
     var body: some View {
         Section {
             if isSubscribeOn {
-                LabeledContent("Monthly Plan") {
-                    Text("Active")
-                }
                 Button("Manage Plan", systemImage: "creditcard") {
                     managePlan()
                 }
