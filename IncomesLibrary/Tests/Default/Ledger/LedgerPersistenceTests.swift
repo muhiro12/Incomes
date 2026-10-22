@@ -10,7 +10,7 @@ struct LedgerPersistenceTests {
     func defaultNameSurvivesReopeningAndResetKeepsFinancialValues(autosaveEnabled: Bool) throws {
         let directory = try persistentTestDirectory(fileManager: .default)
         let url = directory.appendingPathComponent("default-name.store")
-        let itemID: PersistentIdentifier
+        let encodedItemID: String
         let systemName: String
         do {
             let container = try ModelContainerFactory.make(
@@ -20,10 +20,11 @@ struct LedgerPersistenceTests {
             let item = try makeItem(context: context, owner: .default, income: 100)
             item.modify(balance: 900)
             try context.save()
-            itemID = item.id
+            encodedItemID = try PersistentIdentifierCoder.encode(item.persistentModelID)
             systemName = try LedgerOperations.ledger(.default, context: context).name
             context.autosaveEnabled = autosaveEnabled
             try LedgerOperations.rename(.default, to: "Household", context: context)
+            #expect(try PersistentIdentifierCoder.encode(item.persistentModelID) == encodedItemID)
             #expect(context.autosaveEnabled == autosaveEnabled)
             #expect(!context.hasChanges)
         }
@@ -33,7 +34,8 @@ struct LedgerPersistenceTests {
             )
             let context = ModelContext(container)
             #expect(try LedgerOperations.ledger(.default, context: context).name == "Household")
-            let item = try #require(try ItemQueryOperations.item(context: context, persistentID: itemID))
+            let item = try #require(try ItemQueryOperations.item(context: context, encodedIdentifier: encodedItemID))
+            #expect(try PersistentIdentifierCoder.encode(item.persistentModelID) == encodedItemID)
             #expect(item.ledgerIdentifier == .default && item.balance == 900)
             try LedgerOperations.resetDefaultName(context: context)
         }
@@ -41,7 +43,8 @@ struct LedgerPersistenceTests {
         let context = ModelContext(container)
         let restored = try LedgerOperations.ledger(.default, context: context)
         #expect(restored.name == systemName && !restored.isNameCustomized)
-        let item = try #require(try ItemQueryOperations.item(context: context, persistentID: itemID))
+        let item = try #require(try ItemQueryOperations.item(context: context, encodedIdentifier: encodedItemID))
+        #expect(try PersistentIdentifierCoder.encode(item.persistentModelID) == encodedItemID)
         #expect(item.ledgerIdentifier == .default && item.balance == 900)
         #expect(throws: CocoaError(.fileWriteNoPermission)) {
             try LedgerOperations.rename(.default, to: "Blocked", context: context)
