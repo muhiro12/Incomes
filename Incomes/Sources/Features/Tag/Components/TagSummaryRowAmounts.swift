@@ -11,6 +11,8 @@ struct TagSummaryRowAmounts: View {
             Text(outgoText)
         }
         .font(.subheadline)
+        .lineLimit(1)
+        .minimumScaleFactor(IncomesTextScaling.minimumScaleFactor)
         .foregroundStyle(.secondary)
         .monospacedDigit()
     }
