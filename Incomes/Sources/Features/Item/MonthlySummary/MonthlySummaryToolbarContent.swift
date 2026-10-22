@@ -10,7 +10,7 @@ struct MonthlySummaryToolbarContent: ToolbarContent {
 
     var body: some ToolbarContent {
         if isVisible {
-            ToolbarItem(id: "monthlySummary", placement: placement) {
+            ToolbarItem(id: "monthlySummary", placement: .topBarTrailing) {
                 MonthlySummaryToolbarButton(
                     generatedSummary: generatedSummary,
                     isGenerating: isGenerating,
@@ -18,18 +18,10 @@ struct MonthlySummaryToolbarContent: ToolbarContent {
                     generateSummary: generateSummary
                 )
             }
-            ToolbarSpacer(.fixed, placement: placement)
+            ToolbarSpacer(.fixed, placement: .topBarTrailing)
         }
-        ToolbarItem(id: "monthlySummaryCreateItem", placement: placement) {
+        ToolbarItem(id: "monthlySummaryCreateItem", placement: .topBarTrailing) {
             CreateItemButton(presentation: .toolbar)
-        }
-    }
-
-    private var placement: ToolbarItemPlacement {
-        if #available(iOS 27.0, *) {
-            .topBarPinnedTrailing
-        } else {
-            .topBarTrailing
         }
     }
 }
