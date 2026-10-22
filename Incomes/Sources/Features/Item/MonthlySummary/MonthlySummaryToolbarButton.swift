@@ -4,9 +4,10 @@ import SwiftUI
 struct MonthlySummaryToolbarButton: View {
     @State private var isPopoverPresented = false
 
-    let date: Date
-    let currentItems: [Item]
-    let previousItems: [Item]
+    let generatedSummary: MonthlySummaryResult?
+    let isGenerating: Bool
+    let errorMessage: String?
+    let generateSummary: () -> Void
 
     var body: some View {
         Button {
@@ -17,9 +18,10 @@ struct MonthlySummaryToolbarButton: View {
         .accessibilityLabel(Text("Monthly Summary"))
         .popover(isPresented: $isPopoverPresented, arrowEdge: .top) {
             MonthlySummaryPopover(
-                date: date,
-                currentItems: currentItems,
-                previousItems: previousItems
+                generatedSummary: generatedSummary,
+                isGenerating: isGenerating,
+                errorMessage: errorMessage,
+                generateSummary: generateSummary
             )
             .presentationCompactAdaptation(.popover)
         }

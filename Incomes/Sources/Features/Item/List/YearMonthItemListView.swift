@@ -66,7 +66,13 @@ extension YearMonthItemListView: View {
             ItemCountStatusToolbarItem(count: items.count)
         }
         .toolbar {
-            CreateItemToolbarContent()
+            if #available(iOS 26.0, *) {
+                if monthDate == nil || summaryItemsDescriptor == nil {
+                    CreateItemToolbarContent()
+                }
+            } else {
+                CreateItemToolbarContent()
+            }
         }
     }
 }
@@ -77,7 +83,10 @@ private extension YearMonthItemListView {
     }
 
     var monthDate: Date? {
-        TagQueryOperations.date(for: tag)
+        guard tag.type == .yearMonth else {
+            return nil
+        }
+        return TagQueryOperations.date(for: tag)
     }
 
     var yearStrings: [String] {

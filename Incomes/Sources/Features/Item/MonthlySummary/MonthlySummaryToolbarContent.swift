@@ -3,19 +3,31 @@ import SwiftUI
 @available(iOS 26.0, *)
 struct MonthlySummaryToolbarContent: ToolbarContent {
     let isVisible: Bool
-    let date: Date
-    let currentItems: [Item]
-    let previousItems: [Item]
+    let generatedSummary: MonthlySummaryResult?
+    let isGenerating: Bool
+    let errorMessage: String?
+    let generateSummary: () -> Void
 
     var body: some ToolbarContent {
         if isVisible {
-            ToolbarItem(placement: .topBarTrailing) {
+            ToolbarItem(placement: placement) {
                 MonthlySummaryToolbarButton(
-                    date: date,
-                    currentItems: currentItems,
-                    previousItems: previousItems
+                    generatedSummary: generatedSummary,
+                    isGenerating: isGenerating,
+                    errorMessage: errorMessage,
+                    generateSummary: generateSummary
                 )
             }
+            ToolbarSpacer(.fixed, placement: placement)
+        }
+        CreateItemToolbarContent()
+    }
+
+    private var placement: ToolbarItemPlacement {
+        if #available(iOS 27.0, *) {
+            .topBarPinnedTrailing
+        } else {
+            .topBarTrailing
         }
     }
 }

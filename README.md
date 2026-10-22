@@ -49,9 +49,9 @@ Models.
 
 - Drill into periods or categories using search targets and tag summaries backed
   by SwiftData queries and chart-ready aggregates.
-- Generate a monthly summary on request using the on-device model behind Apple
-  Intelligence. Calculated fallback text is identified separately, and generated
-  prose never changes saved amounts or balances.
+- Prepare a monthly summary when opening a month using the on-device model
+  behind Apple Intelligence. Calculated fallback text is identified separately,
+  and generated prose never changes saved amounts or balances.
 - Generative features require iOS 26 or later, a compatible device, and Apple
   Intelligence ready in a supported language. Their App Intent adapters remain
   undiscoverable while the system experience is qualified.
