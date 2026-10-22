@@ -74,9 +74,7 @@ private extension SettingsNavigationView {
         case .license:
             LicenseView()
         case .debug:
-            DebugNavigationView(
-                navigateToCompactDestination: navigateToDestination
-            )
+            DebugNavigationView(navigateToDestination: navigateToDestination)
         case .debugDiagnostics:
             DebugDiagnosticsView()
         case .debugNaturalLanguageSearch:
