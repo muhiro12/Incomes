@@ -5,6 +5,10 @@ struct LedgerSelectionMenu: View {
     @Binding var selectedIdentifier: String
     let manage: () -> Void
 
+    var hasMultipleLedgers: Bool {
+        ledgers.filter(\.isAvailable).count > 1
+    }
+
     var selectedName: String {
         guard let ledger = ledgers.first(where: { $0.id.rawValue == selectedIdentifier }) else {
             return String(localized: "Unavailable Ledger")
@@ -14,12 +18,7 @@ struct LedgerSelectionMenu: View {
 
     var body: some View {
         Menu {
-            Picker("Ledger", selection: $selectedIdentifier) {
-                ForEach(ledgers) { ledger in
-                    Text(selectionTitle(ledger)).tag(ledger.id.rawValue)
-                }
-            }
-            Button("Manage Ledgers", systemImage: "slider.horizontal.3", action: manage)
+            menuContent
         } label: {
             Label(
                 selectedName,
@@ -30,6 +29,25 @@ struct LedgerSelectionMenu: View {
             .truncationMode(.middle)
         }
         .accessibilityLabel(Text(verbatim: String(localized: "Switch Ledger") + ": " + selectedName))
+    }
+
+    var toolbarButton: some View {
+        Menu {
+            menuContent
+        } label: {
+            Label("Switch Ledger", systemImage: "books.vertical")
+        }
+        .labelStyle(.iconOnly)
+        .accessibilityValue(Text(verbatim: selectedName))
+    }
+
+    @ViewBuilder private var menuContent: some View {
+        Picker("Ledger", selection: $selectedIdentifier) {
+            ForEach(ledgers) { ledger in
+                Text(selectionTitle(ledger)).tag(ledger.id.rawValue)
+            }
+        }
+        Button("Manage Ledgers", systemImage: "slider.horizontal.3", action: manage)
     }
 
     private func selectionTitle(_ ledger: LedgerRecord) -> String {

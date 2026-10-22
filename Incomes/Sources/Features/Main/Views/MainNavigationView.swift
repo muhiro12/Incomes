@@ -95,6 +95,7 @@ struct MainNavigationView: View {
             .toolbar {
                 MainNavigationSidebarToolbarContent(
                     isCompact: horizontalSizeClass == .compact,
+                    ledgerMenu: ledgerMenu,
                     openSearch: {
                         enqueueNavigation(to: .search(query: nil))
                     },
