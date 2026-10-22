@@ -7,6 +7,9 @@ enum TimelineChartMetrics {
     static let barOpacity = 0.6
     static let lineMarkWidth: CGFloat = 2
     static let sectionHeight: CGFloat = 240
+    static let singlePointAnnotationSpacing: CGFloat = 8
+    static let singlePointRuleOpacity = 0.35
+    static let singlePointSymbolSize: CGFloat = 64
     static let zeroRuleDashLength: CGFloat = 4
     static let zeroRuleLineWidth: CGFloat = 1
     static let zeroRuleOpacity = 0.25
