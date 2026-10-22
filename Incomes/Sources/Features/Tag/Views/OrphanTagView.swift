@@ -81,7 +81,7 @@ struct OrphanTagView: View {
                 Button(role: .destructive) {
                     isDeleteDialogPresented = true
                 } label: {
-                    Text("Delete")
+                    Label("Delete", systemImage: "trash")
                 }
                 .ledgerWriteAccess(owner: ledgerIdentifier)
             }

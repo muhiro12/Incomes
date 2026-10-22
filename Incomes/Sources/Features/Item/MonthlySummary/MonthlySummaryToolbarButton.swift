@@ -12,7 +12,7 @@ struct MonthlySummaryToolbarButton: View {
         Button {
             isPopoverPresented = true
         } label: {
-            Image(systemName: "sparkles")
+            Label("Monthly Summary", systemImage: "sparkles")
         }
         .accessibilityLabel(Text("Monthly Summary"))
         .popover(isPresented: $isPopoverPresented, arrowEdge: .top) {

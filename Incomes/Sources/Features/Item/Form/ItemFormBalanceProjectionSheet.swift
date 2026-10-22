@@ -71,12 +71,12 @@ extension ItemFormBalanceProjectionSheet {
         .navigationTitle("Balance Projection")
         .toolbar {
             ToolbarItem(placement: .cancellationAction) {
-                Button("Cancel") {
+                Button("Cancel", systemImage: "xmark") {
                     dismiss()
                 }
             }
             ToolbarItem(placement: .confirmationAction) {
-                Button("Done", action: confirmReview)
+                Button("Done", systemImage: "checkmark", action: confirmReview)
                     .disabled(review == nil)
                     .accessibilityHint(Text("Keeps this projection for the next save."))
             }

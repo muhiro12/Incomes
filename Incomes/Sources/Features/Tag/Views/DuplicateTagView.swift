@@ -110,7 +110,7 @@ extension DuplicateTagView {
         }
         .toolbar {
             ToolbarItem {
-                Button("Merge", role: .destructive) {
+                Button("Merge", systemImage: "arrow.triangle.merge", role: .destructive) {
                     isMergeDialogPresented = true
                 }
                 .disabled(!canMergeTags)

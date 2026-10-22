@@ -9,7 +9,7 @@ struct ItemFormInputAssistToolbarContent: ToolbarContent {
 
     var body: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Button("Cancel", action: cancel)
+            Button("Cancel", systemImage: "xmark", action: cancel)
         }
         ToolbarItem(placement: .confirmationAction) {
             Button(action: done) {
@@ -24,7 +24,7 @@ struct ItemFormInputAssistToolbarContent: ToolbarContent {
                     .labelStyle(.titleAndIcon)
                     .accessibilityLabel(Text(processingState.title))
                 } else {
-                    Text("Done")
+                    Label("Done", systemImage: "checkmark")
                 }
             }
             .disabled(isDoneDisabled)

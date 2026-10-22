@@ -89,7 +89,7 @@ struct LedgerWorkspaceView: View {
                     LedgerManagementView(selectedIdentifier: $selectedIdentifier)
                         .toolbar {
                             ToolbarItem(placement: .confirmationAction) {
-                                Button("Done") {
+                                Button("Done", systemImage: "checkmark") {
                                     isManagementPresented = false
                                 }
                             }

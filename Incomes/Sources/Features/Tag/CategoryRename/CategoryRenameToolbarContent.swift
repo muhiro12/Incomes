@@ -7,10 +7,10 @@ struct CategoryRenameToolbarContent: ToolbarContent {
 
     var body: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Button("Cancel", action: cancel)
+            Button("Cancel", systemImage: "xmark", action: cancel)
         }
         ToolbarItem(placement: .confirmationAction) {
-            Button("Save", action: save)
+            Button("Save", systemImage: "checkmark", action: save)
                 .disabled(!canSave)
         }
     }

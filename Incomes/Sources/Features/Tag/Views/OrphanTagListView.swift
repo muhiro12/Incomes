@@ -122,7 +122,7 @@ extension OrphanTagListView {
         .toolbar {
             ToolbarItem {
                 if hasAnyOrphanTags {
-                    Button("Cleanup All", role: .destructive, action: presentCleanupDialog)
+                    Button("Cleanup All", systemImage: "trash", role: .destructive, action: presentCleanupDialog)
                         .ledgerWriteAccess(owner: ledgerIdentifier)
                 }
             }

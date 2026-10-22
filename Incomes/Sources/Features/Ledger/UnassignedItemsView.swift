@@ -62,7 +62,7 @@ struct UnassignedItemsView: View {
         .navigationTitle("Unassigned Items")
         .toolbar {
             ToolbarItem(placement: .topBarLeading) {
-                Button("Select All") {
+                Button("Select All", systemImage: "checkmark.circle") {
                     selectedItemIDs = Set(unassignedItems.map(\.persistentModelID))
                 }
                 .disabled(unassignedItems.isEmpty || isAssigning)

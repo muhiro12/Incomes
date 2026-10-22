@@ -16,16 +16,14 @@ struct ItemFormToolbarContent: ToolbarContent {
 
     var body: some ToolbarContent {
         ToolbarItem(placement: .cancellationAction) {
-            Button(action: cancel) {
-                Text("Cancel")
-            }
+            Button("Cancel", systemImage: "xmark", action: cancel)
         }
         ToolbarItem(placement: .primaryAction) {
             Button(action: submit) {
                 if mode == .create {
-                    Text("Create")
+                    Label("Create", systemImage: "square.and.pencil")
                 } else {
-                    Text("Save")
+                    Label("Save", systemImage: "checkmark")
                 }
             }
             .bold()
