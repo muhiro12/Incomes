@@ -110,26 +110,8 @@ private extension BalanceChart {
         if let balance = ledgerBalances[item.persistentModelID] {
             if items.count == 1 {
                 RuleMark(y: .value("Amount", balance))
-                    .foregroundStyle(.tint.opacity(TimelineChartMetrics.singlePointRuleOpacity))
-                    .lineStyle(.init(
-                        lineWidth: TimelineChartMetrics.zeroRuleLineWidth,
-                        dash: [TimelineChartMetrics.zeroRuleDashLength]
-                    ))
-                PointMark(
-                    x: .value("Date", item.localDate),
-                    y: .value("Amount", balance)
-                )
-                .foregroundStyle(.tint)
-                .symbolSize(TimelineChartMetrics.singlePointSymbolSize)
-                .annotation(
-                    position: .top,
-                    spacing: TimelineChartMetrics.singlePointAnnotationSpacing,
-                    overflowResolution: .init(x: .fit(to: .chart), y: .fit(to: .chart))
-                ) {
-                    Text(verbatim: balance.currencyText(locale: locale))
-                        .font(.caption.weight(.semibold))
-                        .foregroundStyle(.primary)
-                }
+                    .foregroundStyle(.tint)
+                    .lineStyle(.init(lineWidth: TimelineChartMetrics.lineMarkWidth))
             } else {
                 AreaMark(
                     x: .value("Date", item.localDate),
