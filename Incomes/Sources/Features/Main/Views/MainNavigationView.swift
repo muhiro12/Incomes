@@ -11,12 +11,6 @@ import SwiftData
 import SwiftUI
 
 struct MainNavigationView: View {
-    private enum Constants {
-        static let sidebarMinimumWidth: CGFloat = 240
-        static let sidebarIdealWidth: CGFloat = 280
-        static let sidebarMaximumWidth: CGFloat = 360
-    }
-
     @Environment(\.modelContext)
     private var context
     @Environment(\.horizontalSizeClass)
@@ -96,11 +90,6 @@ struct MainNavigationView: View {
                 onNavigate: enqueueNavigation
             )
             .searchable(text: $router.searchText, isPresented: $router.isSearchPresented)
-            .navigationSplitViewColumnWidth(
-                min: Constants.sidebarMinimumWidth,
-                ideal: Constants.sidebarIdealWidth,
-                max: Constants.sidebarMaximumWidth
-            )
             .navigationTitle(
                 router.isSearchActive ? String(localized: "Search") : ledgerMenu?.selectedName ?? "Incomes"
             )
@@ -119,7 +108,6 @@ struct MainNavigationView: View {
         } detail: {
             MainNavigationDetailColumn(hasAnyYears: !yearTags.isEmpty)
         }
-        .navigationSplitViewStyle(.balanced)
         .sheet(
             item: $router.sheetRoute,
             onDismiss: {
