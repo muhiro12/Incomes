@@ -5,15 +5,14 @@
 //  Created by Codex on 2026/03/05.
 //
 
+import Observation
 import SwiftData
-import SwiftUI
 
 @MainActor
 @Observable
 final class MainNavigationRouter {
     let ledgerIdentifier: LedgerIdentifier
 
-    var preferredCompactColumn: NavigationSplitViewColumn = .sidebar
     var yearTagID: Tag.ID?
     var selectedTag: Tag?
     var expandedYearTagIDs: Set<Tag.ID> = []
@@ -56,7 +55,6 @@ final class MainNavigationRouter {
         self.yearTagID = yearTagID
         self.selectedTag = selectedTag
         expandedYearTagIDs.insert(yearTagID)
-        preferredCompactColumn = selectedTag == nil ? .sidebar : .detail
     }
 
     func loadState(context: ModelContext) throws {
@@ -67,7 +65,6 @@ final class MainNavigationRouter {
         if let yearTagID {
             expandedYearTagIDs.insert(yearTagID)
         }
-        preferredCompactColumn = selectedTag == nil ? .sidebar : .detail
     }
 
     func handleIncomingRoute(
@@ -98,10 +95,6 @@ final class MainNavigationRouter {
         self.predicate = predicate
         dismissItemDetail()
         appliesInitialSearchText = false
-        guard isSearchActive else {
-            return
-        }
-        preferredCompactColumn = predicate == nil ? .sidebar : .detail
     }
 
     func selectYearTagID(_ yearTagID: Tag.ID?) {
@@ -112,7 +105,6 @@ final class MainNavigationRouter {
             expandedYearTagIDs.insert(yearTagID)
         }
         clearSearchState()
-        preferredCompactColumn = .sidebar
     }
 
     func beginSearch() {
@@ -121,19 +113,11 @@ final class MainNavigationRouter {
         }
         isSearchActive = true
         dismissItemDetail()
-        preferredCompactColumn = .sidebar
     }
 
     func dismissSearch() {
         clearSearchState()
         dismissItemDetail()
-        preferredCompactColumn = selectedTag == nil ? .sidebar : .detail
-    }
-
-    func syncPreferredCompactColumn(
-        _ preferredCompactColumn: NavigationSplitViewColumn
-    ) {
-        self.preferredCompactColumn = preferredCompactColumn
     }
 }
 
@@ -158,7 +142,6 @@ private extension MainNavigationRouter {
             self.predicate = predicate
             dismissItemDetail()
             appliesInitialSearchText = predicate == nil && query?.isEmpty == false
-            preferredCompactColumn = predicate == nil ? .sidebar : .detail
         case .settings:
             sheetRoute = .settings
             settingsDestination = .root
@@ -195,7 +178,6 @@ private extension MainNavigationRouter {
             expandedYearTagIDs.insert(yearTagID)
         }
         clearSearchState()
-        preferredCompactColumn = selectedTag == nil ? .sidebar : .detail
     }
 
     func presentItemDetail(_ itemID: PersistentIdentifier, context: ModelContext) throws {
@@ -214,7 +196,6 @@ private extension MainNavigationRouter {
             expandedYearTagIDs.insert(yearTagID)
         }
         clearSearchState()
-        preferredCompactColumn = .detail
         sheetRoute = .itemDetail(itemID)
     }
 

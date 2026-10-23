@@ -22,9 +22,8 @@ Restore the semantic selection, not view internals.
   `.yearSummary`, or `.month` in `@SceneStorage`.
 - Session-only: search text and filters, the item detail sheet, Settings,
   yearly duplication, and tag maintenance screens.
-- Never restored: the preferred compact column, which is derived from the
-  restored selection, and unsaved item form input, which follows the form's
-  own save and discard contract.
+- Never restored: split-view column presentation or unsaved item form input.
+  The form retains its own save and discard contract.
 
 Launch order:
 

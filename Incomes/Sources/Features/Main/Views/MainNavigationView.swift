@@ -71,18 +71,7 @@ struct MainNavigationView: View {
     var body: some View {
         @Bindable var router = router
 
-        let compactColumnSelection = Binding<NavigationSplitViewColumn>(
-            get: {
-                self.router.preferredCompactColumn
-            },
-            set: { preferredCompactColumn in
-                self.router.syncPreferredCompactColumn(
-                    preferredCompactColumn
-                )
-            }
-        )
-
-        NavigationSplitView(preferredCompactColumn: compactColumnSelection) {
+        NavigationSplitView {
             MainNavigationSidebarColumn(
                 yearTags: yearTags,
                 selectedYearTag: selectedYearTag,
