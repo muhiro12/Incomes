@@ -9,9 +9,12 @@ struct YearlyDuplicationPromoIcon: View {
 
     var body: some View {
         iconImage
-            .incomesGlassSurface(
-                cornerRadius: Constants.cornerRadius,
-                tint: Color.accentColor.opacity(Constants.tintOpacity)
+            .background(
+                Color.accentColor.opacity(Constants.tintOpacity),
+                in: RoundedRectangle(
+                    cornerRadius: Constants.cornerRadius,
+                    style: .continuous
+                )
             )
     }
 }

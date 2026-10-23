@@ -19,9 +19,12 @@ struct MonthlySummaryHeader: View {
                     width: Constants.iconSize,
                     height: Constants.iconSize
                 )
-                .incomesGlassEffect(
-                    cornerRadius: Constants.iconCornerRadius,
-                    tint: Color.accentColor.opacity(Constants.iconTintOpacity)
+                .background(
+                    Color.accentColor.opacity(Constants.iconTintOpacity),
+                    in: RoundedRectangle(
+                        cornerRadius: Constants.iconCornerRadius,
+                        style: .continuous
+                    )
                 )
                 .accessibilityHidden(true)
 

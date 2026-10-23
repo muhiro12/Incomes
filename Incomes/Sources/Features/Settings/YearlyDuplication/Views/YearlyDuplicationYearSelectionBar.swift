@@ -29,7 +29,13 @@ struct YearlyDuplicationYearSelectionBar: View {
             }
             .padding(.horizontal, horizontalPadding)
             .padding(.vertical, verticalPadding)
-            .incomesGlassSurface(cornerRadius: surfaceCornerRadius)
+            .background(
+                Color(.secondarySystemGroupedBackground),
+                in: RoundedRectangle(
+                    cornerRadius: surfaceCornerRadius,
+                    style: .continuous
+                )
+            )
         }
         .padding(.horizontal, horizontalPadding)
         .padding(.vertical, verticalPadding)

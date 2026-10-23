@@ -19,7 +19,13 @@ struct ItemFormInputAssistProcessingStatus: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .padding(.horizontal, designMetrics.layout.surface.compactInsetHorizontal)
             .padding(.vertical, designMetrics.layout.surface.compactInsetVertical)
-            .incomesGlassSurface(cornerRadius: designMetrics.cornerRadius.surface)
+            .background(
+                Color(.tertiarySystemGroupedBackground),
+                in: RoundedRectangle(
+                    cornerRadius: designMetrics.cornerRadius.surface,
+                    style: .continuous
+                )
+            )
             .accessibilityElement(children: .combine)
     }
 }
