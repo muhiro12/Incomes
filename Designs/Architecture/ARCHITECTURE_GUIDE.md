@@ -342,8 +342,7 @@ product rationale lives in the
    - `Incomes/Sources/Features/Debug/Models/IncomesSampleData.swift`
    - `Incomes/Sources/Platform/*`
    - `Incomes/Sources/Features/Main/Views/MainNavigationView.swift`
-   - `Incomes/Sources/Features/Main/Views/MainNavigationSidebarView.swift`
-   - `Incomes/Sources/Features/Main/Views/MainNavigationContentColumn.swift`
+   - `Incomes/Sources/Features/Main/Views/MainNavigationSidebarColumn.swift`
    - `Incomes/Sources/Features/Main/Views/MainNavigationDetailColumn.swift`
    - `Incomes/Sources/Features/Main/Views/MainNavigationSheetPresenter.swift`
    - `Incomes/Sources/Features/Main/Views/MainNavigationRouter.swift`
@@ -358,7 +357,7 @@ product rationale lives in the
    - Keep `MainNavigationView` as a thin `NavigationSplitView`
      composition root that registers the route handler after loading
      persisted state.
-   - Keep sidebar, content, detail, and sheet presentation split across
+   - Keep sidebar, list content, and sheet presentation split across
      dedicated view files.
    - Keep `MainNavigationRouter` limited to navigation state and route
      application.

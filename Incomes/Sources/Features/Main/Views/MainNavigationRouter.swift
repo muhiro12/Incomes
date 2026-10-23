@@ -16,7 +16,6 @@ final class MainNavigationRouter {
     var preferredCompactColumn: NavigationSplitViewColumn = .sidebar
     var yearTagID: Tag.ID?
     var selectedTag: Tag?
-    var selectedItemID: PersistentIdentifier?
     var expandedYearTagIDs: Set<Tag.ID> = []
     var searchText = ""
     var predicate: ItemPredicate?
@@ -57,18 +56,18 @@ final class MainNavigationRouter {
         self.yearTagID = yearTagID
         self.selectedTag = selectedTag
         expandedYearTagIDs.insert(yearTagID)
-        preferredCompactColumn = selectedTag == nil ? .sidebar : .content
+        preferredCompactColumn = selectedTag == nil ? .sidebar : .detail
     }
 
     func loadState(context: ModelContext) throws {
         let state = try MainNavigationOperations.loadState(context: context, ledgerIdentifier: ledgerIdentifier)
         yearTagID = state.yearTag?.persistentModelID
         selectedTag = state.yearMonthTag
-        selectedItemID = nil
+        dismissItemDetail()
         if let yearTagID {
             expandedYearTagIDs.insert(yearTagID)
         }
-        preferredCompactColumn = selectedTag == nil ? .sidebar : .content
+        preferredCompactColumn = selectedTag == nil ? .sidebar : .detail
     }
 
     func handleIncomingRoute(
@@ -97,18 +96,18 @@ final class MainNavigationRouter {
 
     func selectSearchPredicate(_ predicate: ItemPredicate?) {
         self.predicate = predicate
-        selectedItemID = nil
+        dismissItemDetail()
         appliesInitialSearchText = false
         guard isSearchActive else {
             return
         }
-        preferredCompactColumn = predicate == nil ? .sidebar : .content
+        preferredCompactColumn = predicate == nil ? .sidebar : .detail
     }
 
     func selectYearTagID(_ yearTagID: Tag.ID?) {
         self.yearTagID = yearTagID
         selectedTag = nil
-        selectedItemID = nil
+        dismissItemDetail()
         if let yearTagID {
             expandedYearTagIDs.insert(yearTagID)
         }
@@ -116,24 +115,19 @@ final class MainNavigationRouter {
         preferredCompactColumn = .sidebar
     }
 
-    func selectItemID(_ itemID: PersistentIdentifier?) {
-        selectedItemID = itemID
-        preferredCompactColumn = itemID == nil ? .content : .detail
-    }
-
     func beginSearch() {
         guard !isSearchActive else {
             return
         }
         isSearchActive = true
-        selectedItemID = nil
+        dismissItemDetail()
         preferredCompactColumn = .sidebar
     }
 
     func dismissSearch() {
         clearSearchState()
-        selectedItemID = nil
-        preferredCompactColumn = selectedTag == nil ? .sidebar : .content
+        dismissItemDetail()
+        preferredCompactColumn = selectedTag == nil ? .sidebar : .detail
     }
 
     func syncPreferredCompactColumn(
@@ -162,9 +156,9 @@ private extension MainNavigationRouter {
             isSearchPresented = true
             searchText = query ?? ""
             self.predicate = predicate
-            selectedItemID = nil
+            dismissItemDetail()
             appliesInitialSearchText = predicate == nil && query?.isEmpty == false
-            preferredCompactColumn = predicate == nil ? .sidebar : .content
+            preferredCompactColumn = predicate == nil ? .sidebar : .detail
         case .settings:
             sheetRoute = .settings
             settingsDestination = .root
@@ -188,7 +182,7 @@ private extension MainNavigationRouter {
             fullScreenRoute = .orphanTags
         case .itemDetail(let itemID):
             settingsDestination = nil
-            try selectItemDestination(itemID, context: context)
+            try presentItemDetail(itemID, context: context)
         }
     }
 
@@ -196,15 +190,15 @@ private extension MainNavigationRouter {
         settingsDestination = nil
         self.yearTagID = yearTagID
         self.selectedTag = selectedTag
-        selectedItemID = nil
+        dismissItemDetail()
         if let yearTagID {
             expandedYearTagIDs.insert(yearTagID)
         }
         clearSearchState()
-        preferredCompactColumn = selectedTag == nil ? .sidebar : .content
+        preferredCompactColumn = selectedTag == nil ? .sidebar : .detail
     }
 
-    func selectItemDestination(_ itemID: PersistentIdentifier, context: ModelContext) throws {
+    func presentItemDetail(_ itemID: PersistentIdentifier, context: ModelContext) throws {
         guard let item = try ItemQueryOperations.item(context: context, persistentID: itemID),
               item.ledgerIdentifier == ledgerIdentifier else {
             return
@@ -220,7 +214,16 @@ private extension MainNavigationRouter {
             expandedYearTagIDs.insert(yearTagID)
         }
         clearSearchState()
-        selectItemID(itemID)
+        preferredCompactColumn = .detail
+        sheetRoute = .itemDetail(itemID)
+    }
+
+    func dismissItemDetail() {
+        guard let sheetRoute,
+              case .itemDetail = sheetRoute else {
+            return
+        }
+        self.sheetRoute = nil
     }
 
     func clearSearchState() {

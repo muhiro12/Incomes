@@ -11,6 +11,11 @@ struct MainNavigationSheetPresenter: View {
 
     var body: some View {
         switch route {
+        case .itemDetail(let itemID):
+            MainNavigationItemDetailSheet(
+                itemID: itemID,
+                ledgerIdentifier: ledgerIdentifier
+            )
         case .settings:
             SettingsNavigationView(
                 incomingDestination: $settingsDestination

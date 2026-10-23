@@ -4,19 +4,18 @@ struct MainNavigationDetailColumn: View {
     @Environment(MainNavigationRouter.self)
     private var router
 
+    let hasAnyYears: Bool
+
     var body: some View {
         Group {
-            if let selectedItemID = router.selectedItemID {
-                MainNavigationSelectedItemContent(
-                    itemID: selectedItemID,
-                    ledgerIdentifier: router.ledgerIdentifier
-                )
+            if router.isSearchActive {
+                MainNavigationSearchDetailContent(predicate: router.predicate)
+            } else if let selectedTag = router.selectedTag {
+                MainNavigationTagDetailContent(selectedTagID: selectedTag.persistentModelID)
+            } else if hasAnyYears {
+                MainNavigationSelectMonthContent()
             } else {
-                ContentUnavailableView(
-                    "Select an Item",
-                    systemImage: "doc.text.magnifyingglass",
-                    description: Text("Choose an item from the list to see its details.")
-                )
+                MainNavigationEmptyYearsContent()
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

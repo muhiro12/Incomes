@@ -4,9 +4,6 @@ import SwiftUI
 import TipKit
 
 struct ListItemButton: View {
-    @Environment(\.navigationItemSelection)
-    private var navigationItemSelection
-
     @Environment(\.ledgerBalances)
     private var ledgerBalances
 
@@ -33,19 +30,11 @@ struct ListItemButton: View {
     private let itemDetailTip = ItemDetailTip()
 
     var body: some View {
-        Group {
-            if navigationItemSelection != nil {
-                NavigationLink(value: item.persistentModelID) {
-                    ListItemButtonLabel()
-                }
-            } else {
-                Button {
-                    tipController.donateDidOpenItemDetail()
-                    showDetail(detent: .medium)
-                } label: {
-                    ListItemButtonLabel()
-                }
-            }
+        Button {
+            tipController.donateDidOpenItemDetail()
+            showDetail(detent: .medium)
+        } label: {
+            ListItemButtonLabel()
         }
         .buttonStyle(.plain)
         .accessibilityElement(children: .ignore)
@@ -189,11 +178,7 @@ private extension ListItemButton {
     }
 
     func showDetail(detent: PresentationDetent) {
-        if let navigationItemSelection {
-            navigationItemSelection.wrappedValue = item.persistentModelID
-        } else {
-            detailPresentationDetent = detent
-            route = .detail
-        }
+        detailPresentationDetent = detent
+        route = .detail
     }
 }

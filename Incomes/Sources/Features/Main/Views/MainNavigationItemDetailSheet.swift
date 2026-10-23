@@ -2,32 +2,22 @@ import SwiftData
 import SwiftUI
 
 struct MainNavigationItemDetailSheet: View {
-    @Environment(\.modelContext)
-    private var context
+    @LedgerItemQuery private var items: [Item]
 
-    let itemDetailID: PersistentIdentifier?
+    @State private var selectedDetent = PresentationDetent.medium
 
     var body: some View {
         Group {
-            if let item {
-                ItemNavigationView()
+            if let item = items.first {
+                ItemDetailSheetContent(selectedDetent: $selectedDetent)
                     .environment(item)
             } else {
                 MainNavigationItemUnavailableContent()
             }
         }
     }
-}
 
-private extension MainNavigationItemDetailSheet {
-    var item: Item? {
-        guard let itemDetailID else {
-            return nil
-        }
-
-        return try? ItemQueryOperations.item(
-            context: context,
-            persistentID: itemDetailID
-        )
+    init(itemID: PersistentIdentifier, ledgerIdentifier: LedgerIdentifier) {
+        _items = .init(.items(.idIs(itemID), ledgerIdentifier: ledgerIdentifier))
     }
 }

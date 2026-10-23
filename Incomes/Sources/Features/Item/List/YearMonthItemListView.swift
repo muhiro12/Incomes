@@ -10,9 +10,6 @@ import SwiftData
 import SwiftUI
 
 struct YearMonthItemListView {
-    @Environment(\.navigationItemSelection)
-    private var navigationItemSelection
-
     @Environment(\.ledgerIdentifier)
     private var ledgerIdentifier
 
@@ -31,7 +28,7 @@ extension YearMonthItemListView: View {
         let firstYearString = currentYearStrings.first
 
         ZStack {
-            List(selection: navigationItemSelection) {
+            List {
                 ForEach(currentYearStrings, id: \.self) { yearString in
                     ItemListSection(
                         .items(.tagAndYear(tag: tag, yearString: yearString), ledgerIdentifier: ledgerIdentifier),

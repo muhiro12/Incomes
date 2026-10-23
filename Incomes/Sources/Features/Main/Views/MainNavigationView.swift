@@ -15,9 +15,6 @@ struct MainNavigationView: View {
         static let sidebarMinimumWidth: CGFloat = 240
         static let sidebarIdealWidth: CGFloat = 280
         static let sidebarMaximumWidth: CGFloat = 360
-        static let contentMinimumWidth: CGFloat = 300
-        static let contentIdealWidth: CGFloat = 400
-        static let contentMaximumWidth: CGFloat = 600
     }
 
     @Environment(\.modelContext)
@@ -119,27 +116,8 @@ struct MainNavigationView: View {
                     }
                 )
             }
-        } content: {
-            MainNavigationContentColumn(hasAnyYears: !yearTags.isEmpty)
-                .navigationSplitViewColumnWidth(
-                    min: Constants.contentMinimumWidth,
-                    ideal: Constants.contentIdealWidth,
-                    max: Constants.contentMaximumWidth
-                )
-                .environment(\.navigationItemSelection, Binding(
-                    get: {
-                        self.router.selectedItemID
-                    },
-                    set: { itemID in
-                        guard let itemID else {
-                            return
-                        }
-                        self.router.selectItemID(itemID)
-                        tipController.donateDidOpenItemDetail()
-                    }
-                ))
         } detail: {
-            MainNavigationDetailColumn()
+            MainNavigationDetailColumn(hasAnyYears: !yearTags.isEmpty)
         }
         .navigationSplitViewStyle(.balanced)
         .sheet(
