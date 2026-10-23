@@ -12,7 +12,7 @@ struct MainNavigationSelectedItemContent: View {
     var body: some View {
         Group {
             if let item = items.first {
-                ItemView()
+                ItemView(showsCloseButton: false)
                     .environment(item)
             } else {
                 MainNavigationItemUnavailableContent()

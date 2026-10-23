@@ -13,6 +13,12 @@ struct ItemView {
     private var isDebugOn
     @Environment(\.mhDesignMetrics)
     private var designMetrics
+
+    private let showsCloseButton: Bool
+
+    init(showsCloseButton: Bool = true) {
+        self.showsCloseButton = showsCloseButton
+    }
 }
 
 extension ItemView: View {
@@ -32,7 +38,7 @@ extension ItemView: View {
         .navigationTitle(item.content)
         .itemEntityIdentifier(item)
         .toolbar {
-            if isPresented {
+            if showsCloseButton, isPresented {
                 ToolbarItem {
                     CloseButton()
                 }
