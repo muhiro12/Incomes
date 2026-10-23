@@ -11,6 +11,15 @@ import SwiftData
 import SwiftUI
 
 struct MainNavigationView: View {
+    private enum Constants {
+        static let sidebarMinimumWidth: CGFloat = 240
+        static let sidebarIdealWidth: CGFloat = 280
+        static let sidebarMaximumWidth: CGFloat = 360
+        static let contentMinimumWidth: CGFloat = 300
+        static let contentIdealWidth: CGFloat = 400
+        static let contentMaximumWidth: CGFloat = 600
+    }
+
     @Environment(\.modelContext)
     private var context
     @Environment(\.horizontalSizeClass)
@@ -57,13 +66,13 @@ struct MainNavigationView: View {
         )
     }
 
-    private var yearTagSelection: Binding<Tag.ID?> {
+    private var tagSelection: Binding<Tag.ID?> {
         .init(
             get: {
-                router.yearTagID
+                router.selectedTag?.persistentModelID
             },
-            set: { yearTagID in
-                handleYearTagSelection(yearTagID)
+            set: { tagID in
+                handleTagSelection(tagID)
             }
         )
     }
@@ -77,21 +86,27 @@ struct MainNavigationView: View {
             },
             set: { preferredCompactColumn in
                 self.router.syncPreferredCompactColumn(
-                    preferredCompactColumn,
-                    isCompact: horizontalSizeClass == .compact
+                    preferredCompactColumn
                 )
             }
         )
 
         NavigationSplitView(preferredCompactColumn: compactColumnSelection) {
-            MainNavigationSidebarView(
+            MainNavigationSidebarColumn(
                 yearTags: yearTags,
                 selectedYearTag: selectedYearTag,
-                yearTagSelection: yearTagSelection
-            ) { route in
-                enqueueNavigation(to: route)
-            }
-            .navigationTitle(ledgerMenu?.selectedName ?? "Incomes")
+                tagSelection: tagSelection,
+                onNavigate: enqueueNavigation
+            )
+            .searchable(text: $router.searchText, isPresented: $router.isSearchPresented)
+            .navigationSplitViewColumnWidth(
+                min: Constants.sidebarMinimumWidth,
+                ideal: Constants.sidebarIdealWidth,
+                max: Constants.sidebarMaximumWidth
+            )
+            .navigationTitle(
+                router.isSearchActive ? String(localized: "Search") : ledgerMenu?.selectedName ?? "Incomes"
+            )
             .toolbar {
                 MainNavigationSidebarToolbarContent(
                     isCompact: horizontalSizeClass == .compact,
@@ -105,23 +120,31 @@ struct MainNavigationView: View {
                 )
             }
         } content: {
-            MainNavigationContentColumn(
-                hasAnyYears: !yearTags.isEmpty
-            ) { route in
-                enqueueNavigation(to: route)
-            }
-            .searchable(text: $router.searchText, isPresented: $router.isSearchPresented)
-            .toolbar {
-                MainNavigationContentToolbarContent()
-            }
-            .environment(selectedYearTag)
+            MainNavigationContentColumn(hasAnyYears: !yearTags.isEmpty)
+                .navigationSplitViewColumnWidth(
+                    min: Constants.contentMinimumWidth,
+                    ideal: Constants.contentIdealWidth,
+                    max: Constants.contentMaximumWidth
+                )
+                .environment(\.navigationItemSelection, Binding(
+                    get: {
+                        self.router.selectedItemID
+                    },
+                    set: { itemID in
+                        guard let itemID else {
+                            return
+                        }
+                        self.router.selectItemID(itemID)
+                        tipController.donateDidOpenItemDetail()
+                    }
+                ))
         } detail: {
             MainNavigationDetailColumn()
         }
+        .navigationSplitViewStyle(.balanced)
         .sheet(
             item: $router.sheetRoute,
             onDismiss: {
-                router.itemDetailID = nil
                 Task {
                     applyPendingRouteAfterSettingsDismissalIfNeeded()
                 }
@@ -129,7 +152,6 @@ struct MainNavigationView: View {
             content: { sheetRoute in
                 MainNavigationSheetPresenter(
                     route: sheetRoute,
-                    itemDetailID: router.itemDetailID,
                     settingsDestination: $router.settingsDestination
                 ) { route in
                     navigateFromSettings(to: route)
@@ -187,20 +209,26 @@ struct MainNavigationView: View {
 }
 
 private extension MainNavigationView {
-    func handleYearTagSelection(_ yearTagID: Tag.ID?) {
-        guard let yearTagID else {
-            router.selectYearTagID(nil)
+    func handleTagSelection(_ tagID: Tag.ID?) {
+        // The split view can clear a list selection while collapsing columns.
+        // Back navigation changes the visible column, not the selected place.
+        guard let tagID,
+              let tag = try? TagQueryOperations.getByPersistentID(context: context, persistentID: tagID),
+              !TagQueryOperations.items(for: tag, ledgerIdentifier: router.ledgerIdentifier).isEmpty else {
             return
         }
-        guard let yearTag = yearTags.first(where: { yearTag in
-            yearTag.persistentModelID == yearTagID
-        }) else {
-            return
+        let route: IncomesRoute?
+        switch tag.type {
+        case .year:
+            route = MainNavigationOperations.yearSummaryRoute(forYearTag: tag)
+        case .yearMonth:
+            route = MainNavigationOperations.route(forYearMonthTag: tag)
+            tipController.donateDidOpenMonth()
+        default:
+            route = nil
         }
-        if let route = MainNavigationOperations.route(forYearTag: yearTag) {
+        if let route {
             enqueueNavigation(to: route)
-        } else {
-            router.selectYearTagID(yearTagID)
         }
     }
 
@@ -269,13 +297,11 @@ private extension MainNavigationView {
 
     func handleSearchPresentationChange() {
         if router.isSearchPresented {
+            router.beginSearch()
             tipController.donateDidOpenSearch()
-            return
+        } else if router.isSearchActive {
+            router.dismissSearch()
         }
-
-        router.restoreSidebarAfterSearchDismissalIfNeeded(
-            isCompact: horizontalSizeClass != .regular
-        )
     }
 }
 

@@ -10,6 +10,9 @@ import SwiftData
 import SwiftUI
 
 struct ContentItemListView {
+    @Environment(\.navigationItemSelection)
+    private var navigationItemSelection
+
     @Environment(\.ledgerIdentifier)
     private var ledgerIdentifier
 
@@ -27,7 +30,7 @@ extension ContentItemListView: View {
         let currentYearStrings = yearStrings
         let firstYearString = currentYearStrings.first
 
-        List {
+        List(selection: navigationItemSelection) {
             ForEach(currentYearStrings, id: \.self) { yearString in
                 ItemListSection(
                     .items(.tagAndYear(tag: tag, yearString: yearString), ledgerIdentifier: ledgerIdentifier),

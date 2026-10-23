@@ -8,7 +8,6 @@
 enum MainNavigationSheetRoute: Hashable, Identifiable {
     case settings
     case yearlyDuplication
-    case itemDetail
 
     var id: Self {
         self

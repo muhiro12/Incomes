@@ -16,6 +16,5 @@ struct MainNavigationYearTagRow: View {
                     onDelete: onDelete
                 )
             }
-            .tag(yearTag.persistentModelID)
     }
 }

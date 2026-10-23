@@ -2,12 +2,22 @@ import SwiftData
 import SwiftUI
 
 struct MainNavigationTagDetailContent {
+    @Environment(\.ledgerIdentifier)
+    private var ledgerIdentifier
+
     @Environment(MainNavigationRouter.self)
     private var router
 
     @Query private var tags: [Tag]
 
     private let selectedTagID: Tag.ID
+
+    private var hasItems: Bool {
+        guard let tag = tags.first else {
+            return false
+        }
+        return !TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier).isEmpty
+    }
 
     init(selectedTagID: Tag.ID) {
         self.selectedTagID = selectedTagID
@@ -25,8 +35,8 @@ extension MainNavigationTagDetailContent: View {
                 MainNavigationSelectMonthContent()
             }
         }
-        .onChange(of: tags.isEmpty, initial: true) {
-            guard tags.isEmpty,
+        .onChange(of: hasItems, initial: true) {
+            guard !hasItems,
                   router.selectedTag?.persistentModelID == selectedTagID else {
                 return
             }

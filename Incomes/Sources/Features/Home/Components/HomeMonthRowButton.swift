@@ -9,6 +9,9 @@ import SwiftUI
 import TipKit
 
 struct HomeMonthRowButton: View {
+    @Environment(\.navigationTagSelection)
+    private var navigationTagSelection
+
     @Environment(\.ledgerIdentifier)
     private var ledgerIdentifier
 
@@ -24,11 +27,19 @@ struct HomeMonthRowButton: View {
     private let monthListTip = MonthListTip()
 
     var body: some View {
-        Button {
-            openMonth()
-        } label: {
-            NavigationRowLabel {
-                TagSummaryRow()
+        Group {
+            if navigationTagSelection != nil {
+                NavigationLink(value: tag.persistentModelID) {
+                    TagSummaryRow()
+                }
+            } else {
+                Button {
+                    openMonth()
+                } label: {
+                    NavigationRowLabel {
+                        TagSummaryRow()
+                    }
+                }
             }
         }
         .buttonStyle(.plain)

@@ -8,6 +8,9 @@
 import SwiftUI
 
 struct HomeSummaryButton: View {
+    @Environment(\.navigationTagSelection)
+    private var navigationTagSelection
+
     @Environment(\.ledgerIdentifier)
     private var ledgerIdentifier
 
@@ -17,14 +20,22 @@ struct HomeSummaryButton: View {
     let navigateToRoute: (IncomesRoute) -> Void
 
     var body: some View {
-        Button {
-            guard let yearSummaryRoute else {
-                return
-            }
-            navigateToRoute(yearSummaryRoute)
-        } label: {
-            NavigationRowLabel {
-                TagSummaryRow()
+        Group {
+            if navigationTagSelection != nil {
+                NavigationLink(value: yearTag.persistentModelID) {
+                    TagSummaryRow()
+                }
+            } else {
+                Button {
+                    guard let yearSummaryRoute else {
+                        return
+                    }
+                    navigateToRoute(yearSummaryRoute)
+                } label: {
+                    NavigationRowLabel {
+                        TagSummaryRow()
+                    }
+                }
             }
         }
         .buttonStyle(.plain)

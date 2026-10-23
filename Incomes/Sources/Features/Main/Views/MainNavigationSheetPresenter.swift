@@ -6,7 +6,6 @@ struct MainNavigationSheetPresenter: View {
     private var ledgerIdentifier
 
     let route: MainNavigationSheetRoute
-    let itemDetailID: PersistentIdentifier?
     @Binding var settingsDestination: SettingsNavigationDestination?
     let onNavigateFromSettings: (IncomesRoute) -> Void
 
@@ -23,11 +22,6 @@ struct MainNavigationSheetPresenter: View {
             NavigationStack {
                 YearlyDuplicationView(ledgerIdentifier: ledgerIdentifier)
             }
-            .incomesSheetPresentation()
-        case .itemDetail:
-            MainNavigationItemDetailSheet(
-                itemDetailID: itemDetailID
-            )
             .incomesSheetPresentation()
         }
     }

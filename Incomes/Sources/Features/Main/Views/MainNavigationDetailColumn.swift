@@ -6,14 +6,17 @@ struct MainNavigationDetailColumn: View {
 
     var body: some View {
         Group {
-            if router.isSearchPresented {
-                MainNavigationSearchDetailContent(predicate: router.predicate)
-            } else if let selectedTag = router.selectedTag {
-                MainNavigationTagDetailContent(
-                    selectedTagID: selectedTag.persistentModelID
+            if let selectedItemID = router.selectedItemID {
+                MainNavigationSelectedItemContent(
+                    itemID: selectedItemID,
+                    ledgerIdentifier: router.ledgerIdentifier
                 )
             } else {
-                MainNavigationSelectMonthContent()
+                ContentUnavailableView(
+                    "Select an Item",
+                    systemImage: "doc.text.magnifyingglass",
+                    description: Text("Choose an item from the list to see its details.")
+                )
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

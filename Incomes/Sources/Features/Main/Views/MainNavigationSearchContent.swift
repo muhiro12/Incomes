@@ -52,7 +52,7 @@ private extension MainNavigationSearchContent {
                     .padding(.horizontal, Constants.buttonHorizontalPadding)
             }
             .accessibilityLabel(Text("Cancel Search"))
-            .accessibilityHint(Text("Returns to the year list."))
+            .accessibilityHint(Text("Closes search."))
             .accessibilityAddTraits(.isButton)
         }
         .padding(.horizontal)

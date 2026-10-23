@@ -18,7 +18,7 @@ struct MainNavigationSidebarView: View {
     @State private var deletionErrorMessage: String?
     let yearTags: [Tag]
     let selectedYearTag: Tag?
-    let yearTagSelection: Binding<Tag.ID?>
+    let tagSelection: Binding<Tag.ID?>
     let onNavigate: (IncomesRoute) -> Void
 
     var body: some View {
@@ -28,7 +28,7 @@ struct MainNavigationSidebarView: View {
             } else {
                 MainNavigationSidebarList(
                     yearTags: yearTags,
-                    yearTagSelection: yearTagSelection,
+                    tagSelection: tagSelection,
                     onNavigate: onNavigate,
                     onDeleteYearTags: requestYearDeletion,
                     onDeleteYearTag: requestYearDeletion
