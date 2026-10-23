@@ -7,7 +7,7 @@ struct SearchCurrencyActionSection: View {
 
     let isVisible: Bool
     let isEnabled: Bool
-    let applySearch: () -> Void
+    let predicate: ItemPredicate?
 
     var body: some View {
         if isVisible {
@@ -29,7 +29,7 @@ private extension SearchCurrencyActionSection {
     var actionButton: some View {
         SearchCurrencyActionButton(
             isEnabled: isEnabled,
-            applySearch: applySearch
+            predicate: predicate
         )
     }
 

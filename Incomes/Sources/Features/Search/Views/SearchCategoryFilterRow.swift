@@ -5,9 +5,7 @@ struct SearchCategoryFilterRow: View {
     let applyFilter: (CategoryFacet) -> Void
 
     var body: some View {
-        Button {
-            applyFilter(facet)
-        } label: {
+        NavigationLink(value: ItemPredicate.idsAre(facet.itemIDs)) {
             SearchFilterRowLabel(
                 title: facet.displayName,
                 count: facet.count

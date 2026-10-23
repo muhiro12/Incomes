@@ -251,11 +251,11 @@ private extension MainNavigationView {
     }
 
     func handleSearchPresentationChange() {
+        // A result link can dismiss the search field before List delivers its selection.
+        // The search route handles cancellation separately from field presentation.
         if router.isSearchPresented {
             router.beginSearch()
             tipController.donateDidOpenSearch()
-        } else if router.isSearchActive {
-            router.dismissSearch()
         }
     }
 }

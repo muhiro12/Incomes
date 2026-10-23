@@ -12,9 +12,7 @@ struct SearchTagFilterRow: View {
     var body: some View {
         let itemCount = TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier).count
 
-        Button {
-            applyFilter(tag)
-        } label: {
+        NavigationLink(value: ItemPredicate.tagIs(tag)) {
             SearchFilterRowLabel(
                 title: tag.displayName,
                 count: itemCount

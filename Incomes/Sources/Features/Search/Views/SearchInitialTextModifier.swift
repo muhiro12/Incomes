@@ -1,7 +1,7 @@
 import SwiftUI
 
 struct SearchInitialTextModifier: ViewModifier {
-    let selectedTarget: SearchTarget
+    @Binding var selectedTarget: SearchTarget
     let contentTags: [Tag]
     @Binding var predicate: ItemPredicate?
     @Binding var searchText: String
@@ -10,7 +10,7 @@ struct SearchInitialTextModifier: ViewModifier {
 
     func body(content: Content) -> some View {
         content
-            .task {
+            .task(id: appliesInitialSearchText ? searchText : nil) {
                 applyInitialSearchTextIfNeeded()
             }
             .onChange(of: contentTags.count) {
@@ -24,6 +24,8 @@ private extension SearchInitialTextModifier {
         guard appliesInitialSearchText else {
             return
         }
+
+        selectedTarget = .content
 
         guard !searchText.isEmpty else {
             appliesInitialSearchText = false

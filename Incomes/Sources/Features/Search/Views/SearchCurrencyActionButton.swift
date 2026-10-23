@@ -2,10 +2,10 @@ import SwiftUI
 
 struct SearchCurrencyActionButton: View {
     let isEnabled: Bool
-    let applySearch: () -> Void
+    let predicate: ItemPredicate?
 
     var body: some View {
-        Button(action: applySearch) {
+        NavigationLink(value: predicate) {
             Label("Search", systemImage: "magnifyingglass")
                 .frame(maxWidth: .infinity)
         }

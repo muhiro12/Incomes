@@ -45,6 +45,7 @@ struct SearchListView: View {
 extension SearchListView {
     @ViewBuilder var body: some View {
         SearchListContent(
+            predicate: $predicate,
             selectedTarget: $selectedTarget,
             contentTags: filteredContentTags,
             categoryFacets: categoryFacets,
@@ -53,15 +54,21 @@ extension SearchListView {
             isMinimumValueValid: minValue.isEmptyOrDecimal,
             isMaximumValueValid: maxValue.isEmptyOrDecimal,
             controlSpacing: designMetrics.spacing.control,
+            currencyPredicate: currencyPredicate,
             applyTagFilter: applyTagFilter,
             applyCategoryFilter: applyCategoryFilter,
             applyCurrencyFilter: applyCurrencyFilter
         )
         .scrollDismissesKeyboard(.interactively)
         .navigationTitle("Search")
+        .onChange(of: predicate) {
+            if predicate != nil {
+                tipController.donateDidApplySearch()
+            }
+        }
         .modifier(
             SearchInitialTextModifier(
-                selectedTarget: selectedTarget,
+                selectedTarget: $selectedTarget,
                 contentTags: contents,
                 predicate: $predicate,
                 searchText: $searchText,
@@ -92,30 +99,29 @@ private extension SearchListView {
         minValue.isEmptyOrDecimal && maxValue.isEmptyOrDecimal
     }
 
+    var currencyPredicate: ItemPredicate? {
+        guard isCurrencyFilterValid else {
+            return nil
+        }
+        return selectedTarget.predicate(
+            minimumText: minValue,
+            maximumText: maxValue
+        )
+    }
+
     func applyTagFilter(_ tag: Tag) {
-        tipController.donateDidApplySearch()
         predicate = .tagIs(tag)
     }
 
     func applyCategoryFilter(_ facet: CategoryFacet) {
-        tipController.donateDidApplySearch()
         predicate = .idsAre(facet.itemIDs)
     }
 
     func applyCurrencyFilter() {
-        guard isCurrencyFilterValid else {
+        guard let currencyPredicate else {
             return
         }
-
-        guard let newPredicate = selectedTarget.predicate(
-            minimumText: minValue,
-            maximumText: maxValue
-        ) else {
-            return
-        }
-
-        tipController.donateDidApplySearch()
-        predicate = newPredicate
+        predicate = currencyPredicate
     }
 }
 

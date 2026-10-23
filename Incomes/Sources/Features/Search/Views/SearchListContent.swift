@@ -1,6 +1,7 @@
 import SwiftUI
 
 struct SearchListContent: View {
+    @Binding var predicate: ItemPredicate?
     @Binding var selectedTarget: SearchTarget
     let contentTags: [Tag]
     let categoryFacets: [CategoryFacet]
@@ -9,12 +10,13 @@ struct SearchListContent: View {
     let isMinimumValueValid: Bool
     let isMaximumValueValid: Bool
     let controlSpacing: CGFloat
+    let currencyPredicate: ItemPredicate?
     let applyTagFilter: (Tag) -> Void
     let applyCategoryFilter: (CategoryFacet) -> Void
     let applyCurrencyFilter: () -> Void
 
     var body: some View {
-        List {
+        List(selection: $predicate) {
             SearchTargetSection(selectedTarget: $selectedTarget)
             SearchFilterSection(
                 selectedTarget: selectedTarget,
@@ -32,7 +34,7 @@ struct SearchListContent: View {
             SearchCurrencyActionSection(
                 isVisible: selectedTarget.isForCurrency,
                 isEnabled: isMinimumValueValid && isMaximumValueValid,
-                applySearch: applyCurrencyFilter
+                predicate: currencyPredicate
             )
         }
     }

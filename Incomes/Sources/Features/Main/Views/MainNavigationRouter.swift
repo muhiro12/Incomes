@@ -141,7 +141,7 @@ private extension MainNavigationRouter {
             searchText = query ?? ""
             self.predicate = predicate
             dismissItemDetail()
-            appliesInitialSearchText = predicate == nil && query?.isEmpty == false
+            appliesInitialSearchText = query?.isEmpty == false
         case .settings:
             sheetRoute = .settings
             settingsDestination = .root
