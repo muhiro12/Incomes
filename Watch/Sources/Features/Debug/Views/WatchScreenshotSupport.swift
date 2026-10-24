@@ -19,7 +19,8 @@ enum WatchScreenshotSupport {
         }
         preferences.removePersistentDomain(forName: suiteName)
         preferences.set(false, forKey: IncomesUserDefaultsKeys.Standard.isDebugOn.rawValue)
-        preferences.set("USD", forKey: IncomesUserDefaultsKeys.Standard.currencyCode.rawValue)
+        preferences.set(Locale.current.currency?.identifier ?? "USD",
+                        forKey: IncomesUserDefaultsKeys.Standard.currencyCode.rawValue)
         return preferences
     }()
 
