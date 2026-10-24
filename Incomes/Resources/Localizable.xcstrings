@@ -3094,40 +3094,6 @@
         }
       }
     },
-    "Choose an item from the list to see its details." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Choose an item from the list to see its details."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "一覧から項目を選択すると、明細が表示されます。"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Selecciona un elemento de la lista para ver sus detalles."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sélectionnez un élément dans la liste pour en voir les détails."
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "从列表中选择一个项目以查看其详情。"
-          }
-        }
-      }
-    },
     "Choose an unused tag from the sidebar to review and clean up." : {
       "localizations" : {
         "en" : {
@@ -14831,40 +14797,6 @@
         }
       }
     },
-    "Select an Item" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Select an Item"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "項目を選択"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Selecciona un elemento"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sélectionnez un élément"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "选择项目"
-          }
-        }
-      }
-    },
     "Select an Orphan Tag" : {
       "localizations" : {
         "en" : {
@@ -15439,40 +15371,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "显示与此金额范围匹配的项目。"
-          }
-        }
-      }
-    },
-    "Shows months and summary for this year." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Shows months and summary for this year."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Muestra los meses y el resumen de este año."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Affiche les mois et le résumé de cette année."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "この年の月別一覧とサマリーを表示します。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "显示此年份的月份和摘要。"
           }
         }
       }
