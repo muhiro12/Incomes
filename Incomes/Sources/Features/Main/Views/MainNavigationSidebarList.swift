@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct MainNavigationSidebarList<Footer: View>: View {
+    @Environment(\.locale)
+    private var locale
+
     @Environment(MainNavigationRouter.self)
     private var router
 
@@ -12,36 +15,29 @@ struct MainNavigationSidebarList<Footer: View>: View {
     let footer: Footer
 
     var body: some View {
-        @Bindable var router = router
-
         List(selection: tagSelection) {
             if let selectedYearTag {
+                Section {
+                    HomeSummaryButton(
+                        title: String(localized: "Summary", locale: locale),
+                        navigateToRoute: onNavigate
+                    )
+                    .environment(selectedYearTag)
+                } header: {
+                    yearPicker
+                }
                 HomeYearSection(
                     yearName: selectedYearTag.name,
                     navigateToRoute: onNavigate
                 ) {
-                    MainNavigationYearPicker(
-                        yearTags: yearTags,
-                        selectedYearTag: selectedYearTag,
-                        selection: $router.yearSelection,
-                        onNavigate: onNavigate,
-                        onDelete: onDeleteYearTag
-                    )
+                    Text("Months")
                 }
-                HomeSummarySection(navigateToRoute: onNavigate)
-                    .environment(selectedYearTag)
             } else {
                 Section {
                     Text("Select a Year")
                         .foregroundStyle(.secondary)
                 } header: {
-                    MainNavigationYearPicker(
-                        yearTags: yearTags,
-                        selectedYearTag: nil,
-                        selection: $router.yearSelection,
-                        onNavigate: onNavigate,
-                        onDelete: onDeleteYearTag
-                    )
+                    yearPicker
                 }
             }
 
@@ -63,5 +59,19 @@ struct MainNavigationSidebarList<Footer: View>: View {
         self.onNavigate = onNavigate
         self.onDeleteYearTag = onDeleteYearTag
         self.footer = footer()
+    }
+}
+
+private extension MainNavigationSidebarList {
+    var yearPicker: some View {
+        @Bindable var router = router
+
+        return MainNavigationYearPicker(
+            yearTags: yearTags,
+            selectedYearTag: selectedYearTag,
+            selection: $router.yearSelection,
+            onNavigate: onNavigate,
+            onDelete: onDeleteYearTag
+        )
     }
 }

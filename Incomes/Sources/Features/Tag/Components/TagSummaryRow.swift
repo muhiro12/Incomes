@@ -20,6 +20,8 @@ struct TagSummaryRow: View {
     @Environment(\.locale)
     private var locale
 
+    private let title: String?
+
     private var summary: ItemSummaryOperations.MonthlyTotals {
         get throws {
             try ItemSummaryOperations.totals(
@@ -41,7 +43,7 @@ struct TagSummaryRow: View {
         )
 
         TagSummaryRowContent(
-            displayName: tag.displayName,
+            displayName: title ?? tag.displayName,
             itemCount: itemCount,
             incomeText: (try? summary.totalIncome)?.asCurrency ?? ItemSummaryOperations.unavailableAmountText,
             outgoText: (try? summary.totalOutgo)?.asMinusCurrency
@@ -50,12 +52,21 @@ struct TagSummaryRow: View {
             netIncomePresentation: netIncomePresentation
         )
         .accessibilityElement(children: .ignore)
-        .accessibilityLabel(Text(tag.displayName))
+        .accessibilityLabel(Text(verbatim: accessibilityTitle))
         .accessibilityValue(accessibilityValue(itemCount: itemCount))
+    }
+
+    init(title: String? = nil) {
+        self.title = title
     }
 }
 
 private extension TagSummaryRow {
+    var accessibilityTitle: String {
+        let titles = [title, tag.displayName].compactMap(\.self)
+        return titles.formatted(.list(type: .and).locale(locale))
+    }
+
     var netIncomeAccessibilityText: String {
         let netIncome: Decimal
         do {

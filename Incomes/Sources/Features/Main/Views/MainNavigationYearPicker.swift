@@ -34,16 +34,16 @@ struct MainNavigationYearPicker: View {
         } label: {
             HStack {
                 if let selectedYearTag {
-                    TagSummaryRow()
-                        .environment(selectedYearTag)
-                        .foregroundStyle(Color.primary)
+                    Text(selectedYearTag.displayName)
+                        .font(.headline)
                 } else {
                     Text("Year")
                 }
-                Image(systemName: "chevron.up.chevron.down")
-                    .foregroundStyle(.tint)
+                Image(systemName: "chevron.down")
+                    .foregroundStyle(.secondary)
                     .accessibilityHidden(true)
             }
+            .foregroundStyle(Color.primary)
         }
     }
 }

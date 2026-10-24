@@ -17,13 +17,14 @@ struct HomeSummaryButton: View {
     @Environment(Tag.self)
     private var yearTag
 
-    let navigateToRoute: (IncomesRoute) -> Void
+    private let title: String?
+    private let navigateToRoute: (IncomesRoute) -> Void
 
     var body: some View {
         Group {
             if navigationTagSelection != nil {
                 NavigationLink(value: yearTag.persistentModelID) {
-                    TagSummaryRow()
+                    TagSummaryRow(title: title)
                 }
             } else {
                 Button {
@@ -33,7 +34,7 @@ struct HomeSummaryButton: View {
                     navigateToRoute(yearSummaryRoute)
                 } label: {
                     NavigationRowLabel {
-                        TagSummaryRow()
+                        TagSummaryRow(title: title)
                     }
                 }
             }
@@ -60,6 +61,14 @@ struct HomeSummaryButton: View {
                 CopyURLContextMenuButton("Copy Link", url: yearSummaryURL)
             }
         }
+    }
+
+    init(
+        title: String? = nil,
+        navigateToRoute: @escaping (IncomesRoute) -> Void
+    ) {
+        self.title = title
+        self.navigateToRoute = navigateToRoute
     }
 }
 
