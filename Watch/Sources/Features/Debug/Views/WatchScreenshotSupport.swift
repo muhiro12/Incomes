@@ -9,7 +9,11 @@ enum WatchScreenshotSupport {
     }
 
     static var presentsSettings: Bool {
-        ProcessInfo.processInfo.arguments.contains("--incomes-screenshots-settings")
+        presentsItems || ProcessInfo.processInfo.arguments.contains("--incomes-screenshots-settings")
+    }
+
+    static var presentsItems: Bool {
+        isEnabled && ProcessInfo.processInfo.arguments.contains("--incomes-screenshots-items")
     }
 
     static let preferences: UserDefaults = {

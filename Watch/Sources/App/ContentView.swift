@@ -33,9 +33,19 @@ extension ContentView: View {
                 .navigationTitle("Incomes")
         }
         .sheet(isPresented: $model.isSettingsPresented) {
+            #if DEBUG
+            if WatchScreenshotSupport.presentsItems {
+                WatchScreenshotItemsView()
+            } else {
+                NavigationStack {
+                    SettingsListView()
+                }
+            }
+            #else
             NavigationStack {
                 SettingsListView()
             }
+            #endif
         }
         .task {
             #if DEBUG
