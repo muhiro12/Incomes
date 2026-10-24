@@ -9,7 +9,7 @@ import MHPlatform
 import SwiftData
 import SwiftUI
 
-struct HomeYearSection: View {
+struct HomeYearSection<Header: View>: View {
     @Environment(\.ledgerIdentifier)
     private var ledgerIdentifier
 
@@ -37,12 +37,14 @@ struct HomeYearSection: View {
     @State private var willDeleteItems: [Item] = []
 
     private let navigateToRoute: (IncomesRoute) -> Void
+    private let header: Header
 
     init(
         yearName: String,
         navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
             // no-op
-        }
+        },
+        @ViewBuilder header: () -> Header
     ) {
         _queriedYearMonthTags = Query(
             .tags(
@@ -51,6 +53,23 @@ struct HomeYearSection: View {
             )
         )
         self.navigateToRoute = navigateToRoute
+        self.header = header()
+    }
+}
+
+extension HomeYearSection where Header == EmptyView {
+    init(
+        yearName: String,
+        navigateToRoute: @escaping (IncomesRoute) -> Void = { _ in
+            // no-op
+        }
+    ) {
+        self.init(
+            yearName: yearName,
+            navigateToRoute: navigateToRoute
+        ) {
+            EmptyView()
+        }
     }
 }
 
@@ -78,6 +97,8 @@ extension HomeYearSection {
                     allowsEmptySelection: true
                 )
             }
+        } header: {
+            header
         }
         .itemDeletionErrorAlert($deletionErrorMessage)
         .confirmationDialog(

@@ -1,73 +1,67 @@
-import MHPlatform
 import SwiftUI
 
 struct MainNavigationSidebarList<Footer: View>: View {
-    @Environment(\.ledgerIdentifier)
-    private var ledgerIdentifier
-
-    @AppStorage(\.isSubscribeOn)
-    private var isSubscribeOn
-
     @Environment(MainNavigationRouter.self)
     private var router
 
     let yearTags: [Tag]
+    let selectedYearTag: Tag?
     let tagSelection: Binding<Tag.ID?>
     let onNavigate: (IncomesRoute) -> Void
-    let onDeleteYearTags: (IndexSet) -> Void
     let onDeleteYearTag: (Tag) -> Void
     let footer: Footer
 
     var body: some View {
+        @Bindable var router = router
+
         List(selection: tagSelection) {
-            ForEach(yearTags, id: \.persistentModelID) { yearTag in
-                DisclosureGroup(isExpanded: expansion(for: yearTag)) {
-                    HomeYearSection(yearName: yearTag.name, navigateToRoute: onNavigate)
-                    HomeSummarySection(navigateToRoute: onNavigate)
-                        .environment(yearTag)
-                } label: {
-                    MainNavigationYearTagRow(
+            if let selectedYearTag {
+                HomeYearSection(
+                    yearName: selectedYearTag.name,
+                    navigateToRoute: onNavigate
+                ) {
+                    MainNavigationYearPicker(
+                        yearTags: yearTags,
+                        selectedYearTag: selectedYearTag,
+                        selection: $router.yearSelection,
                         onNavigate: onNavigate,
                         onDelete: onDeleteYearTag
                     )
-                    .environment(yearTag)
                 }
-                .deleteDisabled(!LedgerAccessOperations.canEdit(ledgerIdentifier, isPremium: isSubscribeOn))
+                HomeSummarySection(navigateToRoute: onNavigate)
+                    .environment(selectedYearTag)
+            } else {
+                Section {
+                    Text("Select a Year")
+                        .foregroundStyle(.secondary)
+                } header: {
+                    MainNavigationYearPicker(
+                        yearTags: yearTags,
+                        selectedYearTag: nil,
+                        selection: $router.yearSelection,
+                        onNavigate: onNavigate,
+                        onDelete: onDeleteYearTag
+                    )
+                }
             }
-            .onDelete(perform: onDeleteYearTags)
 
             footer
         }
-        .listStyle(.sidebar)
     }
 
     init(
         yearTags: [Tag],
+        selectedYearTag: Tag?,
         tagSelection: Binding<Tag.ID?>,
         onNavigate: @escaping (IncomesRoute) -> Void,
-        onDeleteYearTags: @escaping (IndexSet) -> Void,
         onDeleteYearTag: @escaping (Tag) -> Void,
         @ViewBuilder footer: () -> Footer
     ) {
         self.yearTags = yearTags
+        self.selectedYearTag = selectedYearTag
         self.tagSelection = tagSelection
         self.onNavigate = onNavigate
-        self.onDeleteYearTags = onDeleteYearTags
         self.onDeleteYearTag = onDeleteYearTag
         self.footer = footer()
-    }
-    private func expansion(for yearTag: Tag) -> Binding<Bool> {
-        .init(
-            get: {
-                router.expandedYearTagIDs.contains(yearTag.persistentModelID)
-            },
-            set: { isExpanded in
-                if isExpanded {
-                    router.expandedYearTagIDs.insert(yearTag.persistentModelID)
-                } else {
-                    router.expandedYearTagIDs.remove(yearTag.persistentModelID)
-                }
-            }
-        )
     }
 }

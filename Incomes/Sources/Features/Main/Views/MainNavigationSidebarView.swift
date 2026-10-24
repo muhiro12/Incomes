@@ -28,9 +28,9 @@ struct MainNavigationSidebarView: View {
             } else {
                 MainNavigationSidebarList(
                     yearTags: yearTags,
+                    selectedYearTag: selectedYearTag,
                     tagSelection: tagSelection,
                     onNavigate: onNavigate,
-                    onDeleteYearTags: requestYearDeletion,
                     onDeleteYearTag: requestYearDeletion
                 ) {
                     YearlyDuplicationPromoSection(
@@ -114,24 +114,6 @@ private extension MainNavigationSidebarView {
                 deletionErrorMessage = ErrorMessageOperations.message(from: error)
             }
         }
-    }
-
-    func requestYearDeletion(indices: IndexSet) {
-        Haptic.warning.impact()
-        yearDeletionModel.prepare(
-            from: yearTags,
-            indices: indices,
-            logger: yearDeletionLogger,
-            ledgerIdentifier: router.ledgerIdentifier
-        )
-        sidebarLogger.debug(
-            "year_deletion.requested",
-            metadata: IncomesLogging.metadata(
-                ("index_count", IncomesLogging.count(indices.count)),
-                ("tag_count", IncomesLogging.count(yearDeletionModel.tagsToDelete.count)),
-                ("item_count", IncomesLogging.count(yearDeletionModel.itemsToDelete.count))
-            )
-        )
     }
 
     func requestYearDeletion(yearTag: Tag) {

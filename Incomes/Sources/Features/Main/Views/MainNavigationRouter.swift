@@ -15,7 +15,6 @@ final class MainNavigationRouter {
 
     var yearTagID: Tag.ID?
     var selectedTag: Tag?
-    var expandedYearTagIDs: Set<Tag.ID> = []
     var searchText = ""
     var predicate: ItemPredicate?
     var isSearchActive = false
@@ -26,6 +25,18 @@ final class MainNavigationRouter {
     var settingsDestination: SettingsNavigationDestination?
 
     @ObservationIgnored private var hasAppliedIncomingRoute = false
+
+    var yearSelection: Tag.ID? {
+        get {
+            yearTagID
+        }
+        set {
+            guard newValue != yearTagID else {
+                return
+            }
+            selectYearTagID(newValue)
+        }
+    }
 
     init(ledgerIdentifier: LedgerIdentifier = .default) {
         self.ledgerIdentifier = ledgerIdentifier
@@ -54,7 +65,6 @@ final class MainNavigationRouter {
         }
         self.yearTagID = yearTagID
         self.selectedTag = selectedTag
-        expandedYearTagIDs.insert(yearTagID)
     }
 
     func loadState(context: ModelContext) throws {
@@ -62,9 +72,6 @@ final class MainNavigationRouter {
         yearTagID = state.yearTag?.persistentModelID
         selectedTag = state.yearMonthTag
         dismissItemDetail()
-        if let yearTagID {
-            expandedYearTagIDs.insert(yearTagID)
-        }
     }
 
     func handleIncomingRoute(
@@ -101,9 +108,6 @@ final class MainNavigationRouter {
         self.yearTagID = yearTagID
         selectedTag = nil
         dismissItemDetail()
-        if let yearTagID {
-            expandedYearTagIDs.insert(yearTagID)
-        }
         clearSearchState()
     }
 
@@ -174,9 +178,6 @@ private extension MainNavigationRouter {
         self.yearTagID = yearTagID
         self.selectedTag = selectedTag
         dismissItemDetail()
-        if let yearTagID {
-            expandedYearTagIDs.insert(yearTagID)
-        }
         clearSearchState()
     }
 
@@ -192,9 +193,6 @@ private extension MainNavigationRouter {
         )
         yearTagID = state.yearTag?.persistentModelID
         selectedTag = state.yearMonthTag
-        if let yearTagID {
-            expandedYearTagIDs.insert(yearTagID)
-        }
         clearSearchState()
         sheetRoute = .itemDetail(itemID)
     }
