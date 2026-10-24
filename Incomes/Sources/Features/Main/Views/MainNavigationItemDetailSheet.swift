@@ -19,5 +19,10 @@ struct MainNavigationItemDetailSheet: View {
 
     init(itemID: PersistentIdentifier, ledgerIdentifier: LedgerIdentifier) {
         _items = .init(.items(.idIs(itemID), ledgerIdentifier: ledgerIdentifier))
+        #if DEBUG
+        if IncomesScreenshotSupport.showsItemInformation {
+            _selectedDetent = .init(wrappedValue: .large)
+        }
+        #endif
     }
 }

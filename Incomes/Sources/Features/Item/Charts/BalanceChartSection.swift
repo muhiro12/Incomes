@@ -30,6 +30,9 @@ struct BalanceChartSection: View {
             }
         } header: {
             Text("Balance")
+                #if DEBUG
+                .id("incomes-screenshot-balance-header")
+            #endif
         }
     }
 

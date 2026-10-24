@@ -14,10 +14,28 @@ import TipKit
 
 @main
 struct IncomesApp: App {
-    @State private var startupCoordinator: IncomesStartupCoordinator
+    @State private var startupCoordinator: IncomesStartupCoordinator?
+
+    #if DEBUG
+    private let screenshotView: IncomesScreenshotView?
+    #endif
 
     var body: some Scene {
         WindowGroup {
+            #if DEBUG
+            if let screenshotView {
+                screenshotView
+            } else {
+                appContent
+            }
+            #else
+            appContent
+            #endif
+        }
+    }
+
+    @ViewBuilder private var appContent: some View {
+        if let startupCoordinator {
             switch startupCoordinator.state {
             case .ready(let platformEnvironment):
                 IncomesAppRootView(
@@ -33,6 +51,15 @@ struct IncomesApp: App {
 
     @MainActor
     init() {
+        #if DEBUG
+        if IncomesScreenshotSupport.isEnabled {
+            screenshotView = .init()
+            _startupCoordinator = .init(wrappedValue: nil)
+            return
+        }
+        screenshotView = nil
+        #endif
+
         let preferenceLifecycleOutcome = IncomesPreferenceLifecycle.runSynchronously(
             preserving: MHAdsConsentStorage.currentDescriptors()
         )

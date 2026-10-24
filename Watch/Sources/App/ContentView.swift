@@ -29,7 +29,7 @@ extension ContentView: View {
         @Bindable var model = model
 
         NavigationStack {
-            homeList(model: model)
+            homeContent(model: model)
                 .navigationTitle("Incomes")
         }
         .sheet(isPresented: $model.isSettingsPresented) {
@@ -39,6 +39,10 @@ extension ContentView: View {
         }
         .task {
             #if DEBUG
+            guard !WatchScreenshotSupport.isEnabled else {
+                model.isSettingsPresented = WatchScreenshotSupport.presentsSettings
+                return
+            }
             isDebugOn = true
             #endif
 
@@ -68,6 +72,25 @@ extension ContentView: View {
 }
 
 private extension ContentView {
+    @ViewBuilder
+    func homeContent(model: WatchHomeScreenModel) -> some View {
+        #if DEBUG
+        ScrollViewReader { scrollProxy in
+            homeList(model: model)
+                .task(id: upcomingCandidates.count) {
+                    guard WatchScreenshotSupport.isEnabled,
+                          !WatchScreenshotSupport.presentsSettings else {
+                        return
+                    }
+                    await Task.yield()
+                    scrollProxy.scrollTo("watch-screenshot-upcoming-date", anchor: .top)
+                }
+        }
+        #else
+        homeList(model: model)
+        #endif
+    }
+
     func homeList(
         model: WatchHomeScreenModel
     ) -> some View {
@@ -98,6 +121,9 @@ private extension ContentView {
                     Text(nextDate.formatted(.dateTime.weekday().month().day()))
                         .font(.footnote)
                         .foregroundStyle(.secondary)
+                        #if DEBUG
+                        .id("watch-screenshot-upcoming-date")
+                    #endif
                 }
 
                 ForEach(nextItems) { item in
@@ -180,6 +206,12 @@ private extension ContentView {
     func reloadRecentMonthsIfNeeded(
         trigger: WatchHomeScreenModel.ReloadTrigger
     ) async {
+        #if DEBUG
+        guard !WatchScreenshotSupport.isEnabled else {
+            return
+        }
+        #endif
+
         guard model.beginReload(trigger: trigger) else {
             return
         }

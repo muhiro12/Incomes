@@ -139,6 +139,13 @@ struct MainNavigationView: View {
 
             tipController.refreshHasAnyItems(!yearTags.isEmpty)
 
+            #if DEBUG
+            guard !IncomesScreenshotSupport.isEnabled else {
+                IncomesScreenshotSupport.presentItemInformationIfRequested(context: context, router: router)
+                return
+            }
+            #endif
+
             await IncomesMutationWorkflow.refreshNotificationSchedule(
                 notificationService: notificationService
             )

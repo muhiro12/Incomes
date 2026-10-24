@@ -14,6 +14,13 @@ struct IncomesWatchApp: App {
     private let sharedModelContainer: ModelContainer
 
     init() {
+        #if DEBUG
+        if WatchScreenshotSupport.isEnabled {
+            sharedModelContainer = WatchScreenshotSupport.makeModelContainer()
+            return
+        }
+        #endif
+
         _ = IncomesPreferenceLifecycle.runSynchronously()
 
         let modelContainer: ModelContainer
@@ -30,8 +37,21 @@ struct IncomesWatchApp: App {
 extension IncomesWatchApp {
     @SceneBuilder var body: some Scene {
         WindowGroup {
-            ContentView()
-                .modelContainer(sharedModelContainer)
+            #if DEBUG
+            if WatchScreenshotSupport.isEnabled {
+                appContent
+                    .defaultAppStorage(WatchScreenshotSupport.preferences)
+            } else {
+                appContent
+            }
+            #else
+            appContent
+            #endif
         }
+    }
+
+    private var appContent: some View {
+        ContentView()
+            .modelContainer(sharedModelContainer)
     }
 }

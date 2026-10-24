@@ -24,24 +24,26 @@ struct YearMonthItemListView {
 
 extension YearMonthItemListView: View {
     var body: some View {
-        let currentYearStrings = yearStrings
-        let firstYearString = currentYearStrings.first
-
         ZStack {
-            List {
-                ForEach(currentYearStrings, id: \.self) { yearString in
-                    ItemListSection(
-                        .items(.tagAndYear(tag: tag, yearString: yearString), ledgerIdentifier: ledgerIdentifier),
-                        showsItemDetailTip: yearString == firstYearString
-                    )
-                    if !isSubscribeOn {
-                        AdvertisementSection(.media)
+            #if DEBUG
+            ScrollViewReader { scrollProxy in
+                monthList
+                    .task(id: items.count) {
+                        guard IncomesScreenshotSupport.isEnabled,
+                              ProcessInfo.processInfo.arguments.contains("--incomes-screenshots-charts"),
+                              !items.isEmpty else {
+                            return
+                        }
+                        await Task.yield()
+                        scrollProxy.scrollTo(
+                            "incomes-screenshot-balance-header",
+                            anchor: IncomesScreenshotSupport.chartScrollAnchor
+                        )
                     }
-                    ChartSectionGroup(
-                        .items(.tagAndYear(tag: tag, yearString: yearString), ledgerIdentifier: ledgerIdentifier)
-                    )
-                }
             }
+            #else
+            monthList
+            #endif
             if let monthDate,
                let summaryItemsDescriptor {
                 if #available(iOS 26.0, *) {
@@ -78,6 +80,26 @@ extension YearMonthItemListView: View {
 }
 
 private extension YearMonthItemListView {
+    var monthList: some View {
+        let currentYearStrings = yearStrings
+        let firstYearString = currentYearStrings.first
+
+        return List {
+            ForEach(currentYearStrings, id: \.self) { yearString in
+                ItemListSection(
+                    .items(.tagAndYear(tag: tag, yearString: yearString), ledgerIdentifier: ledgerIdentifier),
+                    showsItemDetailTip: yearString == firstYearString
+                )
+                if !isSubscribeOn {
+                    AdvertisementSection(.media)
+                }
+                ChartSectionGroup(
+                    .items(.tagAndYear(tag: tag, yearString: yearString), ledgerIdentifier: ledgerIdentifier)
+                )
+            }
+        }
+    }
+
     var items: [Item] {
         TagQueryOperations.items(for: tag, ledgerIdentifier: ledgerIdentifier)
     }
