@@ -13,10 +13,6 @@ import SwiftUI
 struct SettingsListView {
     @AppStorage(\.isDebugOn)
     private var isDebugOn
-
-    #if DEBUG
-    @State private var showsScreenshotItems = false
-    #endif
 }
 
 extension SettingsListView: View {
@@ -40,18 +36,6 @@ extension SettingsListView: View {
             }
         }
         .navigationTitle("Settings")
-        #if DEBUG
-        .navigationDestination(isPresented: $showsScreenshotItems) {
-            WatchItemListView()
-        }
-        .task {
-            guard WatchScreenshotSupport.isEnabled,
-                  WatchScreenshotSupport.presentsItems else {
-                return
-            }
-            showsScreenshotItems = true
-        }
-        #endif
     }
 }
 
