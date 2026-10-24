@@ -35,10 +35,7 @@ extension YearMonthItemListView: View {
                             return
                         }
                         await Task.yield()
-                        scrollProxy.scrollTo(
-                            "incomes-screenshot-balance-header",
-                            anchor: IncomesScreenshotSupport.chartScrollAnchor
-                        )
+                        await IncomesScreenshotSupport.positionCharts(using: scrollProxy)
                     }
             }
             #else
