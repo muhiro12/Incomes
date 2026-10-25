@@ -133,8 +133,9 @@ in financial models.
 
 The existing backup feature captures book identities, names, and empty books
 in file format 1 with SwiftData schema 2.0.0. It remains available without
-Premium and is not an activation prerequisite. Single-version 6.0 and development
-files are unsupported.
+Premium and is not an activation prerequisite. A read-only header adapter maps
+released 6.0 files to this pair before normal validation and import review.
+Development V2 files remain unsupported.
 File references are opaque digests of the source Tag identity; the file never
 contains a SwiftData persistent identifier or its store payload. The digest stays
 stable through a source-store rename, but is not a portable model identifier.

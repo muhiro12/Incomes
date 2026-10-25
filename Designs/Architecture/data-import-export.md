@@ -5,10 +5,11 @@ container/encoding revision in `formatVersion`. The current supported pair is
 format 1 with schema 2.0.0. The file identifier and extension remain
 `com.muhiro12.Incomes.data` and `.incomes`.
 
-The 6.1 contract deliberately does not read the single-version file introduced
-in 6.0 or the earlier development V2 payload. Their readers are removed rather
-than retaining a second versioning policy. This changes file interchange only;
-existing on-device and iCloud records do not require a new storage schema.
+The reader also accepts released 6.0 files through a narrow header adapter.
+It maps that payload to format 1 / schema 2.0.0 without retaining the old
+independent versioning policy or V2/V3 payload readers. Earlier development V2
+files remain unsupported. Existing on-device and iCloud records do not require
+a new storage schema.
 
 ## Purpose
 
@@ -61,11 +62,17 @@ The file is UTF-8 JSON with sorted keys and indentation, so the same records
 always produce the same bytes. The file extension is `incomes`, and its type
 `com.muhiro12.Incomes.data` conforms to `public.json`.
 
-The `fileType` header carries that type identifier. The earlier `format`
-header is unsupported, including the lowercase development namespace. The new
-writer omits `format`, so a 6.0 reader rejects the file before routing its schema
-2.0.0 value to the obsolete default-book-only payload reader. There is no alias,
-legacy reader, downgrade writer, or rewriting of existing external files.
+The `fileType` header carries that type identifier. A read-only adapter recognizes
+the released 6.0 header: `format: "com.muhiro12.Incomes.data"`,
+`schemaVersion: "3.0.0"`, and neither `fileType` nor `formatVersion` present.
+It normalizes the header to the fixed format-1/schema-2.0.0 pair, then uses the
+same payload validation and reviewed import flow. The lowercase development
+namespace, development V2 payload, and mixed old/new headers do not qualify
+for adaptation. Unknown current format/schema pairs retain their normal errors.
+
+The writer omits `format`, so a 6.0 reader rejects a new export before routing
+its schema 2.0.0 value to the obsolete default-book-only payload reader. There
+is no downgrade writer or rewriting of existing external files.
 
 Reading and writing share a 32 MiB limit. Export refuses a larger payload so it
 cannot produce a file this version cannot restore. The URL reader bounds the
@@ -202,7 +209,8 @@ policies.
 
 `Tests/Default/Fixtures/IncomesFile-1-Schema-2.0.0/` records the new pair's exact
 values and bytes, including empty additional ledgers. The untouched synthetic
-6.0 file is retained only as an unsupported-input fixture; it has no decoder.
+6.0 file, `Tests/Default/Fixtures/Incomes-6.0.incomes`, verifies header adaptation,
+value preservation, and re-export using the current canonical bytes.
 Native store migration fixtures remain separate evidence under
 [SwiftData storage history](swiftdata-schema-evolution.md). File round trips do
 not establish native-store migration or CloudKit convergence.

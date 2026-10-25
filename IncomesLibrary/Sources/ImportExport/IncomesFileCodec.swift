@@ -67,12 +67,16 @@ enum IncomesFileCodec {
         guard data.count <= maximumByteCount else {
             throw ItemImportError.fileTooLarge
         }
-        guard let type = try? JSONDecoder().decode(TypeHeader.self, from: data),
-              type.fileType == fileTypeIdentifier
-        else {
+        let readableData: Data
+        if let type = try? JSONDecoder().decode(TypeHeader.self, from: data),
+           type.fileType == fileTypeIdentifier {
+            readableData = data
+        } else if let normalizedData = try IncomesFileSixZeroAdapter.normalizedData(from: data) {
+            readableData = normalizedData
+        } else {
             throw ItemImportError.unrecognizedFormat
         }
-        guard let header = try? JSONDecoder().decode(VersionHeader.self, from: data),
+        guard let header = try? JSONDecoder().decode(VersionHeader.self, from: readableData),
               let versionText = header.schemaVersion,
               let version = IncomesFileValueCoding.version(from: versionText)
         else {
@@ -89,7 +93,7 @@ enum IncomesFileCodec {
         }
         switch (header.formatVersion, version) {
         case (IncomesFileFormatV1.formatVersion, IncomesSchemaV2.versionIdentifier):
-            return try IncomesFileFormatV1.contents(from: data)
+            return try IncomesFileFormatV1.contents(from: readableData)
         default:
             throw ItemImportError.unsupportedSchemaVersion(versionText)
         }

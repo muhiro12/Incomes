@@ -26,6 +26,62 @@ struct ItemImportPersistenceTests {
         }
     }
 
+    @Test
+    func a_six_zero_import_reopens_with_exact_values_and_resolved_ledger_ownership() throws {
+        try withStore { url in
+            let contents = try ItemImportOperations.read(data: sixZeroData())
+            let createdIDs = try importContents(contents, at: url)
+            let container = try ModelContainerFactory.make(
+                configuration: .init(url: url, cloudKitDatabase: .none)
+            )
+            let context = container.mainContext
+            let items = try context.fetch(.allLedgerItems())
+            #expect(try Set(items.map { item in
+                try PersistentIdentifierCoder.encode(item.persistentModelID)
+            }) == createdIDs)
+            #expect(try ItemImportOperations.difference(contents: contents, context: context).isIdentical)
+            let ledgers = try LedgerOperations.ledgers(context: context)
+            for source in contents.ledgers {
+                let destination = try #require(ledgers.first { $0.name == source.name })
+                let expected = contents.items.filter { $0.ledgerIdentifier == source.id }.map { item in
+                    item.assigning(to: destination.id)
+                }
+                let restored = items.filter { $0.ledgerIdentifier == destination.id }.map { item in
+                    IncomesFileItem(item: item, balance: item.balance)
+                }
+                #expect(IncomesFileItem.sortedByValue(restored) == IncomesFileItem.sortedByValue(expected))
+            }
+            let defaultItems = items.filter { $0.ledgerIdentifier == .default }
+            #expect(ItemExportOperations.fileItems(items: defaultItems) == contents.items.filter { item in
+                item.ledgerIdentifier == .default
+            })
+        }
+    }
+
+    @Test
+    func a_rejected_six_zero_amount_preserves_saved_records_and_identity() throws {
+        try withStore { url in
+            let contents = try fixtureContents()
+            let createdIDs = try importContents(contents, at: url)
+            var object = try #require(JSONSerialization.jsonObject(with: sixZeroData()) as? [String: Any])
+            var incomingItems = try #require(object["items"] as? [[String: Any]])
+            incomingItems[0]["income"] = "invalid amount"
+            object["items"] = incomingItems
+            let data = try JSONSerialization.data(withJSONObject: object)
+            #expect(throws: ItemImportError.invalidItem(index: 0, field: .income)) {
+                try ItemImportOperations.read(data: data)
+            }
+            let container = try ModelContainerFactory.make(
+                configuration: .init(url: url, cloudKitDatabase: .none)
+            )
+            let items = fetchItems(container.mainContext)
+            #expect(ItemExportOperations.fileItems(items: items) == contents.items)
+            #expect(try Set(items.map { item in
+                try PersistentIdentifierCoder.encode(item.persistentModelID)
+            }) == createdIDs)
+        }
+    }
+
     @Test(arguments: [
         ("fileType", #""com.muhiro12.incomes.data""#, ItemImportError.unrecognizedFormat),
         ("formatVersion", "2", ItemImportError.newerFormatVersion(2)),
@@ -159,6 +215,13 @@ private extension ItemImportPersistenceTests {
             subdirectory: "Fixtures/IncomesFile-1-Schema-2.0.0"
         ))
         return try ItemImportOperations.read(data: Data(contentsOf: url))
+    }
+
+    func sixZeroData() throws -> Data {
+        let url = try #require(Bundle.module.url(
+            forResource: "Incomes-6.0", withExtension: "incomes", subdirectory: "Fixtures"
+        ))
+        return try Data(contentsOf: url)
     }
 
     func importContents(_ contents: IncomesFileContents, at url: URL) throws -> Set<String> {
