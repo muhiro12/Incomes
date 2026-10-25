@@ -1,13 +1,13 @@
 {
-  "originHash" : "0ade1f67900ac2a6950214021f0eccb7ea968cfa82105e34e7af5df94462dab3",
+  "originHash" : "5351ad1c1479ff1b698bca58e01c424e57374cd6239ef31ff536267e8cd420dc",
   "pins" : [
     {
       "identity" : "apogee",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/Apogee.git",
       "state" : {
-        "revision" : "805ea2c7c274bc7d4147efc560b72b9484e893c7",
-        "version" : "1.4.0"
+        "revision" : "5492b06b750833fc945ae0fd041e011351d131d2",
+        "version" : "1.5.0"
       }
     },
     {

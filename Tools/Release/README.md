@@ -1,13 +1,13 @@
 # Incomes release tools
 
 This macOS SwiftPM package uses Apogee's command plugin for the Incomes 6.x
-release cycle. It pins Apogee **1.4.0** at
-`805ea2c7c274bc7d4147efc560b72b9484e893c7`; commit `Package.resolved` with any
+release cycle. It pins Apogee **1.5.0** at
+`5492b06b750833fc945ae0fd041e011351d131d2`; commit `Package.resolved` with any
 deliberate dependency update. No app target links Apogee.
 
 Apogee publishes three-component semantic version tags, so the Git tag, the
 `Package.swift` requirement, and the `Package.resolved` version all read
-`1.4.0`. Check the resolved revision as well as the version when updating.
+`1.5.0`. Check the resolved revision as well as the version when updating.
 
 Match the selected local Xcode to the toolchain used for the intended release
 candidate. The current project-format qualification uses Xcode 27.2 RC
@@ -29,6 +29,44 @@ command plugin and its executable when the plugin runs.
 For screenshot operations, add `--progress` to show preparation and upload
 stages on standard error while keeping standard output as the final JSON
 result. The flag is optional and does not change the dry-run or apply boundary.
+
+## Screenshot migration from 1.4.0
+
+Apogee 1.5.0 uses Apple's App Asset Library, including `IPHONE_DUO`.
+Production input directories now use display classes instead of the former
+`APP_*` names. For the current Incomes captures, use these directories under
+each App Store locale:
+
+| Capture target | Directory |
+| --- | --- |
+| iPhone | `IPHONE_DYNAMIC_ISLAND_MEDIUM_DISPLAY` |
+| iPhone Duo | `IPHONE_DUO` |
+| iPad | `IPAD_13_DISPLAY` |
+| Apple Watch | `WATCH_SERIES_10` |
+
+Preserve the approved image bytes and numbered order. Do not mix old and new
+directory names. Apple's runtime reference data determines compatible image
+dimensions and placement groups; Apogee does not resize or retarget images.
+Only supplied locale/display directories are updated. Omitted directories and
+empty directories do not request deletion of obsolete placements.
+
+Start each new operation with a new private recovery directory. Legacy
+`state.json` journals cannot resume Asset Library operations. The new
+`asset-library-state.json` records asset and placement identities and original
+order; it does not export original image bytes. Keep the approved source files
+and earlier recovery records. Obsolete placements may be removed, while shared
+library images remain available.
+
+Obtain a fresh `update-screenshots --dry-run` plan before an approved `--apply`.
+Placement removal or reordering also requires `--allow-destructive` and the
+matching plan token. Existing images may be planned for upload again if they
+lack Apogee's SHA-256 identity metadata. That writable metadata is not a
+server-verified checksum: the new API has no `sourceFileChecksum`. Verification
+checks processing, compatible specifications, byte counts, asset and placement
+identities, readiness, and order. Inspect the entire plan before applying.
+
+See the pinned [screenshot guide](https://github.com/muhiro12/Apogee/blob/1.5.0/docs/screenshots.md)
+for input limits, recovery, and the verification contract.
 
 ## Local metadata
 
@@ -152,16 +190,16 @@ Successful metadata validation does not authorize review submission or release.
    Locale creation and review declarations stay in App Store Connect.
 5. Validate metadata, inspect release status, and review/apply the intended
    metadata update. `read-metadata` exports the stored remote values, and
-   `update-screenshots` applies verified screenshots once private recovery
-   originals exist. Attach an exact processed build through a separate
-   `attach-build --dry-run`, followed by its approved `--apply`.
+   `update-screenshots` plans Asset Library placements and applies an approved
+   plan with private recovery storage. Attach an exact processed build through
+   a separate `attach-build --dry-run`, followed by its approved `--apply`.
 6. Treat `submit-for-review` as a separate release decision after all evidence
    is ready. Read `build-feedback` for the candidate build, then check the dry
    run, attached build, and publication timing before applying. Monitor with
    `release-status`; confirm publication separately.
 
 No operation runs automatically from an app build or Git push in this package.
-Use Apogee's [adoption guide](https://github.com/muhiro12/Apogee/blob/1.4.0/docs/adoption.md)
+Use Apogee's [adoption guide](https://github.com/muhiro12/Apogee/blob/1.5.0/docs/adoption.md)
 for command boundaries and failure recovery. After dependency updates, verify
 the published tag and resolved revision, run local metadata validation, and
 check release status and a fresh metadata dry run before the next write.
