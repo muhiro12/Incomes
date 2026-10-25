@@ -100,9 +100,11 @@ For a future storage change:
 5. Verify extension-first startup and host migration, then verify cloud import
    and export on signed devices before release.
 6. Review the Incomes file contract described in
-   [Data import and export](data-import-export.md). If the change affects portable
-   financial meaning, freeze the previous payload, add a forward conversion,
-   and commit a fixture for the new file version.
+   [Data import and export](data-import-export.md). Export declares the current
+   SwiftData schema version alongside its file-format revision. Register the
+   new supported pair even if its portable values are unchanged. When meaning
+   changes, define preservation once for native migration and the historical
+   file adapter, freeze the previous payload, and commit the new fixture.
 
 ## Relocation failures
 

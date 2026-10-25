@@ -2,7 +2,9 @@ import Foundation
 
 /// Validated contents of an Incomes file, converted to the current representation.
 public struct IncomesFileContents: Equatable, Sendable {
-    /// Schema version that wrote the file, such as `2.0.0`.
+    /// File container and encoding revision.
+    public let formatVersion: Int
+    /// SwiftData schema version that wrote the file, such as `2.0.0`.
     public let schemaVersion: String
     /// Moment the file was written.
     public let exportedAt: Date
@@ -16,6 +18,7 @@ public struct IncomesFileContents: Equatable, Sendable {
     public let selectionLedgerIdentifiers: Set<LedgerIdentifier>
 
     public init(
+        formatVersion: Int,
         schemaVersion: String,
         exportedAt: Date,
         currencyCode: String?,
@@ -23,6 +26,7 @@ public struct IncomesFileContents: Equatable, Sendable {
         ledgers: [IncomesFileLedger] = [],
         selectionLedgerIdentifiers: Set<LedgerIdentifier> = [.default]
     ) {
+        self.formatVersion = formatVersion
         self.schemaVersion = schemaVersion
         self.exportedAt = exportedAt
         self.currencyCode = currencyCode

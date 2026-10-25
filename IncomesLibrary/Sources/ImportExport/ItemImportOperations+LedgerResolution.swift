@@ -38,6 +38,7 @@ extension ItemImportOperations {
             throw LedgerError.duplicateIdentifier
         }
         return .init(
+            formatVersion: contents.formatVersion,
             schemaVersion: contents.schemaVersion,
             exportedAt: contents.exportedAt,
             currencyCode: contents.currencyCode,

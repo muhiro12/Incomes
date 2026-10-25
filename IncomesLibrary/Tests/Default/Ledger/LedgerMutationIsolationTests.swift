@@ -25,7 +25,8 @@ struct LedgerMutationIsolationTests {
             balance: nil
         )
         let contents = IncomesFileContents(
-            schemaVersion: "3.0.0",
+            formatVersion: 1,
+            schemaVersion: "2.0.0",
             exportedAt: .now,
             currencyCode: nil,
             items: [value]
@@ -64,7 +65,8 @@ struct LedgerMutationIsolationTests {
         let context = ModelContext(try ModelContainerFactory.inMemory())
         let other = try seedUnsupportedBook(context: context)
         let contents = IncomesFileContents(
-            schemaVersion: "3.0.0",
+            formatVersion: 1,
+            schemaVersion: "2.0.0",
             exportedAt: .now,
             currencyCode: nil,
             items: [],

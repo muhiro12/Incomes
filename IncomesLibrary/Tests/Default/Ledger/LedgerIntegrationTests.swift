@@ -62,7 +62,8 @@ struct LedgerIntegrationTests {
         _ = try item(context: context, owner: ledger.id)
         try context.save()
         let contents = IncomesFileContents(
-            schemaVersion: "3.0.0",
+            formatVersion: 1,
+            schemaVersion: "2.0.0",
             exportedAt: .now,
             currencyCode: nil,
             items: [],
@@ -124,7 +125,8 @@ struct LedgerIntegrationTests {
             name: "From File"
         )
         let contents = IncomesFileContents(
-            schemaVersion: "3.0.0",
+            formatVersion: 1,
+            schemaVersion: "2.0.0",
             exportedAt: .now,
             currencyCode: nil,
             items: [],
@@ -241,8 +243,10 @@ struct LedgerIntegrationTests {
             identifiers: [.default, first.id, second.id, empty.id]
         )
     }
+}
 
-    private func item(
+private extension LedgerIntegrationTests {
+    func item(
         context: ModelContext,
         owner: LedgerIdentifier = .default,
         month: Int = 1,

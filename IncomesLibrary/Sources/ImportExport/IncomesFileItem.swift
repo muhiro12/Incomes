@@ -14,7 +14,7 @@ public struct IncomesFileItem: Equatable, Sendable {
         case balance
     }
 
-    /// Stable owner; old files resolve only to the original default ledger.
+    /// Explicit owner within the file or destination store.
     public let ledgerIdentifier: LedgerIdentifier
 
     /// Stored calendar day at UTC midnight, matching `Item.utcDate`.

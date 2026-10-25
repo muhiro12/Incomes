@@ -204,7 +204,7 @@ private extension ItemImportOwnershipQualificationTests {
         let url = try #require(Bundle.module.url(
             forResource: "Incomes",
             withExtension: "incomes",
-            subdirectory: "Fixtures/IncomesFile-2.0.0"
+            subdirectory: "Fixtures/IncomesFile-1-Schema-2.0.0"
         ))
         return try ItemImportOperations.read(data: Data(contentsOf: url))
     }

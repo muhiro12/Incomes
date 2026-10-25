@@ -26,8 +26,16 @@ struct ItemImportPersistenceTests {
         }
     }
 
-    @Test
-    func refusing_an_unreleased_file_identifier_preserves_saved_records_and_identity() throws {
+    @Test(arguments: [
+        ("fileType", #""com.muhiro12.incomes.data""#, ItemImportError.unrecognizedFormat),
+        ("formatVersion", "2", ItemImportError.newerFormatVersion(2)),
+        ("schemaVersion", #""3.0.0""#, ItemImportError.newerSchemaVersion("3.0.0"))
+    ])
+    func refusing_unsupported_files_preserves_saved_records_and_identity(
+        key: String,
+        json: String,
+        error: ItemImportError
+    ) throws {
         try withStore { url in
             let contents = try fixtureContents()
             let createdIDs = try importContents(contents, at: url)
@@ -37,9 +45,9 @@ struct ItemImportPersistenceTests {
                 exportedAt: contents.exportedAt
             )
             var object = try #require(JSONSerialization.jsonObject(with: validData) as? [String: Any])
-            object["format"] = "com.muhiro12.incomes.data"
+            object[key] = try JSONSerialization.jsonObject(with: Data(json.utf8), options: .fragmentsAllowed)
             let rejectedData = try JSONSerialization.data(withJSONObject: object)
-            #expect(throws: ItemImportError.unrecognizedFormat) {
+            #expect(throws: error) {
                 try ItemImportOperations.read(data: rejectedData)
             }
 
@@ -148,7 +156,7 @@ private extension ItemImportPersistenceTests {
         let url = try #require(Bundle.module.url(
             forResource: "Incomes",
             withExtension: "incomes",
-            subdirectory: "Fixtures/IncomesFile-2.0.0"
+            subdirectory: "Fixtures/IncomesFile-1-Schema-2.0.0"
         ))
         return try ItemImportOperations.read(data: Data(contentsOf: url))
     }
@@ -176,6 +184,7 @@ private extension ItemImportPersistenceTests {
         let container = try ModelContainerFactory.readOnly(at: url)
         let context = ModelContext(container)
         let contents = IncomesFileContents(
+            formatVersion: 1,
             schemaVersion: "2.0.0",
             exportedAt: .now,
             currencyCode: "JPY",

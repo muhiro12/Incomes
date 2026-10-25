@@ -153,6 +153,7 @@ private extension ItemImportDifferenceTests {
 
     func makeContents(_ items: [IncomesFileItem]) -> IncomesFileContents {
         .init(
+            formatVersion: 1,
             schemaVersion: "2.0.0",
             exportedAt: isoDate("2026-09-29T00:00:00Z"),
             currencyCode: "JPY",

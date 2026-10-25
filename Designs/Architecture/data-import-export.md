@@ -1,10 +1,14 @@
 # Data import and export
 
-The ownership-aware file format is 3.0.0. The earlier development payload 2.0.0
-remains readable within the canonical format identifier and always describes the
-default book. Neither payload was shipped in 5.12. File versions are independent of the
-SwiftData schema: adding book ownership to the file does not add stored model
-attributes.
+The file declares the writing SwiftData schema in `schemaVersion` and its
+container/encoding revision in `formatVersion`. The current supported pair is
+format 1 with schema 2.0.0. The file identifier and extension remain
+`com.muhiro12.Incomes.data` and `.incomes`.
+
+The 6.1 contract deliberately does not read the single-version file introduced
+in 6.0 or the earlier development V2 payload. Their readers are removed rather
+than retaining a second versioning policy. This changes file interchange only;
+existing on-device and iCloud records do not require a new storage schema.
 
 ## Purpose
 
@@ -57,10 +61,11 @@ The file is UTF-8 JSON with sorted keys and indentation, so the same records
 always produce the same bytes. The file extension is `incomes`, and its type
 `com.muhiro12.Incomes.data` conforms to `public.json`.
 
-The former `com.muhiro12.incomes.data` spelling from unreleased development
-builds is intentionally rejected, without an alias or migration. This changes
-the file header and declared type, not the on-device store. The payload version
-is unchanged because its fields and representation are unchanged.
+The `fileType` header carries that type identifier. The earlier `format`
+header is unsupported, including the lowercase development namespace. The new
+writer omits `format`, so a 6.0 reader rejects the file before routing its schema
+2.0.0 value to the obsolete default-book-only payload reader. There is no alias,
+legacy reader, downgrade writer, or rewriting of existing external files.
 
 Reading and writing share a 32 MiB limit. Export refuses a larger payload so it
 cannot produce a file this version cannot restore. The URL reader bounds the
@@ -69,7 +74,8 @@ bytes loaded even if the file size changes after selection.
 ```json
 {
   "exportedAt": "2026-09-29T03:04:05Z",
-  "format": "com.muhiro12.Incomes.data",
+  "fileType": "com.muhiro12.Incomes.data",
+  "formatVersion": 1,
   "items": [
     {
       "balance": "120000",
@@ -84,7 +90,7 @@ bytes loaded even if the file size changes after selection.
     }
   ],
   "ledgers": [],
-  "schemaVersion": "3.0.0",
+  "schemaVersion": "2.0.0",
   "selection": {
     "filters": [],
     "ledgerIDs": ["default"]
@@ -127,51 +133,79 @@ does not add ordering fields or expand the editor's priority range.
 
 ## Extension rules
 
-The file can grow along two axes without breaking older readers.
+Ignorable fields and must-understand selection filters provide bounded
+extension points within a supported version pair.
 
 Sections describe which kinds of data the file contains. `items` is required
 and `settings` is optional. Planned sections include category attributes
-and notification settings. V3 requires the ledger metadata section `ledgers`.
+and notification settings. Format 1 requires the ledger metadata section
+`ledgers`.
 
 - A section or field that a reader can ignore without changing the meaning of
-  the remaining data may be added within the same schema version. Readers
-  ignore unknown keys.
+  the remaining data may be added within the same supported version pair.
+  Readers ignore unknown keys.
 - Data whose omission would change meaning, such as ledger ownership, requires
-  a new schema version.
+  an appropriate new schema or format revision.
 
-`selection.ledgerIDs` explicitly lists covered owners in V3. An empty
+`selection.ledgerIDs` explicitly lists covered owners. An empty
 `selection.filters` list means all Items within those owners. Replacing this
 selection cannot erase another owner. The current full export includes the
 default book even when it is empty. Planned filter kinds include a date range
-and categories. V2 files retain their original optional selection shape and
-resolve only to the default ledger.
+and categories.
 
-V3 refuses duplicate book IDs. Additional-book names are metadata, not identity;
-same-name books stay distinct. Merge retains existing names unless explicitly
+Format 1 refuses duplicate book IDs. Additional-book names are metadata, not
+identity; same-name books stay distinct. Merge retains existing names unless explicitly
 changed in review. See [Independent ledgers](independent-ledgers.md).
 
 - Filters are must-understand. A reader rejects a file containing a filter kind
   it does not know, instead of mistaking a partial file for a complete one.
-  Therefore a new filter kind can be added within the same schema version.
+  An older reader still refuses an unknown filter before mutation.
 - The selection also defines the scope of a replacement import: replacing with
   a file covering 2026 replaces only 2026 records. A file without a
-  `selection` key covers all records.
+  `selection` key is invalid in format 1.
 
 ## Versioning
 
-File versions describe portable financial meaning independently of the
-[SwiftData storage history](swiftdata-schema-evolution.md).
+The two fields have different responsibilities:
 
-- Export writes the latest file version. Ownership-aware V3 is required even
-  though its Items and Tags retain storage schema V2.
-- Each file version has a frozen payload type and a committed decoding fixture.
-  A released payload must not be edited in place.
-- Import converts supported older payloads into the current representation and
-  rejects newer versions. It never infers an additional owner for a V2 Item.
-- A stored-model change requires reviewing the file contract; a version increase
-  is necessary when omitting the new data would change its financial meaning.
+| Field | Source and meaning |
+| --- | --- |
+| `schemaVersion` | The writing `VersionedSchema.versionIdentifier`, currently `IncomesSchemaV2` / `2.0.0` |
+| `formatVersion` | File structure, representation, and decoding conventions, currently `1` |
 
-The first file version is `2.0.0`. Files were never written for earlier schemas.
+Export derives the schema declaration from the actual versioned model rather
+than maintaining another schema number. A storage revision changes that
+declaration even when the portable representation is unchanged; register an
+explicit reader for the new pair and reuse a payload decoder when appropriate.
+A file-only change advances the format revision without manufacturing a
+SwiftData schema. A change affecting both may advance both.
+
+Only explicitly supported pairs are readable. Unknown future format or schema
+versions are rejected before item decoding and mutation. Support is not the
+Cartesian product of every historical format and storage schema.
+
+From this baseline, freeze each published payload and its fixture. Retain
+historical Foundation value readers for supported pairs and convert into the
+current import candidate. A temporary database or execution of
+`SchemaMigrationPlan` is not required for file input. Store migration and file
+adapters share preservation rules for exact money, saved balances, calendar
+days, recurrence, and ledger ownership; share pure conversion helpers only
+where there is actual common transformation logic.
+
+A future adapter must distinguish a field absent from an older schema from an
+explicit empty/null value in a schema that defines it. Do not silently clear
+existing information that an old file cannot represent, or invent a fact for a
+newly created record. Carry availability in the transient candidate when
+needed; do not add provenance columns or a generic migration framework now.
+Keep these rules within the existing matching and reviewed merge/replace
+policies.
+
+`Tests/Default/Fixtures/IncomesFile-1-Schema-2.0.0/` records the new pair's exact
+values and bytes, including empty additional ledgers. The untouched synthetic
+6.0 file is retained only as an unsupported-input fixture; it has no decoder.
+Native store migration fixtures remain separate evidence under
+[SwiftData storage history](swiftdata-schema-evolution.md). File round trips do
+not establish native-store migration or CloudKit convergence.
 
 ## Import flow
 

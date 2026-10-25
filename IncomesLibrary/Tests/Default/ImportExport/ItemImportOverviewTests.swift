@@ -28,6 +28,7 @@ struct ItemImportOverviewTests {
             )
         ]
         let contents = IncomesFileContents(
+            formatVersion: 1,
             schemaVersion: "2.0.0",
             exportedAt: .now,
             currencyCode: nil,

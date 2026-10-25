@@ -1,26 +1,23 @@
 import Foundation
 import SwiftData
 
-/// Writes the current file version and routes each readable version to its frozen payload.
+/// Writes and validates supported file-format and SwiftData-schema version pairs.
 enum IncomesFileCodec {
-    private struct Header: Decodable {
-        let format: String?
+    private struct TypeHeader: Decodable {
+        let fileType: String?
+    }
+
+    private struct VersionHeader: Decodable {
+        let formatVersion: Int
         let schemaVersion: String?
     }
 
     /// Format identifier stored in every file; also the file's uniform type identifier.
-    static let format = "com.muhiro12.Incomes.data"
+    static let fileTypeIdentifier = "com.muhiro12.Incomes.data"
     /// Largest file accepted for import: 32 MiB.
     static let maximumByteCount = 33_554_432
-    // File ownership changed without changing the persisted SwiftData model shape.
-    // swiftlint:disable:next no_magic_numbers
-    static let currentSchemaVersion = Schema.Version(3, 0, 0)
-    /// Oldest schema that ever wrote a file.
-    static let firstSchemaVersion = IncomesSchemaV2.versionIdentifier
-    /// Versions that have a frozen payload reader.
-    static let readableSchemaVersions = [
-        IncomesSchemaV2.versionIdentifier, currentSchemaVersion
-    ]
+    static let currentSchemaVersion = IncomesSchemaV2.versionIdentifier
+    static let currentFormatVersion = IncomesFileFormatV1.formatVersion
 
     /// Encodes items with sorted keys, so the same items always produce the same bytes.
     static func encode(
@@ -50,7 +47,7 @@ enum IncomesFileCodec {
         guard Set(ledgers.map(\.id)).count == ledgers.count else {
             throw LedgerError.duplicateIdentifier
         }
-        let file = IncomesFileV3(
+        let file = IncomesFileFormatV1(
             items: IncomesFileItem.sortedByValue(items),
             ledgers: ledgers,
             currencyCode: currencyCode,
@@ -70,24 +67,29 @@ enum IncomesFileCodec {
         guard data.count <= maximumByteCount else {
             throw ItemImportError.fileTooLarge
         }
-        guard let header = try? JSONDecoder().decode(Header.self, from: data),
-              header.format == format
+        guard let type = try? JSONDecoder().decode(TypeHeader.self, from: data),
+              type.fileType == fileTypeIdentifier
         else {
             throw ItemImportError.unrecognizedFormat
         }
-        guard let versionText = header.schemaVersion,
+        guard let header = try? JSONDecoder().decode(VersionHeader.self, from: data),
+              let versionText = header.schemaVersion,
               let version = IncomesFileValueCoding.version(from: versionText)
         else {
             throw ItemImportError.malformedFile
         }
+        guard header.formatVersion <= currentFormatVersion else {
+            throw ItemImportError.newerFormatVersion(header.formatVersion)
+        }
+        guard header.formatVersion == currentFormatVersion else {
+            throw ItemImportError.unsupportedFormatVersion(header.formatVersion)
+        }
         guard version <= currentSchemaVersion else {
             throw ItemImportError.newerSchemaVersion(versionText)
         }
-        switch version {
-        case IncomesSchemaV2.versionIdentifier:
-            return try IncomesFileV2.contents(from: data)
-        case currentSchemaVersion:
-            return try IncomesFileV3.contents(from: data)
+        switch (header.formatVersion, version) {
+        case (IncomesFileFormatV1.formatVersion, IncomesSchemaV2.versionIdentifier):
+            return try IncomesFileFormatV1.contents(from: data)
         default:
             throw ItemImportError.unsupportedSchemaVersion(versionText)
         }

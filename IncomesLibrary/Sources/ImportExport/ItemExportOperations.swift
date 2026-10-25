@@ -3,7 +3,7 @@ import Foundation
 /// Read-only summaries and snapshots for exporting Incomes files.
 public enum ItemExportOperations {
     /// Uniform type identifier of an Incomes file; the app declares it in Info.plist.
-    public static let fileTypeIdentifier = IncomesFileCodec.format
+    public static let fileTypeIdentifier = IncomesFileCodec.fileTypeIdentifier
     /// File name extension of an Incomes file.
     public static let fileExtension = "incomes"
 

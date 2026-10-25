@@ -159,7 +159,8 @@ struct ItemImportBalanceTests {
         try context.save()
         let reference = LedgerIdentifier(rawValue: "file-ledger")
         let contents = IncomesFileContents(
-            schemaVersion: "3.0.0",
+            formatVersion: 1,
+            schemaVersion: "2.0.0",
             exportedAt: isoDate("2026-10-21T00:00:00Z"),
             currencyCode: "JPY",
             items: [fileItem(day: 9, income: 20, balance: 1).assigning(to: reference)],
@@ -200,7 +201,8 @@ private extension ItemImportBalanceTests {
 
     func contents(_ items: [IncomesFileItem]) -> IncomesFileContents {
         .init(
-            schemaVersion: "3.0.0",
+            formatVersion: 1,
+            schemaVersion: "2.0.0",
             exportedAt: isoDate("2026-10-21T00:00:00Z"),
             currencyCode: "JPY",
             items: IncomesFileItem.sortedByValue(items)

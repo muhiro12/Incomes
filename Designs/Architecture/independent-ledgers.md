@@ -132,8 +132,9 @@ boundary, including import and system entry points. Entitlement is not stored
 in financial models.
 
 The existing backup feature captures book identities, names, and empty books
-in file version 3.0.0. It remains available without Premium and is not an
-activation prerequisite. Legacy V2 files resolve only to the default book.
+in file format 1 with SwiftData schema 2.0.0. It remains available without
+Premium and is not an activation prerequisite. Single-version 6.0 and development
+files are unsupported.
 File references are opaque digests of the source Tag identity; the file never
 contains a SwiftData persistent identifier or its store payload. The digest stays
 stable through a source-store rename, but is not a portable model identifier.

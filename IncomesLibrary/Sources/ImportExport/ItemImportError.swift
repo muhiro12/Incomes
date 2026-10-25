@@ -8,6 +8,10 @@ public enum ItemImportError: LocalizedError, Equatable, Sendable {
     case unrecognizedFormat
     /// The data claims to be an Incomes file but is not valid JSON of that shape.
     case malformedFile
+    /// The file uses a newer container or encoding convention.
+    case newerFormatVersion(Int)
+    /// No reader exists for this file-format revision.
+    case unsupportedFormatVersion(Int)
     /// A newer version of Incomes wrote the file.
     case newerSchemaVersion(String)
     /// No supported reader exists for the file's version.
@@ -27,13 +31,15 @@ public enum ItemImportError: LocalizedError, Equatable, Sendable {
             String(localized: "This file is not an Incomes data file, or it is damaged.", bundle: .module)
         case .malformedFile:
             String(localized: "This file is damaged and cannot be read.", bundle: .module)
-        case .newerSchemaVersion,
+        case .newerFormatVersion,
+             .newerSchemaVersion,
              .unsupportedSelection:
             String(
                 localized: "A newer version of Incomes created this file. Update Incomes and try again.",
                 bundle: .module
             )
-        case .unsupportedSchemaVersion:
+        case .unsupportedFormatVersion,
+             .unsupportedSchemaVersion:
             String(localized: "This version of the file is not supported.", bundle: .module)
         case .invalidItem(let index, _):
             String(localized: "Item \(index + 1) in the file has an invalid value.", bundle: .module)

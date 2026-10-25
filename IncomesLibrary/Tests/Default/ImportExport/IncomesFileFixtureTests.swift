@@ -3,12 +3,13 @@ import Foundation
 import Testing
 
 struct IncomesFileFixtureTests {
-    private let fixtureDirectory = "Fixtures/IncomesFile-2.0.0"
+    private let fixtureDirectory = "Fixtures/IncomesFile-1-Schema-2.0.0"
 
     @Test
-    func version_2_0_0_fixture_keeps_its_values() throws {
+    func current_fixture_keeps_its_values() throws {
         let contents = try ItemImportOperations.read(data: fixtureData())
         #expect(contents.schemaVersion == "2.0.0")
+        #expect(contents.formatVersion == 1)
         #expect(contents.exportedAt == isoDate("2026-09-29T00:00:00Z"))
         #expect(contents.currencyCode == "JPY")
         #expect(contents.items.count == 6)
@@ -30,26 +31,34 @@ struct IncomesFileFixtureTests {
         #expect(contents.items.last?.balance == Decimal(string: "56400.75"))
     }
 
-    @Test
-    func frozen_version_2_writer_reproduces_the_fixture_bytes() throws {
-        let data = try fixtureData()
+    @Test(arguments: ["Incomes", "Ledgers"])
+    func current_writer_reproduces_the_fixture_bytes(name: String) throws {
+        let data = try fixtureData(name: name)
         let contents = try ItemImportOperations.read(data: data)
-        let encoder = JSONEncoder()
-        encoder.outputFormatting = [.prettyPrinted, .sortedKeys, .withoutEscapingSlashes]
-        let rewritten = try encoder.encode(IncomesFileV2(
-            items: contents.items,
+        let rewritten = try ItemExportOperations.incomesFileData(
+            fileItems: contents.items,
             currencyCode: contents.currencyCode ?? "",
-            exportedAt: contents.exportedAt
-        ))
+            exportedAt: contents.exportedAt,
+            ledgers: contents.ledgers
+        )
         #expect(rewritten == data)
+    }
+
+    @Test
+    func ownership_fixture_keeps_empty_ledgers() throws {
+        let contents = try ItemImportOperations.read(data: fixtureData(name: "Ledgers"))
+        #expect(contents.items.count == 6)
+        #expect(contents.selectionLedgerIdentifiers.count == 3)
+        let empty = try #require(contents.ledgers.first { $0.name == "Savings" })
+        #expect(!contents.items.contains { $0.ledgerIdentifier == empty.id })
     }
 }
 
 private extension IncomesFileFixtureTests {
-    func fixtureData() throws -> Data {
+    func fixtureData(name: String = "Incomes") throws -> Data {
         let url = try #require(
             Bundle.module.url(
-                forResource: "Incomes",
+                forResource: name,
                 withExtension: "incomes",
                 subdirectory: fixtureDirectory
             )
