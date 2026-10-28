@@ -11,12 +11,15 @@ public enum DatabaseMigrator {
 
     /// Moves a legacy store before any shared-store container is opened.
     /// Propagates failures so startup cannot silently continue with an empty database.
+    /// DEBUG builds use a separate store and never relocate released data.
     public static func migrateSQLiteFilesIfNeeded() throws {
+        #if !DEBUG
         try migrateSQLiteFilesIfNeeded(
             fileManager: .default,
             legacyURL: Database.legacyURL,
             currentURL: Database.url
         )
+        #endif
     }
 
     static func migrateSQLiteFilesIfNeeded(

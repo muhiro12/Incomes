@@ -99,6 +99,12 @@ Models.
 - **WatchConnectivity bridge** – `PhoneWatchBridge` answers watch requests with
   typed `WatchSyncReply` payloads, while `PhoneSyncClient` manages activation
   and message replies on watchOS.
+- **Development data** – normal DEBUG builds use a separate persistent
+  `Incomes-Development.sqlite` store without iCloud sync. The first creation
+  seeds the standard sample profile; later launches preserve edits and empty
+  states. See [Sample Data Profiles](Designs/Architecture/sample-data-profiles.md)
+  for disabling seeding and testing an empty store. Release keeps its existing
+  store, migration, and sync behavior.
 - **Preview infrastructure** – `IncomesSampleData` provisions an in-memory
   store, a named sample-data profile, and mock services so SwiftUI previews
   remain functional. See

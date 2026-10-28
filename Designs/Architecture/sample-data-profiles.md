@@ -52,20 +52,46 @@ that already holds records leaves those records untouched.
 
 ## Store Safety
 
-Seeding writes into the context it receives. Only explicit actions seed the
-user's store:
+Seeding writes into the context it receives. Store selection keeps development
+records separate from released financial records:
 
+- Normal DEBUG startup opens `Incomes-Development.sqlite` in the App Group,
+  with CloudKit disabled, and seeds the standard profile only when creating that
+  database file. No launch arguments are needed. DEBUG widgets read this same
+  development file; App Intents use the host's development container. Watch
+  continues to receive phone snapshots in its isolated in-memory store.
+- Release continues to use `Incomes.sqlite` and its existing iCloud preference.
+  DEBUG startup never relocates, copies, or opens the released or legacy store.
+  Existing development records previously stored there remain in that file.
 - SwiftUI previews use `IncomesSampleData.makePreviewContext(profile:)`, which
-  seeds an in-memory, CloudKit-disabled container. The Watch preview wrapper
-  also uses an in-memory container.
-- Tests seed in-memory contexts.
+  seeds an in-memory, CloudKit-disabled container. Watch previews do likewise.
+- Tests use isolated contexts or temporary store directories.
 - Debug "Add Sample Data" is compiled only in DEBUG builds. It requires the
-  Debug option and a confirmation, then adds the chosen profile to the open
-  store. DEBUG builds currently share the normal App Group store; they are not
-  automatically isolated development databases.
-- UI smoke seeding runs only in Debug builds, only with the
-  `--incomes-ui-smoke-seed-if-empty` launch argument, and only when the store
-  is empty.
+  Debug option and confirmation, then adds the chosen profile to the development
+  store.
+- The explicit `--incomes-ui-smoke-seed-if-empty` argument remains available for
+  smoke workflows. Unlike automatic initialization, it intentionally refills an
+  empty development store when requested. Screenshot mode keeps its independent
+  in-memory fixtures.
+
+The database file itself records initialization, independently of item count.
+Subsequent launches preserve developer edits and intentional empty states. A
+failed initial seed surfaces through startup recovery; retry opens the existing
+store without adding another dataset. Use the explicit Debug action if samples
+are needed after recovery. An unreadable store fails instead of being replaced.
+
+To disable automatic seeding, set `automaticallySeedsSampleData` to `false` in
+`IncomesStartupDebugOptions.swift` and rebuild. This changes only initialization;
+it never deletes existing records. For an empty-state check on an existing
+installation, separately use Settings maintenance to remove the records, without
+the explicit smoke-seeding argument. Re-enabling automatic seeding still leaves
+that existing empty database empty. Only removing the development database file
+(or using a fresh installation) makes it new again.
+
+DEBUG ignores the saved iCloud preference and omits the iCloud toggle and restart
+notice. The former `--incomes-ui-smoke-icloud-on` argument no longer enables
+CloudKit in DEBUG. Use a deliberately prepared Release environment for CloudKit
+integration checks. This does not change the saved Release sync preference.
 
 Settings removes seeded data with the debug-data delete action, including in
 Release builds so previously added samples can still be removed. Watch Debug
@@ -116,9 +142,3 @@ Technical safety and App Review disclosure are separate requirements. The
 prohibit hidden, dormant, or undocumented functionality. No public diagnostic
 screen is introduced just to expose development tools. Any future Release
 support UI needs its own user-facing purpose and disclosure review.
-
-Automatic startup seeding is not enabled in the shared App Group store. A local
-empty store can still represent an intentionally cleared database or a store
-awaiting iCloud records. A future automatic development setup must use an
-explicitly isolated persistent store, remember initialization independently of
-item count, and support disabling seeding without deleting developer edits.

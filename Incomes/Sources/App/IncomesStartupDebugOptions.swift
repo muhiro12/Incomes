@@ -6,17 +6,10 @@ enum IncomesStartupDebugOptions {
     private struct SimulatedFailure: Error {}
 
     static let failureArgumentPrefix = "--incomes-ui-smoke-fail-startup="
-    static let forcedICloudArgument = "--incomes-ui-smoke-icloud-on"
+    /// Set to false and rebuild to create an empty development database.
+    /// Existing data is preserved regardless of this setting.
+    static let automaticallySeedsSampleData = true
     #endif
-
-    /// True when the launch arguments ask for a CloudKit-backed container.
-    static var isICloudForced: Bool {
-        #if DEBUG
-        return ProcessInfo.processInfo.arguments.contains(forcedICloudArgument)
-        #else
-        return false
-        #endif
-    }
 
     /// Throws when the launch arguments request a failure for `phase`.
     static func failIfRequested(

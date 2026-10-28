@@ -23,9 +23,11 @@ struct SettingsSubscriptionSection: View {
                 Button("Manage Plan", systemImage: "creditcard") {
                     managePlan()
                 }
+                #if !DEBUG
                 Toggle(isOn: $isICloudOn) {
                     Text("iCloud Sync")
                 }
+                #endif
             } else {
                 Button(action: openSubscription) {
                     Label("Subscription", systemImage: "creditcard")
@@ -35,11 +37,13 @@ struct SettingsSubscriptionSection: View {
                 .popoverTip(subscriptionTip, arrowEdge: .top)
             }
         } footer: {
+            #if !DEBUG
             if isICloudOn != isICloudConfigured {
                 Text(
                     "Restart Incomes to apply changes. The current iCloud sync setting remains active until then."
                 )
             }
+            #endif
         }
         .manageSubscriptionsSheet(isPresented: $isPlanManagementPresented)
     }

@@ -107,7 +107,9 @@ private extension ContentView {
             isICloudOn: isICloudOn
         )
         isSubscribeOn = state.isSubscribeOn
+        #if !DEBUG
         isICloudOn = state.isICloudOn
+        #endif
     }
 }
 
