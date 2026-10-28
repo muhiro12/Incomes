@@ -11,8 +11,6 @@ import SwiftData
 import SwiftUI
 
 struct ContentView {
-    @AppStorage(\.isDebugOn)
-    private var isDebugOn
     @Environment(\.modelContext)
     private var context
     @Environment(\.scenePhase)
@@ -53,7 +51,6 @@ extension ContentView: View {
                 model.isSettingsPresented = WatchScreenshotSupport.presentsSettings
                 return
             }
-            isDebugOn = true
             #endif
 
             await reloadRecentMonthsIfNeeded(

@@ -20,8 +20,6 @@ struct ContentView {
     private var isSubscribeOn
     @AppStorage(\.isICloudOn)
     private var isICloudOn
-    @AppStorage(\.isDebugOn)
-    private var isDebugOn
 }
 
 extension ContentView: View {
@@ -49,9 +47,6 @@ extension ContentView: View {
                 Text("Incomes could not open \(invalidURL.absoluteString)")
             }
             .task {
-                #if DEBUG
-                isDebugOn = true
-                #endif
                 syncSubscriptionStateIfNeeded()
             }
             .onChange(of: appRuntime.premiumStatus) {

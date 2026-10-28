@@ -1,198 +1,59 @@
-#if DEBUG
-//
-//  DebugListView.swift
-//  Incomes
-//
-//  Created by Hiromu Nakano on 2022/01/12.
-//
-
 import MHPlatform
-import SwiftData
 import SwiftUI
-import TipKit
 
-struct DebugListView {
-    @Environment(\.modelContext)
-    private var context
-    @Environment(IncomesTipController.self)
-    private var tipController
-
-    @Query(.tags(.typeIs(.year)))
-    private var yearTags: [Tag]
-
+struct DebugListView: View {
     @AppStorage(\.isDebugOn)
     private var isDebugOn
 
-    @State private var isDialogPresented = false
-    @State private var errorMessage: String?
-    @State private var isMutating = false
-
     private let navigateToRoute: (DebugRoute) -> Void
 
-    init(
-        navigateToRoute: @escaping (DebugRoute) -> Void = { _ in
-            // no-op
-        }
-    ) {
-        self.navigateToRoute = navigateToRoute
-    }
-}
-
-extension DebugListView: View {
     var body: some View {
         List {
-            debugOptionSection
-            if isDebugOn {
-                debugDiagnosticsSection
+            Section {
+                navigationButton("Diagnostics Console", route: .diagnostics)
+            } footer: {
+                Text("Logs are stored on this device. Review them before sharing.")
             }
-            if let tag = firstTag {
-                debugNavigationSection(tag: tag)
+            Section {
+                navigationButton("All Items", route: .allItems)
+                navigationButton("All Tags", route: .allTags)
+                Toggle("Show Item Diagnostics", isOn: $isDebugOn)
+            } footer: {
+                Text("Inspection does not change your saved items.")
             }
-            debugSampleDataSection
-            debugTipsSection
-            StoreSection()
-            AdvertisementSection(.media)
-            AdvertisementSection(.compact)
-            ShortcutsLinkSection()
+            #if DEBUG
+            Section {
+                navigationButton("Natural Language Search", route: .naturalLanguageSearch)
+            }
+            DebugDevelopmentSections()
+            #endif
         }
-        .alert("Error", isPresented: .init(
-            get: { errorMessage != nil },
-            set: { isPresented in
-                if !isPresented {
-                    errorMessage = nil
-                }
-            }
-        )) {
-            Button("OK", role: .cancel) {
-                errorMessage = nil
-            }
-        } message: {
-            Text(errorMessage ?? "")
-        }
-        .confirmationDialog(
-            Text("Add Sample Data"),
-            isPresented: $isDialogPresented
-        ) {
-            Button(role: .destructive) {
-                prepareSampleData(.standard)
-            } label: {
-                Text("Prepare")
-            }
-            Button(role: .destructive) {
-                prepareSampleData(.duplicateTags)
-            } label: {
-                Text("Prepare duplicate tags")
-            }
-            Button(role: .destructive) {
-                prepareSampleData(.largeLedger)
-            } label: {
-                Text("Prepare large ledger")
-            }
-            Button(role: .cancel) {
-                // no-op
-            } label: {
-                Text("Cancel")
-            }
-        } message: {
-            Text("Add sample data to your items?")
-        }
-        .navigationTitle("Debug")
+        .navigationTitle("Diagnostics")
         .toolbar {
             ToolbarItem {
                 CloseButton()
             }
         }
     }
-}
 
-private extension DebugListView {
-    var firstTag: Tag? {
-        (try? TagQueryOperations.getAll(context: context))?.first
+    init(navigateToRoute: @escaping (DebugRoute) -> Void = { _ in
+        // No navigation is needed in standalone previews.
+    }) {
+        self.navigateToRoute = navigateToRoute
     }
 
-    var debugOptionSection: some View {
-        Section {
-            Toggle(isOn: $isDebugOn) {
-                Text("Debug option")
-            }
-        }
-    }
-
-    var debugDiagnosticsSection: some View {
-        Section {
-            debugNavigationButton("Diagnostics Console") {
-                navigateToRoute(.diagnostics)
-            }
-            debugNavigationButton("Natural Language Search") {
-                navigateToRoute(.naturalLanguageSearch)
-            }
-        }
-    }
-
-    var debugSampleDataSection: some View {
-        Section {
-            Button {
-                isDialogPresented = true
-            } label: {
-                Text("Add Sample Data")
-            }
-            .disabled(!isDebugOn)
-        }
-    }
-
-    var debugTipsSection: some View {
-        Section("TipKit") {
-            Button("Reset Tips", action: resetTips)
-            Button("Show All Tips For Testing") {
-                Tips.showAllTipsForTesting()
-            }
-            Button("Hide All Tips For Testing") {
-                Tips.hideAllTipsForTesting()
-            }
-        }
-    }
-
-    func debugNavigationSection(
-        tag: Tag
-    ) -> some View {
-        Section {
-            debugNavigationButton("All Items") {
-                navigateToRoute(.tag(tag.persistentModelID))
-            }
-            debugNavigationButton("All Tags") {
-                navigateToRoute(.allTags)
-            }
-        }
-    }
-
-    func debugNavigationButton(
-        _ title: LocalizedStringKey,
-        action: @escaping () -> Void
-    ) -> some View {
-        Button(action: action) {
+    private func navigationButton(_ title: LocalizedStringKey, route: DebugRoute) -> some View {
+        Button {
+            navigateToRoute(route)
+        } label: {
             Text(title)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .contentShape(Rectangle())
         }
         .buttonStyle(.plain)
     }
-
-    func prepareSampleData(_ profile: SampleDataOperations.Profile) {
-        IncomesMutationWorkflow.performDataMutation(errorMessage: $errorMessage, isProcessing: $isMutating) {
-            try SampleDataOperations.seedAndSave(context: context, profile: profile)
-        }
-    }
-
-    func resetTips() {
-        do {
-            try tipController.resetTips(hasAnyItems: !yearTags.isEmpty)
-        } catch {
-            assertionFailure(error.localizedDescription)
-        }
-    }
 }
 
 #Preview(traits: .modifier(IncomesSampleData())) {
     DebugListView()
 }
-#endif

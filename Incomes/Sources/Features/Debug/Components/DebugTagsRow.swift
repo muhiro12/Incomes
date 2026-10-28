@@ -1,4 +1,3 @@
-#if DEBUG
 import SwiftUI
 
 struct DebugTagsRow: View {
@@ -17,4 +16,3 @@ struct DebugTagsRow: View {
         }
     }
 }
-#endif

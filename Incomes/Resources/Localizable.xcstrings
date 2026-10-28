@@ -4896,6 +4896,40 @@
         }
       }
     },
+    "Diagnostics" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnostics"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "診断"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnóstico"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Diagnostic"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "诊断"
+          }
+        }
+      }
+    },
     "Diagnostics Console" : {
       "localizations" : {
         "en" : {
@@ -7719,6 +7753,40 @@
         }
       }
     },
+    "Inspection does not change your saved items." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Inspection does not change your saved items."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "確認操作で保存済みの明細が変更されることはありません。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La inspección no modifica las partidas guardadas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La consultation ne modifie pas vos écritures enregistrées."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "查看诊断信息不会更改已保存的明细。"
+          }
+        }
+      }
+    },
     "Interpret Request" : {
       "localizations" : {
         "en" : {
@@ -8871,6 +8939,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "正在加载提案..."
+          }
+        }
+      }
+    },
+    "Logs are stored on this device. Review them before sharing." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Logs are stored on this device. Review them before sharing."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ログはこのデバイスに保存されます。共有する前に内容を確認してください。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los registros se guardan en este dispositivo. Revísalos antes de compartirlos."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les journaux sont stockés sur cet appareil. Vérifiez-les avant de les partager."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日志保存在此设备上。共享前请检查其内容。"
           }
         }
       }
@@ -11252,6 +11354,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "打开调试设置。"
+          }
+        }
+      }
+    },
+    "Opens diagnostic logs and read-only data inspection." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Opens diagnostic logs and read-only data inspection."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "診断ログと読み取り専用のデータ確認を開きます。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Abre los registros de diagnóstico y la inspección de datos de solo lectura."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ouvre les journaux de diagnostic et la consultation des données en lecture seule."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "打开诊断日志和只读数据查看。"
           }
         }
       }
@@ -15201,6 +15337,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "显示项目详情"
+          }
+        }
+      }
+    },
+    "Show Item Diagnostics" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Show Item Diagnostics"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "明細に診断情報を表示"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mostrar diagnósticos de las partidas"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Afficher les diagnostics des écritures"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "显示明细诊断信息"
           }
         }
       }

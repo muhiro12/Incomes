@@ -5,6 +5,7 @@ enum SettingsNavigationDestination: Hashable {
     case debug
     case debugDiagnostics
     case debugNaturalLanguageSearch
+    case debugAllItems
     case debugAllTags
     case debugTag(Tag.ID)
 }

@@ -1,4 +1,3 @@
-#if DEBUG
 //
 //  DebugNavigationView.swift
 //  Incomes Playgrounds
@@ -27,6 +26,8 @@ struct DebugNavigationView: View {
 private extension DebugNavigationView {
     func navigate(to route: DebugRoute) {
         switch route {
+        case .allItems:
+            navigateToDestination(.debugAllItems)
         case .allTags:
             navigateToDestination(.debugAllTags)
         case .diagnostics:
@@ -44,4 +45,3 @@ private extension DebugNavigationView {
         DebugNavigationView()
     }
 }
-#endif

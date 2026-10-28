@@ -1,4 +1,3 @@
-#if DEBUG
 //
 //  DebugSection.swift
 //  Incomes
@@ -39,4 +38,3 @@ extension DebugSection: View {
             .environment(items[0])
     }
 }
-#endif

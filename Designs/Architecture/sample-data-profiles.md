@@ -124,21 +124,32 @@ has the same action in DEBUG builds.
 
 ## Diagnostic Boundaries
 
-The iOS and Watch development screens, including sample insertion, TipKit test
-controls, raw item inspection, and the diagnostic console UI, are compiled only
-with `#if DEBUG`. A persisted Debug preference does not enable them in Release.
-The item-form `Enable Debug` shortcut is also DEBUG-only. The existing Debug
-route remains parseable for compatibility and opens ordinary Settings in Release.
+Settings exposes Diagnostics in both DEBUG and Release. The existing Debug route
+opens this same visible screen. The iOS console can inspect current and previous
+logs, adjust capture level, and copy or export logs explicitly. Clearing logs
+requires confirmation and does not clear financial records. Release starts with
+warning/error capture; changing diagnostic visibility does not change capture
+level. Users should inspect logs before sharing them.
 
-Release retains normal warning/error logging and the explicit maintenance
-operation for removing previously seeded samples. Diagnostic visibility does not
-grant Premium access; purchase status and financial mutation checks remain the
-responsibility of the existing entitlement and mutation operations. Screenshot
-fixtures that simulate subscription state remain DEBUG-only and use isolated
-preview stores and preferences.
+The data-inspection paths are read-only: all items and tags lead to diagnostic
+values without edit, duplicate, delete, or recalculation controls. The optional
+item-diagnostics toggle uses the existing preference and adds raw values to the
+ordinary item detail screen; launching the app does not override that choice.
+Watch Diagnostics only browses its received item/tag snapshot in Release.
 
-Technical safety and App Review disclosure are separate requirements. The
-[App Review Guidelines](https://developer.apple.com/app-store/review/guidelines/)
-prohibit hidden, dormant, or undocumented functionality. No public diagnostic
-screen is introduced just to expose development tools. Any future Release
-support UI needs its own user-facing purpose and disclosure review.
+Sample insertion, TipKit test controls, ad/subscription test placements, and the
+experimental natural-language-search UI remain behind `#if DEBUG`. The item-form
+`Enable Debug` shortcut is also DEBUG-only. A persisted diagnostic preference
+cannot enable development controls in Release. Screenshot fixtures that simulate
+subscription state remain DEBUG-only and use isolated stores and preferences.
+
+Release retains the explicit Settings maintenance operation for removing samples
+added by older versions. Diagnostic visibility does not grant Premium access;
+purchase status and normal financial mutations retain their existing checks.
+
+Technical safety and App Review disclosure are separate requirements. The visible
+Settings entry explains the support purpose of these tools rather than relying
+on a secret gesture. Review notes for a release exposing Diagnostics should
+identify Settings > Advanced > Diagnostics, describe local log export and
+read-only inspection, and distinguish these from excluded development controls.
+This source change does not update App Store Connect or establish review approval.

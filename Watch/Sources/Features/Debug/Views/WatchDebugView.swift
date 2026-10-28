@@ -1,4 +1,3 @@
-#if DEBUG
 import MHPreferences
 import MHPreferencesUI
 import SwiftData
@@ -8,30 +7,31 @@ struct WatchDebugView {
     @Environment(\.modelContext)
     private var context
 
-    @AppStorage(\.isDebugOn)
-    private var isDebugOn
-
     @State private var hasDebugData = false
 }
 
 extension WatchDebugView: View {
     var body: some View {
         List {
-            WatchDebugOptionSection(isDebugOn: $isDebugOn)
             WatchDebugNavigationSection()
+            #if DEBUG
             if hasDebugData {
                 WatchDebugSampleDataSection(
                     deleteDebugData: deleteDebugData
                 )
             }
+            #endif
         }
-        .navigationTitle("Debug")
+        .navigationTitle("Diagnostics")
+        #if DEBUG
         .task {
             refreshDebugPresence()
         }
+        #endif
     }
 }
 
+#if DEBUG
 private extension WatchDebugView {
     func refreshDebugPresence() {
         do {
@@ -52,6 +52,8 @@ private extension WatchDebugView {
     }
 }
 
+#endif
+
 #Preview {
     WatchPreview {
         NavigationStack {
@@ -59,4 +61,3 @@ private extension WatchDebugView {
         }
     }
 }
-#endif

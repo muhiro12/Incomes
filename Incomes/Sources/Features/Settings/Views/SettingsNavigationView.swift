@@ -73,28 +73,29 @@ private extension SettingsNavigationView {
             StoreListView()
         case .license:
             LicenseView()
-        #if DEBUG
         case .debug:
             DebugNavigationView(navigateToDestination: navigateToDestination)
         case .debugDiagnostics:
             DebugDiagnosticsView()
         case .debugNaturalLanguageSearch:
+            #if DEBUG
             DebugNaturalLanguageSearchView()
                 .toolbar {
                     ToolbarItem {
                         CloseButton()
                     }
                 }
+            #else
+            EmptyView()
+            #endif
+        case .debugAllItems:
+            DebugAllItemsView()
         case .debugAllTags:
             DebugAllTagsView(
                 selection: debugTagSelectionBinding
             )
         case .debugTag(let tagID):
             DebugTagItemListView(tagID: tagID)
-        #else
-        case .debug, .debugDiagnostics, .debugNaturalLanguageSearch, .debugAllTags, .debugTag:
-            EmptyView()
-        #endif
         }
     }
 
@@ -126,7 +127,8 @@ private extension SettingsNavigationView {
              .license,
              .debug:
             [destination]
-        case .debugDiagnostics,
+        case .debugAllItems,
+             .debugDiagnostics,
              .debugNaturalLanguageSearch,
              .debugAllTags,
              .debugTag:

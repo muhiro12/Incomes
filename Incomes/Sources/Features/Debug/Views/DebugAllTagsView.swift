@@ -1,4 +1,3 @@
-#if DEBUG
 import SwiftData
 import SwiftUI
 
@@ -27,4 +26,3 @@ extension DebugAllTagsView {
         DebugAllTagsView()
     }
 }
-#endif

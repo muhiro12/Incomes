@@ -1,4 +1,3 @@
-#if DEBUG
 import MHPlatform
 import SwiftUI
 
@@ -22,4 +21,3 @@ struct DebugDiagnosticsView: View {
         DebugDiagnosticsView()
     }
 }
-#endif

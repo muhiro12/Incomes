@@ -1,4 +1,3 @@
-#if DEBUG
 import SwiftData
 import SwiftUI
 
@@ -68,4 +67,3 @@ extension DebugTagListView {
 #Preview(traits: .modifier(IncomesSampleData())) {
     DebugTagListView()
 }
-#endif

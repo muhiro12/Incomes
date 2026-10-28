@@ -26,8 +26,6 @@ struct SettingsListView {
     private var currencyCode: String
     @AppStorage(\.notificationSettings, default: .init())
     private var notificationSettings: NotificationSettings
-    @AppStorage(\.isDebugOn)
-    private var isDebugOn: Bool
 
     @State private var model: SettingsScreenModel = .init()
     @State private var errorMessage: String?
@@ -61,19 +59,6 @@ extension SettingsListView: View {
             )
             advancedSection(model: model)
             aboutSection
-            #if DEBUG
-            if isDebugOn {
-                Section {
-                    SettingsNavigationRowButton(
-                        title: "Debug",
-                        systemImage: "ladybug",
-                        accessibilityHint: "Opens debug settings."
-                    ) {
-                        navigateToRoute(.settingsDebug)
-                    }
-                }
-            }
-            #endif
             ShortcutsLinkSection()
         }
         .scrollDismissesKeyboard(.interactively)
@@ -231,6 +216,13 @@ private extension SettingsListView {
                 )
             } label: {
                 Label("Maintenance", systemImage: "wrench.and.screwdriver")
+            }
+            SettingsNavigationRowButton(
+                title: "Diagnostics",
+                systemImage: "stethoscope",
+                accessibilityHint: "Opens diagnostic logs and read-only data inspection."
+            ) {
+                navigateToRoute(.settingsDebug)
             }
         }
     }

@@ -20,7 +20,7 @@ Models.
   views, SwiftData, and on-device services such as notifications, ads, and App
   Intents.
 - **Watch** – a watchOS companion that mirrors upcoming payments, settings, and
-  DEBUG-only development utilities while staying in sync with the phone via
+  read-only diagnostics while staying in sync with the phone via
   WatchConnectivity snapshots.
 - **Widgets** – a WidgetKit bundle that surfaces balances, upcoming
   transactions, and monthly breakdowns on the Home Screen and StandBy.
@@ -55,6 +55,15 @@ Models.
 - Generative features require iOS 26 or later, a compatible device, and Apple
   Intelligence ready in a supported language. Their App Intent adapters remain
   undiscoverable while the system experience is qualified.
+
+### Diagnostics
+
+- Open Diagnostics from Settings to inspect local logs and saved data without
+  changing financial records or Premium access.
+- Export logs explicitly after reviewing them. Sample insertion, TipKit test
+  controls, and other development tools are available only in DEBUG builds.
+- See [Diagnostic Boundaries](Designs/Architecture/sample-data-profiles.md#diagnostic-boundaries)
+  for available operations and release disclosure expectations.
 
 ### Notifications and schedules
 
