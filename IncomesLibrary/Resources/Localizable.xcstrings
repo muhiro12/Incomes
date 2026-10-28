@@ -307,6 +307,74 @@
         }
       }
     },
+    "Check the %@ value against the template instructions." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Check the %@ value against the template instructions."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "テンプレートの説明に従って「%@」の値を確認してください。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Comprueba el valor de %@ según las instrucciones de la plantilla."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifiez la valeur de %@ en suivant les instructions du modèle."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请根据模板说明检查 %@ 的值。"
+          }
+        }
+      }
+    },
+    "Choose a currency in Settings before exchanging templates." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose a currency in Settings before exchanging templates."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "テンプレートを入出力する前に、設定で通貨を選択してください。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Elige una moneda en Ajustes antes de intercambiar plantillas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choisissez une devise dans Réglages avant d’échanger des modèles."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "交换模板前，请在设置中选择货币。"
+          }
+        }
+      }
+    },
     "Compared with the previous month, %@." : {
       "localizations" : {
         "en" : {
@@ -1260,6 +1328,176 @@
         }
       }
     },
+    "The template contains an unsupported section: %@." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The template contains an unsupported section: %@."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "テンプレートに未対応のセクション「%@」があります。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La plantilla contiene una sección no compatible: %@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le modèle contient une section non prise en charge : %@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "模板包含不支持的部分：%@。"
+          }
+        }
+      }
+    },
+    "The template contains more than one %@ section." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The template contains more than one %@ section."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "テンプレートに「%@」セクションが複数あります。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La plantilla contiene más de una sección %@."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le modèle contient plusieurs sections %@."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "模板包含多个 %@ 部分。"
+          }
+        }
+      }
+    },
+    "The template currency must match the currency in Settings. No amounts were converted." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The template currency must match the currency in Settings. No amounts were converted."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "テンプレートの通貨は設定と一致している必要があります。金額は換算されていません。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La moneda de la plantilla debe coincidir con la de Ajustes. No se ha convertido ningún importe."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La devise du modèle doit correspondre à celle de Réglages. Aucun montant n’a été converti."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "模板货币必须与设置中的货币一致。未转换任何金额。"
+          }
+        }
+      }
+    },
+    "The template is missing the %@ section." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The template is missing the %@ section."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "テンプレートに「%@」セクションがありません。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Falta la sección %@ en la plantilla."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La section %@ est absente du modèle."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "模板缺少 %@ 部分。"
+          }
+        }
+      }
+    },
+    "The template is too large. Use one item with at most 16 KiB and 512 lines." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The template is too large. Use one item with at most 16 KiB and 512 lines."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "テンプレートが大きすぎます。1件につき16 KiB、512行以内にしてください。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La plantilla es demasiado grande. Usa un registro de hasta 16 KiB y 512 líneas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le modèle est trop volumineux. Utilisez une entrée de 16 Kio et 512 lignes maximum."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "模板过大。请仅包含一个条目，且不超过 16 KiB 和 512 行。"
+          }
+        }
+      }
+    },
     "The total cannot be calculated exactly. Review the income and outgo amounts and try again." : {
       "localizations" : {
         "en" : {
@@ -1566,6 +1804,40 @@
         }
       }
     },
+    "This template version is not supported." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This template version is not supported."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "このテンプレートのバージョンには対応していません。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta versión de plantilla no es compatible."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette version du modèle n’est pas prise en charge."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "不支持此模板版本。"
+          }
+        }
+      }
+    },
     "This version of the file is not supported." : {
       "localizations" : {
         "en" : {
@@ -1766,6 +2038,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "无法确认是否需要更新。请连接互联网后重试。"
+          }
+        }
+      }
+    },
+    "Use the Incomes template with its version, headings, and one bullet per section." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use the Incomes template with its version, headings, and one bullet per section."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Incomesのテンプレートを使い、バージョン、見出し、各セクション1つの箇条書きを保持してください。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Usa la plantilla de Incomes con su versión, sus encabezados y una viñeta por sección."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Utilisez le modèle Incomes avec sa version, ses titres et une puce par section."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请使用 Incomes 模板，保留版本、标题以及每个部分的一个项目符号。"
           }
         }
       }
