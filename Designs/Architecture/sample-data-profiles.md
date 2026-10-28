@@ -66,9 +66,8 @@ records separate from released financial records:
 - SwiftUI previews use `IncomesSampleData.makePreviewContext(profile:)`, which
   seeds an in-memory, CloudKit-disabled container. Watch previews do likewise.
 - Tests use isolated contexts or temporary store directories.
-- Debug "Add Sample Data" is compiled only in DEBUG builds. It requires the
-  Debug option and confirmation, then adds the chosen profile to the development
-  store.
+- Diagnostics "Add Sample Data" is compiled only in DEBUG builds. After
+  confirmation, it adds the chosen profile to the development store.
 - The explicit `--incomes-ui-smoke-seed-if-empty` argument remains available for
   smoke workflows. Unlike automatic initialization, it intentionally refills an
   empty development store when requested. Screenshot mode keeps its independent
