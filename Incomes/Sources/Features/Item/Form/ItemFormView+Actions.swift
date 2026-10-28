@@ -71,6 +71,7 @@ extension ItemFormView {
     }
 
     func presentAssist() {
+        focusedField = nil
         formPresentation.sheetRoute = .assist
     }
 

@@ -32,6 +32,12 @@ Models.
 
 ### Capture and inference
 
+- Use Input Assistance to interpret prose with on-device AI or read an explicit
+  Markdown template without AI. Both paths prefill the ordinary editable form;
+  creating the Item remains an explicit action. Copy a prompt/template for an
+  external tool or export one saved Item's supported fields. See
+  [Item template exchange](Designs/Architecture/item-template-exchange.md)
+  for field coverage, currency requirements, and validation rules.
 - Capture receipts through the photo library or camera, then run on-device
   VisionKit text recognition to assemble a transcript.
 - Use Apple Foundation Models to infer the date, amounts, and category that

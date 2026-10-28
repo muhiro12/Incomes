@@ -47,6 +47,16 @@ struct ItemFormView: View {
             && LedgerAccessOperations.canEdit(model.ledgerIdentifier, isPremium: isSubscribeOn)
     }
 
+    var supportsInputAssistance: Bool {
+        if mode == .create {
+            return true
+        }
+        if #available(iOS 26.0, *) {
+            return true
+        }
+        return false
+    }
+
     let mode: Mode
     let onCreate: (() -> Void)?
     let priorityRange = ItemFormInput.priorityRange
@@ -70,6 +80,7 @@ extension ItemFormView {
         @Bindable var presentation = presentation
 
         Form {
+            inputAssistanceSection
             ItemFormInformationSection(
                 model: model,
                 income: incomeBinding,
@@ -111,8 +122,7 @@ extension ItemFormView {
                 content: $model.content,
                 category: $model.category,
                 cancel: cancel,
-                submit: submit,
-                presentAssist: presentAssist
+                submit: submit
             )
         }
         .gesture(
@@ -185,13 +195,11 @@ extension ItemFormView {
         .sheet(item: $presentation.sheetRoute) { route in
             switch route {
             case .assist:
-                if #available(iOS 26.0, *) {
-                    NavigationStack {
-                        ItemFormInputAssistView()
-                            .environment(self.model)
-                    }
-                    .incomesSheetPresentation()
+                NavigationStack {
+                    ItemInputAssistanceView(allowsTemplates: mode == .create)
                 }
+                .environment(self.model)
+                .incomesSheetPresentation()
             case .balanceProjection:
                 NavigationStack {
                     ItemFormBalanceProjectionSheet(
@@ -210,6 +218,14 @@ extension ItemFormView {
 }
 
 extension ItemFormView {
+    @ViewBuilder var inputAssistanceSection: some View {
+        if supportsInputAssistance {
+            Section {
+                Button("Input Assistance", systemImage: "text.badge.plus", action: presentAssist)
+            }
+        }
+    }
+
     var formModel: ItemFormModel {
         get { model }
         nonmutating set { model = newValue }

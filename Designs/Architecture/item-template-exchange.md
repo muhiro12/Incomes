@@ -99,6 +99,10 @@ store unchanged. Source, currency, or draft changes invalidate the preview.
 Applying a template leaves repetition disabled for the new draft; people can
 subsequently enable it in the ordinary form.
 
+On supported systems, **Extract This Text** explicitly copies the source into
+the existing inference editor. It requires its own user action and model
+availability; a template error never starts inference automatically.
+
 The preview discloses its destination ledger, currency, and any new category.
 The final form remains editable, with the ordinary Create action required to
 persist. Reopening input assistance retains the source text for that form.

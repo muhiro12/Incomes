@@ -20,6 +20,9 @@ struct ItemFormInputAssistView: View {
         }
     }
 
+    var initialText: String?
+    var onApply: (() -> Void)?
+
     @Environment(\.dismiss)
     private var dismiss
     @Environment(ItemFormModel.self)
@@ -36,6 +39,7 @@ struct ItemFormInputAssistView: View {
     @State private var errorMessage: String?
     @State private var selectedItem: PhotosPickerItem?
     @State private var scanner: ImageTextScanner = .init()
+    @State private var hasLoadedInitialText = false
 
     var body: some View {
         @Bindable var scanner = scanner
@@ -62,7 +66,7 @@ struct ItemFormInputAssistView: View {
         }
         .formStyle(.grouped)
         .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
-        .navigationTitle("Text Capture")
+        .navigationTitle("Extract from Text")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ItemFormInputAssistToolbarContent(
@@ -86,6 +90,15 @@ struct ItemFormInputAssistView: View {
         }
         .task(id: inferenceState.pendingRequest) {
             await applyInferenceAndClose()
+        }
+        .onAppear {
+            guard !hasLoadedInitialText else {
+                return
+            }
+            hasLoadedInitialText = true
+            if let initialText {
+                scanner.recognizedText = initialText
+            }
         }
         .onDisappear {
             inferenceState.cancel()
@@ -204,7 +217,11 @@ private extension ItemFormInputAssistView {
                 return
             }
             model.apply(updatedInput)
-            dismiss()
+            if let onApply {
+                onApply()
+            } else {
+                dismiss()
+            }
         } catch is CancellationError {
             if inferenceState.pendingRequest == request {
                 inferenceState.cancel()

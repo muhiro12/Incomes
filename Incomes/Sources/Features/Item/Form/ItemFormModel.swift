@@ -12,6 +12,7 @@ final class ItemFormModel {
     var category: String = ""
     var repeatMonthSelections: Set<RepeatMonthSelection> = []
     var isRepeatEnabled = false
+    var templateText = ""
 
     private let hasDraft: Bool
     private var hasAppliedInitialContext = false
@@ -119,6 +120,12 @@ extension ItemFormModel {
         category = formInput.category
         priority = formInput.priorityText
         syncRepeatMonthSelectionsWithBaseDate()
+    }
+
+    func applyTemplate(_ formInput: ItemFormInput) {
+        apply(formInput)
+        isRepeatEnabled = false
+        repeatMonthSelections = [baseSelection]
     }
 
     func updateIncomeText(_ text: String) {

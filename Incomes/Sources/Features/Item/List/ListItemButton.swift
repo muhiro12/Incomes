@@ -60,6 +60,9 @@ struct ListItemButton: View {
                 deleteAction: {
                     Haptic.warning.impact()
                     isDeletePresented = true
+                },
+                exportTemplateAction: {
+                    route = .exportTemplate
                 }
             )
         } preview: {
