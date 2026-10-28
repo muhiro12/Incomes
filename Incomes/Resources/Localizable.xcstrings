@@ -508,36 +508,36 @@
         }
       }
     },
-    "Add sample data to your items?" : {
+    "Add sample data to the empty development database?" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Add sample data to your items?"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Añadir datos de muestra a tus elementos?"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Ajouter des données d’exemple à vos éléments ?"
+            "value" : "Add sample data to the empty development database?"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "項目にサンプルデータを追加しますか？"
+            "value" : "空の開発用データベースにサンプルデータを追加しますか？"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "¿Añadir datos de ejemplo a la base de datos de desarrollo vacía?"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ajouter des données d’exemple à la base de données de développement vide ?"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "要向项目中添加示例数据吗？"
+            "value" : "要向空的开发数据库添加示例数据吗？"
           }
         }
       }

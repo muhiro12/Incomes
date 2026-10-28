@@ -52,17 +52,17 @@ extension DebugDevelopmentSections: View {
             Text("Add Sample Data"),
             isPresented: $isDialogPresented
         ) {
-            Button(role: .destructive) {
+            Button {
                 prepareSampleData(.standard)
             } label: {
                 Text("Prepare")
             }
-            Button(role: .destructive) {
+            Button {
                 prepareSampleData(.duplicateTags)
             } label: {
                 Text("Prepare duplicate tags")
             }
-            Button(role: .destructive) {
+            Button {
                 prepareSampleData(.largeLedger)
             } label: {
                 Text("Prepare large ledger")
@@ -73,7 +73,7 @@ extension DebugDevelopmentSections: View {
                 Text("Cancel")
             }
         } message: {
-            Text("Add sample data to your items?")
+            Text("Add sample data to the empty development database?")
         }
     }
 }
@@ -86,6 +86,7 @@ private extension DebugDevelopmentSections {
             } label: {
                 Text("Add Sample Data")
             }
+            .disabled(isMutating)
         }
     }
 
@@ -103,7 +104,7 @@ private extension DebugDevelopmentSections {
 
     func prepareSampleData(_ profile: SampleDataOperations.Profile) {
         IncomesMutationWorkflow.performDataMutation(errorMessage: $errorMessage, isProcessing: $isMutating) {
-            try SampleDataOperations.seedAndSave(context: context, profile: profile)
+            try DevelopmentStore.seedIfEmpty(context: context, profile: profile)
         }
     }
 

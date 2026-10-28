@@ -11,6 +11,46 @@ public enum DevelopmentStore {
         try makeContainer(at: Database.url, automaticallySeedsSampleData: automaticallySeedsSampleData)
     }
 
+    /// Adds samples only to an empty, writable, unsynced development store.
+    /// The caller's unrelated pending edits are neither saved nor discarded.
+    @preconcurrency
+    @MainActor
+    public static func seedIfEmpty(
+        context: ModelContext,
+        profile: SampleDataOperations.Profile
+    ) throws {
+        try seedIfEmpty(context: context, profile: profile, at: Database.url)
+    }
+
+    @MainActor
+    static func seedIfEmpty(
+        context: ModelContext,
+        profile: SampleDataOperations.Profile,
+        at developmentURL: URL
+    ) throws {
+        try validateSampleDataTarget(context.container.configurations, at: developmentURL)
+        try ItemMutationSupport.performAndSave(context: context) {
+            guard try ItemQueryOperations.allItemsCount(context: context) == .zero else {
+                throw DevelopmentStoreError.containsItems
+            }
+            try SampleDataOperations.seed(context: context, profile: profile)
+        }
+    }
+
+    static func validateSampleDataTarget(
+        _ configurations: Set<ModelConfiguration>,
+        at developmentURL: URL
+    ) throws {
+        guard configurations.count == 1,
+              let configuration = configurations.first,
+              configuration.url.standardizedFileURL == developmentURL.standardizedFileURL,
+              !configuration.isStoredInMemoryOnly,
+              configuration.allowsSave,
+              configuration.cloudKitContainerIdentifier == nil else {
+            throw DevelopmentStoreError.invalidSampleDataTarget
+        }
+    }
+
     @MainActor
     static func makeContainer(
         at url: URL,

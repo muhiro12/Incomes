@@ -954,6 +954,74 @@
         }
       }
     },
+    "Sample data can only be added to the local development database." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sample data can only be added to the local development database."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "サンプルデータはローカルの開発用データベースにのみ追加できます。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los datos de ejemplo solo se pueden añadir a la base de datos de desarrollo local."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les données d’exemple ne peuvent être ajoutées qu’à la base de données de développement locale."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "示例数据只能添加到本地开发数据库。"
+          }
+        }
+      }
+    },
+    "Sample data can only be added when the development database has no items." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sample data can only be added when the development database has no items."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "開発用データベースに明細がない場合にのみ、サンプルデータを追加できます。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Los datos de ejemplo solo se pueden añadir cuando la base de datos de desarrollo no contiene partidas."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Les données d’exemple ne peuvent être ajoutées que si la base de données de développement ne contient aucune écriture."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅当开发数据库没有明细时，才能添加示例数据。"
+          }
+        }
+      }
+    },
     "Some items have no ledger assignment. Review them before relying on ledger balances." : {
       "localizations" : {
         "en" : {

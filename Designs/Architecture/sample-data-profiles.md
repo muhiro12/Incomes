@@ -67,7 +67,12 @@ records separate from released financial records:
   seeds an in-memory, CloudKit-disabled container. Watch previews do likewise.
 - Tests use isolated contexts or temporary store directories.
 - Diagnostics "Add Sample Data" is compiled only in DEBUG builds. After
-  confirmation, it adds the chosen profile to the development store.
+  confirmation, it adds the chosen profile only when the development store has
+  no items. The operation validates the context's actual store URL, writable
+  persistent configuration, and absence of a CloudKit container before mutation.
+  Other stores and populated stores are rejected without changing their records.
+  This action works without restarting after disabling automatic seeding or
+  deleting samples, independently of the initial-seeding setting.
 - The explicit `--incomes-ui-smoke-seed-if-empty` argument remains available for
   smoke workflows. Unlike automatic initialization, it intentionally refills an
   empty development store when requested. Screenshot mode keeps its independent
@@ -129,6 +134,15 @@ logs, adjust capture level, and copy or export logs explicitly. Clearing logs
 requires confirmation and does not clear financial records. Release starts with
 warning/error capture; changing diagnostic visibility does not change capture
 level. Users should inspect logs before sharing them.
+
+The ordinary Settings entry is also the intended entry in TestFlight and App
+Store builds. Removing the former `Enable Debug` secret command was deliberate:
+the owner needs occasional inspection in the distributed app, and a discoverable
+entry avoids relying on hidden functionality that needs separate App Review
+consideration. Do not restore a secret command, gesture, or saved mode as an
+unlock requirement. Individual development tools remain build-gated; the
+item-detail preference only controls optional diagnostic values. See the
+[owner clarification](https://github.com/muhiro12/Incomes/issues/417#issuecomment-6465664421).
 
 The data-inspection paths are read-only: all items and tags lead to diagnostic
 values without edit, duplicate, delete, or recalculation controls. The optional
