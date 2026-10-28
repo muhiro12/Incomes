@@ -33,10 +33,6 @@ final class ItemFormPresentationModel {
         }
     }
 
-    func presentDebugDialog() {
-        dialogRoute = .debug
-    }
-
     func applyBalanceProjectionReview(
         _ review: ItemBalanceProjectionReview
     ) {

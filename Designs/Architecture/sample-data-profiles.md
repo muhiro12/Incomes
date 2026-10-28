@@ -138,10 +138,11 @@ ordinary item detail screen; launching the app does not override that choice.
 Watch Diagnostics only browses its received item/tag snapshot in Release.
 
 Sample insertion, TipKit test controls, ad/subscription test placements, and the
-experimental natural-language-search UI remain behind `#if DEBUG`. The item-form
-`Enable Debug` shortcut is also DEBUG-only. A persisted diagnostic preference
-cannot enable development controls in Release. Screenshot fixtures that simulate
-subscription state remain DEBUG-only and use isolated stores and preferences.
+experimental natural-language-search UI remain behind `#if DEBUG`. Diagnostics
+uses the Settings entry without an item-form activation command. A persisted
+diagnostic preference cannot enable development controls in Release. Screenshot
+fixtures that simulate subscription state remain DEBUG-only and use isolated
+stores and preferences.
 
 Release retains the explicit Settings maintenance operation for removing samples
 added by older versions. Diagnostic visibility does not grant Premium access;

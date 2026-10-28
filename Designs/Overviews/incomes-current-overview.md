@@ -273,8 +273,8 @@ living in the app targets.
   survives subsequent launches and does not grant Premium access.
 - In DEBUG only, seed sample profiles, test TipKit state, inspect ad/subscription
   placements, and experiment with natural-language search.
-- Keep the hidden `Enable Debug` form shortcut DEBUG-only. Existing Debug URLs
-  open the visible Diagnostics screen in both configurations.
+- Open Diagnostics directly from Settings without an activation command. Existing
+  Debug URLs open the same screen in both configurations.
 - Remove previously added samples through the normal Settings maintenance flow.
 
 See [diagnostic boundaries](../Architecture/sample-data-profiles.md#diagnostic-boundaries)

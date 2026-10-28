@@ -17759,40 +17759,6 @@
         }
       }
     },
-    "Turn on the debug option?" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Turn on the debug option?"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "¿Activar la opción de depuración?"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Activer l’option de débogage ?"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "デバッグオプションをオンにしますか？"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "要开启调试选项吗？"
-          }
-        }
-      }
-    },
     "Turn this on for rent, salary, and other items you reuse every month." : {
       "localizations" : {
         "en" : {

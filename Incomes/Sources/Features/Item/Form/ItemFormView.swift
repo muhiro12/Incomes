@@ -38,9 +38,6 @@ struct ItemFormView: View {
     @AppStorage(\.isSubscribeOn)
     var isSubscribeOn
 
-    @AppStorage(\.isDebugOn)
-    var isDebugOn
-
     @FocusState var focusedField: ItemFormFocusedField?
     @State private var model: ItemFormModel
     @State private var presentation: ItemFormPresentationModel = .init()
@@ -127,26 +124,6 @@ extension ItemFormView {
                     focusedField = nil
                 }
         )
-        #if DEBUG
-        .confirmationDialog(
-            Text("Debug"),
-            isPresented: isDialogPresented(.debug)
-        ) {
-            Button {
-                isDebugOn = true
-                dismiss()
-            } label: {
-                Text("OK")
-            }
-            Button(role: .cancel) {
-                // no-op
-            } label: {
-                Text("Cancel")
-            }
-        } message: {
-            Text("Turn on the debug option?")
-        }
-        #endif
         .alert(
             "Error",
             isPresented: Binding(

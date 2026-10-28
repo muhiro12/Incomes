@@ -237,13 +237,6 @@ extension ItemFormView {
         guard !formPresentation.isSubmitting else {
             return
         }
-        #if DEBUG
-        if formModel.content == "Enable Debug" {
-            formModel.content = ""
-            formPresentation.presentDebugDialog()
-            return
-        }
-        #endif
         dismiss()
     }
 
