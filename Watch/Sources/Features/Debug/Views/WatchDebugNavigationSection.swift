@@ -1,3 +1,4 @@
+#if DEBUG
 import SwiftUI
 
 struct WatchDebugNavigationSection: View {
@@ -16,3 +17,4 @@ struct WatchDebugNavigationSection: View {
         }
     }
 }
+#endif

@@ -1,3 +1,4 @@
+#if DEBUG
 //
 //  DebugListView.swift
 //  Incomes
@@ -194,3 +195,4 @@ private extension DebugListView {
 #Preview(traits: .modifier(IncomesSampleData())) {
     DebugListView()
 }
+#endif

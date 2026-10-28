@@ -157,7 +157,11 @@ private extension MainNavigationRouter {
             settingsDestination = .license
         case .settingsDebug:
             sheetRoute = .settings
+            #if DEBUG
             settingsDestination = .debug
+            #else
+            settingsDestination = .root
+            #endif
         case .yearlyDuplication:
             settingsDestination = nil
             sheetRoute = .yearlyDuplication

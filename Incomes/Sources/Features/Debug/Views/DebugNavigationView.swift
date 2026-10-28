@@ -1,3 +1,4 @@
+#if DEBUG
 //
 //  DebugNavigationView.swift
 //  Incomes Playgrounds
@@ -43,3 +44,4 @@ private extension DebugNavigationView {
         DebugNavigationView()
     }
 }
+#endif

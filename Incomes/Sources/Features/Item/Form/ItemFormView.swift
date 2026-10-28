@@ -127,6 +127,7 @@ extension ItemFormView {
                     focusedField = nil
                 }
         )
+        #if DEBUG
         .confirmationDialog(
             Text("Debug"),
             isPresented: isDialogPresented(.debug)
@@ -145,6 +146,7 @@ extension ItemFormView {
         } message: {
             Text("Turn on the debug option?")
         }
+        #endif
         .alert(
             "Error",
             isPresented: Binding(

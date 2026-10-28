@@ -1,3 +1,4 @@
+#if DEBUG
 import SwiftData
 import SwiftUI
 
@@ -41,3 +42,4 @@ struct DebugTagItemListView: View {
         }
     }
 }
+#endif

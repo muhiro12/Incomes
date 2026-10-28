@@ -265,6 +265,11 @@ living in the app targets.
 
 ### 14. Debug and internal maintenance features
 
+Development screens and the activation shortcut below are available only in
+DEBUG builds. Release retains warning/error logging and the Settings action to
+remove previously seeded sample data. The existing Debug URL opens ordinary
+Settings in Release. See [diagnostic boundaries](../Architecture/sample-data-profiles.md#diagnostic-boundaries).
+
 - Enable or disable a debug option.
 - Seed the standard sample ledger, a large ledger for performance checks, or
   sample data with duplicate tags for duplicate tag testing.
@@ -285,7 +290,7 @@ living in the app targets.
 - Show the upcoming day of items on the main watch screen.
 - Show a manual reload action.
 - Show a Settings entry point.
-- In debug mode, inspect all items and tags and remove debug sample data.
+- In DEBUG builds, inspect all items and tags and remove debug sample data.
 
 ## Widget Features
 

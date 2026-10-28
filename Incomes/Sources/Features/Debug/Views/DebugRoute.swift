@@ -1,3 +1,4 @@
+#if DEBUG
 import Foundation
 
 enum DebugRoute {
@@ -6,3 +7,4 @@ enum DebugRoute {
     case naturalLanguageSearch
     case tag(Tag.ID)
 }
+#endif

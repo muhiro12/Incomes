@@ -1,3 +1,4 @@
+#if DEBUG
 import SwiftData
 import SwiftUI
 
@@ -38,3 +39,4 @@ struct DebugNaturalLanguageSearchResultSections: View {
         )
     }
 }
+#endif

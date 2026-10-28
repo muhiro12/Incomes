@@ -1,3 +1,4 @@
+#if DEBUG
 import MHPreferences
 import MHPreferencesUI
 import SwiftData
@@ -58,3 +59,4 @@ private extension WatchDebugView {
         }
     }
 }
+#endif

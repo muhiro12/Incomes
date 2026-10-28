@@ -73,6 +73,7 @@ private extension SettingsNavigationView {
             StoreListView()
         case .license:
             LicenseView()
+        #if DEBUG
         case .debug:
             DebugNavigationView(navigateToDestination: navigateToDestination)
         case .debugDiagnostics:
@@ -90,6 +91,10 @@ private extension SettingsNavigationView {
             )
         case .debugTag(let tagID):
             DebugTagItemListView(tagID: tagID)
+        #else
+        case .debug, .debugDiagnostics, .debugNaturalLanguageSearch, .debugAllTags, .debugTag:
+            EmptyView()
+        #endif
         }
     }
 

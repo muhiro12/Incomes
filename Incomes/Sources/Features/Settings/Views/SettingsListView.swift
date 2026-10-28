@@ -61,6 +61,7 @@ extension SettingsListView: View {
             )
             advancedSection(model: model)
             aboutSection
+            #if DEBUG
             if isDebugOn {
                 Section {
                     SettingsNavigationRowButton(
@@ -72,6 +73,7 @@ extension SettingsListView: View {
                     }
                 }
             }
+            #endif
             ShortcutsLinkSection()
         }
         .scrollDismissesKeyboard(.interactively)

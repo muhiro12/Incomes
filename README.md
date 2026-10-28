@@ -20,8 +20,8 @@ Models.
   views, SwiftData, and on-device services such as notifications, ads, and App
   Intents.
 - **Watch** – a watchOS companion that mirrors upcoming payments, settings, and
-  debug utilities while staying in sync with the phone via WatchConnectivity
-  snapshots.
+  DEBUG-only development utilities while staying in sync with the phone via
+  WatchConnectivity snapshots.
 - **Widgets** – a WidgetKit bundle that surfaces balances, upcoming
   transactions, and monthly breakdowns on the Home Screen and StandBy.
 - **IncomesLibrary** – the shared domain layer containing the SwiftData models,

@@ -25,6 +25,7 @@ extension SettingsListView: View {
                     Label("Items", systemImage: "list.bullet")
                 }
             }
+            #if DEBUG
             if isDebugOn {
                 Section {
                     NavigationLink {
@@ -34,6 +35,7 @@ extension SettingsListView: View {
                     }
                 }
             }
+            #endif
         }
         .navigationTitle("Settings")
     }

@@ -19,9 +19,11 @@ extension ItemView: View {
     var body: some View {
         List {
             ItemSection()
+            #if DEBUG
             if isDebugOn {
                 DebugSection()
             }
+            #endif
             Section {
                 EditItemButton()
                 DuplicateItemButton()

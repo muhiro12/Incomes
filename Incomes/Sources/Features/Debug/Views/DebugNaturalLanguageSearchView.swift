@@ -1,3 +1,4 @@
+#if DEBUG
 import MHPlatform
 import SwiftData
 import SwiftUI
@@ -158,3 +159,4 @@ private extension DebugNaturalLanguageSearchView {
         DebugNaturalLanguageSearchView()
     }
 }
+#endif

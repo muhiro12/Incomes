@@ -1,3 +1,4 @@
+#if DEBUG
 import SwiftUI
 
 struct DebugNaturalLanguageSearchIntroSection: View {
@@ -12,3 +13,4 @@ struct DebugNaturalLanguageSearchIntroSection: View {
         }
     }
 }
+#endif
