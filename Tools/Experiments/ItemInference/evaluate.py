@@ -18,7 +18,9 @@ import time
 ROOT = Path(__file__).resolve().parents[3]
 DIRECTORY = Path(__file__).resolve().parent
 SOURCES = [
+    "Incomes/Sources/Features/Item/Inference/ItemFormInferenceGeneratedFields.swift",
     "Incomes/Sources/Features/Item/Inference/ItemFormInferenceResult.swift",
+    "IncomesLibrary/Sources/Item/ItemInferenceDateOperations.swift",
     "IncomesLibrary/Sources/Item/ItemFormInferencePromptBuilder.swift",
     "IncomesLibrary/Sources/Item/Inference/FoundationModelPromptTemplate.swift",
     "IncomesLibrary/Sources/Item/PromptLiteralSupport.swift",
@@ -57,12 +59,13 @@ def fields_needing_correction(candidate, expected):
 
 def run_case(binary, case, repetition, environment, timeout):
     result = {"case": case["id"], "repetition": repetition, "input": case["text"],
-              "locale": case["locale"], "expected": case["expected"]}
+              "locale": case["locale"], "referenceDate": case.get("referenceDate", "20261029"),
+              "expected": case["expected"]}
     started = time.monotonic()
     try:
         response = subprocess.run(
             [str(binary)],
-            input=json.dumps({"text": case["text"], "referenceDate": "20261029",
+            input=json.dumps({"text": case["text"], "referenceDate": result["referenceDate"],
                               "locale": case["locale"]}, ensure_ascii=False),
             env=environment, capture_output=True, text=True, timeout=timeout,
         )

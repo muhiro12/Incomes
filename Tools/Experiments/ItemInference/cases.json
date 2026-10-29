@@ -3,48 +3,184 @@
     "id": "expense",
     "text": "2026年10月28日に昼食代として1,200円を支払いました。",
     "locale": "ja_JP",
-    "expected": {"date": "20261028", "income": "0", "outgo": "1200", "hasUnspecifiedAmount": false}
+    "expected": {
+      "date": "20261028",
+      "income": "0",
+      "outgo": "1200",
+      "hasUnspecifiedAmount": false
+    }
   },
   {
     "id": "income",
     "text": "2026年10月28日に給与250,000円を受け取りました。",
     "locale": "ja_JP",
-    "expected": {"date": "20261028", "income": "250000", "outgo": "0", "hasUnspecifiedAmount": false}
+    "expected": {
+      "date": "20261028",
+      "income": "250000",
+      "outgo": "0",
+      "hasUnspecifiedAmount": false
+    }
   },
   {
     "id": "unknown_amount",
     "text": "2026年11月1日の家賃は金額未定です。",
     "locale": "ja_JP",
-    "expected": {"date": "20261101", "income": "0", "outgo": "0", "hasUnspecifiedAmount": true}
+    "expected": {
+      "date": "20261101",
+      "income": "0",
+      "outgo": "0",
+      "hasUnspecifiedAmount": true
+    }
   },
   {
     "id": "explicit_zero",
     "text": "2026年10月28日の無料イベント、料金は0円でした。",
     "locale": "ja_JP",
-    "expected": {"date": "20261028", "income": "0", "outgo": "0", "hasUnspecifiedAmount": false}
+    "expected": {
+      "date": "20261028",
+      "income": "0",
+      "outgo": "0",
+      "hasUnspecifiedAmount": false
+    }
   },
   {
     "id": "ambiguous_month",
     "text": "来月の家賃、金額未定です。",
     "locale": "ja_JP",
-    "expected": {"date": "", "income": "0", "outgo": "0", "hasUnspecifiedAmount": true}
+    "expected": {
+      "date": "",
+      "income": "0",
+      "outgo": "0",
+      "hasUnspecifiedAmount": true
+    }
   },
   {
     "id": "missing_date",
     "text": "昼食代として1,200円を支払いました。",
     "locale": "ja_JP",
-    "expected": {"date": "", "income": "0", "outgo": "1200", "hasUnspecifiedAmount": false}
+    "expected": {
+      "date": "",
+      "income": "0",
+      "outgo": "1200",
+      "hasUnspecifiedAmount": false
+    }
   },
   {
     "id": "relative_day",
     "text": "昨日の昼食代として1,200円を支払いました。",
     "locale": "ja_JP",
-    "expected": {"date": "20261028", "income": "0", "outgo": "1200", "hasUnspecifiedAmount": false}
+    "expected": {
+      "date": "20261028",
+      "income": "0",
+      "outgo": "1200",
+      "hasUnspecifiedAmount": false
+    }
   },
   {
     "id": "fractional_expense",
     "text": "On October 28, 2026, I paid 12.50 for lunch.",
     "locale": "en_US",
-    "expected": {"date": "20261028", "income": "0", "outgo": "12.50", "hasUnspecifiedAmount": false}
+    "expected": {
+      "date": "20261028",
+      "income": "0",
+      "outgo": "12.50",
+      "hasUnspecifiedAmount": false
+    }
+  },
+  {
+    "id": "year_boundary",
+    "text": "昨日、昼食代として1,200円を支払いました。",
+    "locale": "ja_JP",
+    "referenceDate": "20270101",
+    "expected": {
+      "date": "20261231",
+      "income": "0",
+      "outgo": "1200",
+      "hasUnspecifiedAmount": false
+    }
+  },
+  {
+    "id": "leap_day",
+    "text": "昨日、昼食代として1,200円を支払いました。",
+    "locale": "ja_JP",
+    "referenceDate": "20240301",
+    "expected": {
+      "date": "20240229",
+      "income": "0",
+      "outgo": "1200",
+      "hasUnspecifiedAmount": false
+    }
+  },
+  {
+    "id": "tomorrow",
+    "text": "Tomorrow I will pay 12.50 for lunch.",
+    "locale": "en_US",
+    "referenceDate": "20261231",
+    "expected": {
+      "date": "20270101",
+      "income": "0",
+      "outgo": "12.50",
+      "hasUnspecifiedAmount": false
+    }
+  },
+  {
+    "id": "french_yesterday",
+    "text": "Hier, j’ai payé 12,50 pour le déjeuner.",
+    "locale": "fr_FR",
+    "referenceDate": "20261029",
+    "expected": {
+      "date": "20261028",
+      "income": "0",
+      "outgo": "12.50",
+      "hasUnspecifiedAmount": false
+    }
+  },
+  {
+    "id": "spanish_day",
+    "text": "Ayer pagué 12,50 por el almuerzo.",
+    "locale": "es_ES",
+    "referenceDate": "20261029",
+    "expected": {
+      "date": "20261028",
+      "income": "0",
+      "outgo": "12.50",
+      "hasUnspecifiedAmount": false
+    }
+  },
+  {
+    "id": "chinese_day",
+    "text": "昨天午饭花了120元。",
+    "locale": "zh_CN",
+    "referenceDate": "20261029",
+    "expected": {
+      "date": "20261028",
+      "income": "0",
+      "outgo": "120",
+      "hasUnspecifiedAmount": false
+    }
+  },
+  {
+    "id": "month_without_day",
+    "text": "2026年11月の家賃として80,000円を支払う予定です。",
+    "locale": "ja_JP",
+    "referenceDate": "20261029",
+    "expected": {
+      "date": "",
+      "income": "0",
+      "outgo": "80000",
+      "hasUnspecifiedAmount": false
+    }
+  },
+  {
+    "id": "invalid_calendar_day",
+    "text": "2026年2月30日の支出は1,200円です。",
+    "locale": "ja_JP",
+    "referenceDate": "20261029",
+    "expected": {
+      "date": "",
+      "income": "0",
+      "outgo": "1200",
+      "hasUnspecifiedAmount": false
+    }
   }
 ]

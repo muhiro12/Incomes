@@ -30,9 +30,10 @@ without changing the persisted Item schema.
 
 ## Deterministic test results
 
-- Full IncomesLibrary test plan: 1,762 passed, no failures or skips.
-- Final focused inference/qualification run: 21 passed, no failures or skips.
-  This is a separate regression run, not an additional unique-test total.
+- Full IncomesLibrary test plan after source-date resolution: 1,793 passed,
+  no failures or skips. Date tests include source mismatch, missing precision,
+  invalid calendar days, five-language relative days, Japanese particles,
+  width variants, year/leap-day boundaries and three time zones across DST.
 - Incomes consumer build passed; Xcode reported no warnings or errors.
 - Repository SwiftLint, architecture and Operations boundary checks passed.
 - Five new UI/error strings have English, Japanese, Spanish, French and
@@ -52,7 +53,7 @@ the expected values are not supplied to the model. The process runs on macOS,
 without app screens, Simulator taps, app records or settings changes. It does
 not execute the iOS service's error wrapper or persistence path.
 
-Final run on macOS 27.2 (26B123), arm64, Swift 6.4.2, SDK 27.2, with reference
+Baseline run on macOS 27.2 (26B123), arm64, Swift 6.4.2, SDK 27.2, with reference
 date October 29, 2026, Asia/Tokyo: **16 requests completed, 10 matched, 6 semantic
 mismatches, no request errors or timeouts**. Each case ran twice in a fresh
 process/session. Elapsed times including process startup were 1.227–2.221 s;
@@ -75,6 +76,38 @@ without semantic scoring. The evaluator returns a failing exit status for
 these mismatches. Reports retain raw fields, generated JSON, actual rendered
 prompts, source hashes and host configuration outside the repository.
 
+## Source-date resolution follow-up
+
+The app now asks the model to copy a `dateExpression` from the source rather
+than calculate `yyyyMMdd`. Both the app and probe construct the same normalized
+`ItemFormInferenceResult` using `ItemInferenceDateOperations`. The resolver
+requires source occurrence, resolves supported complete expressions, and leaves
+invalid, incomplete or unsupported dates empty for review. Relative days use
+Calendar arithmetic. Raw generated JSON and the copied expression are recorded
+alongside the normalized day; expected values are never used for normalization.
+
+The final UI-free evaluation completed **32/32 matches**, with no request
+errors, timeouts or scored-field mismatches: the original eight cases and eight
+additional cases, each repeated twice. The original cases' expectations were
+unchanged. Additions cover year boundaries, leap day, tomorrow, French,
+Spanish and Chinese, a month without a day, and an invalid date. Individual
+cases override the reference day when needed. The host/toolchain match the
+baseline; elapsed times including process startup were 1.254–2.395 s.
+
+An earlier expanded run exposed a Spanish payment classified as income. The
+prompt and guides now explicitly distinguish money received from money paid
+or spent; both final Spanish samples match. The added month-only rent fixture
+was clarified to explicitly say the person will pay: its earlier text did not
+establish whether rent was income or expense. Its date expectation remains
+empty. The baseline eight cases were not rewritten to fit outputs.
+
+Supported expressions and unresolved formats are documented in the
+[date boundary](item-template-exchange.md#inference-and-shared-form-boundaries).
+This sample demonstrates the tested app behavior; it does not establish that
+the model itself performs reliable calendar arithmetic or reads arbitrary prose
+correctly. Description/category meaning and physical-device performance remain
+outside this evaluation.
+
 ## Evidence boundary
 
 A validator can reject an invalid date or an inexact amount. It cannot establish
@@ -88,6 +121,6 @@ Generated unknown-state metadata describes what the model reported. It does
 not independently verify that the source omitted a value. Proposals remain
 editable and require the ordinary explicit Create action. These unit-test
 results do not establish general extraction accuracy, UI quality, physical
-phone performance, or release qualification. The real-model results above
-demonstrate that date extraction still has concrete quality gaps despite the
-typed-value tests passing.
+phone performance, or release qualification. Source-backed resolution addresses
+the reproduced date failures without treating typed generation or a generated
+confidence flag as proof of source fidelity.

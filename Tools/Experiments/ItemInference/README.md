@@ -15,32 +15,36 @@ the process environment. The runner is opt-in; normal unit tests never invoke it
 
 ## Production code reuse
 
-The script compiles the app's actual `ItemFormInferenceResult` (`@Generable`)
-and shared prompt builder, resource renderer, JSON-literal and locale helpers
+The script compiles the app's actual `ItemFormInferenceGeneratedFields`
+(`@Generable`), normalized `ItemFormInferenceResult`, shared source-date resolver,
+prompt builder, resource renderer, JSON-literal and locale helpers
 directly from their source files. It copies the two production prompt resources
 unchanged into a temporary bundle. The probe provides only the standalone
 equivalent of SwiftPM's generated `Bundle.module` accessor.
 
 Like `ItemInferenceService`, it uses `SystemLanguageModel.default`, checks model
 and locale availability, creates a fresh `LanguageModelSession` with the shared
-instructions, and calls `respond(generating: ItemFormInferenceResult.self)`
+instructions, and calls `respond(generating: ItemFormInferenceGeneratedFields.self)`
 with framework-default generation options. It supplies only the source text,
 reference date and locale to the model. Expected values are used afterwards
 for scoring and are never included in the model prompt.
 
 This is a standalone macOS process, not the signed iOS app service wrapper.
-It measures raw extraction before app error mapping, validation, form handoff
-or persistence. Those later boundaries retain their ordinary unit tests.
+It records raw extraction and reuses the app's source-backed date normalization
+before scoring. It does not invoke the service's error mapping, financial-value
+validation, form handoff or persistence. Those boundaries retain unit tests.
 
 ## Cases and interpretation
 
-Eight synthetic cases cover expense, income, an unknown amount, explicit zero,
+Sixteen synthetic cases cover expense, income, an unknown amount, explicit zero,
 an ambiguous month, a missing date, a relative day and an English fractional
-amount. The reference day is fixed to October 29, 2026, in Asia/Tokyo. Missing
+amount, plus year/leap-day boundaries, other app languages, a specified month
+without a day, and an invalid calendar day. The default reference day is
+October 29, 2026, in Asia/Tokyo; a case can override `referenceDate`. Missing
 or ambiguous dates are expected to remain empty; unknown amounts are expected
 to be explicitly marked and become zero-valued drafts under app policy.
 
-The runner compares exact day, numeric Decimal values and unknown-amount state,
+The runner compares the normalized day, numeric Decimal values and unknown-amount state,
 and requires nonempty content. Category labels and description wording are
 recorded but not judged for semantic quality. Mismatches fail the command;
 they are not corrected with expected values or counted as successful reads.
@@ -48,6 +52,7 @@ they are not corrected with expected values or counted as successful reads.
 Each request starts a new process/session. A request error or deadline stops
 the remaining cases and is recorded separately from a semantic mismatch.
 Times include process startup and service work; they are not iPhone latency.
-The report records raw fields, generated JSON, rendered prompts, source hashes,
+The report records the copied date expression, normalized day, raw generated
+JSON, rendered prompts, source hashes,
 host/toolchain and per-case comparisons outside the repository. Small repeated
 samples do not establish a population accuracy rate or release qualification.

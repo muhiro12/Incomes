@@ -15,7 +15,7 @@ update, or merge the original record.
 
 ## Inference and shared form boundaries
 
-Foundation Models produces a typed `@Generable` result, rather than generating
+Foundation Models produces typed `@Generable` fields, rather than generating
 Markdown for the template reader. Structured generation constrains the response
 shape; it does not establish that extracted facts are correct. Before applying
 a suggestion, the adapter rejects invalid calendar dates, empty descriptions,
@@ -24,8 +24,23 @@ Unsupported output leaves the source text available for correction or manual
 entry. Cancellation and source/draft changes prevent an older response from
 replacing the current form.
 
-An empty generated date keeps the selected form date and displays a review
-notice. An unspecified amount is represented
+The generated `dateExpression` copies a date phrase verbatim from the source.
+`ItemInferenceDateOperations` first verifies that it occurs in that source,
+then resolves supported expressions with a Gregorian calendar in the reference
+date's time zone. The model does not calculate calendar days. Missing,
+unsupported, invalid or month-only expressions keep the selected form date
+and display a review notice. The normalized `ItemFormInferenceResult` retains
+the existing canonical `yyyyMMdd` date contract for the form and Intent adapter.
+
+Supported expressions include year-first numeric and Japanese/Chinese dates,
+Japanese/Chinese month/day in the reference year, English/French/Spanish
+written-month dates, and exact relative-day words in the five app languages.
+Japanese trailing case particles are accepted. Relative days use Calendar
+arithmetic across month/year boundaries, leap days and DST. Other expressions,
+including ambiguous slash notation and relative weekdays, remain unresolved
+for review; this is not a general natural-language date parser.
+
+An unspecified amount is represented
 separately from an explicit zero in the generated result. By product policy,
 it becomes an editable draft with income and outgo set to zero and a visible
 review notice; the ordinary Create action remains available. Explicit zero
@@ -34,12 +49,11 @@ current draft, are cleared by manual edits to the corresponding fields, and
 do not add a persisted status or change the Item schema. Reopening the text
 editor retains the source for that form.
 
-These states describe the model's output, not independently verified source
-facts. Qualification found that a month without a day can still produce an
-invented exact day. Neither generated fields nor generated uncertainty flags
-guarantee that ambiguity is recognized. See the
-[qualification record](item-input-qualification.md) for the observed failure
-and the distinction between value validation and model-quality evidence.
+The resolver rejects unquoted, unsupported or incomplete expressions instead
+of trusting a generated exact day. It does not prove that the model selected
+the correct phrase when several dates occur. Other fields and uncertainty flags still need
+review. See the [qualification record](item-input-qualification.md) for the
+measured results and the distinction between value validation and model quality.
 
 Both adapters converge on `ItemFormInput` and the existing creation workflow.
 Typed amounts carry their formatting locale until they are reformatted for

@@ -11,6 +11,7 @@ private enum ItemInferenceProbe {
 
     private struct Output: Encodable {
         let date: String
+        let dateExpression: String
         let content: String
         let hasUnspecifiedAmount: Bool
         let income: String
@@ -64,18 +65,30 @@ private enum ItemInferenceProbe {
         let session = LanguageModelSession(model: model) {
             instructions
         }
-        let response = try await session.respond(generating: ItemFormInferenceResult.self) {
+        let response = try await session.respond(generating: ItemFormInferenceGeneratedFields.self) {
             prompt
         }
-        let result = response.content
+        return try output(generated: response.content, input: input, instructions: instructions, prompt: prompt)
+    }
+
+    private static func output(
+        generated: ItemFormInferenceGeneratedFields, input: Input, instructions: String, prompt: String
+    ) throws -> Output {
+        let result = try ItemFormInferenceResult(
+            generated: generated,
+            sourceText: input.text,
+            referenceDate: referenceDate(input.referenceDate),
+            locale: .init(identifier: input.locale)
+        )
         return .init(
             date: result.date,
+            dateExpression: generated.dateExpression,
             content: result.content,
             hasUnspecifiedAmount: result.hasUnspecifiedAmount,
             income: result.income.description,
             outgo: result.outgo.description,
             category: result.category,
-            generatedJSON: result.generatedContent.jsonString,
+            generatedJSON: generated.generatedContent.jsonString,
             instructions: instructions,
             prompt: prompt
         )

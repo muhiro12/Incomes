@@ -40,12 +40,12 @@ enum ItemInferenceService {
                 currentDate: currentDate,
                 locale: locale
             )
-            let response = try await session.respond(
-                generating: ItemFormInferenceResult.self
-            ) {
+            let response = try await session.respond(generating: ItemFormInferenceGeneratedFields.self) {
                 prompt
             }
-            let result = try validated(response.content)
+            let result = try validated(.init(
+                generated: response.content, sourceText: text, referenceDate: currentDate, locale: locale
+            ))
             logger.notice(
                 "inference.completed",
                 metadata: metadata
