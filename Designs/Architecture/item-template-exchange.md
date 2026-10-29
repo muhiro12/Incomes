@@ -13,6 +13,40 @@ workflow. Template reading is available for new Items only. Exporting a saved
 Item creates text that can later prefill another new Item; it cannot identify,
 update, or merge the original record.
 
+## Inference and shared form boundaries
+
+Foundation Models produces a typed `@Generable` result, rather than generating
+Markdown for the template reader. Structured generation constrains the response
+shape; it does not establish that extracted facts are correct. Before applying
+a suggestion, the adapter rejects invalid calendar dates, empty descriptions,
+negative or inexact amounts, and simultaneous positive income and outgo.
+Unsupported output leaves the source text available for correction or manual
+entry. Cancellation and source/draft changes prevent an older response from
+replacing the current form.
+
+An empty generated date keeps the selected form date and displays a review
+notice. An unspecified amount is represented
+separately from an explicit zero in the generated result. By product policy,
+it becomes an editable draft with income and outgo set to zero and a visible
+review notice; the ordinary Create action remains available. Explicit zero
+does not produce the unspecified-amount notice. These notices describe the
+current draft, are cleared by manual edits to the corresponding fields, and
+do not add a persisted status or change the Item schema. Reopening the text
+editor retains the source for that form.
+
+These states describe the model's output, not independently verified source
+facts. Qualification found that a month without a day can still produce an
+invented exact day. Neither generated fields nor generated uncertainty flags
+guarantee that ambiguity is recognized. See the
+[qualification record](item-input-qualification.md) for the observed failure
+and the distinction between value validation and model-quality evidence.
+
+Both adapters converge on `ItemFormInput` and the existing creation workflow.
+Typed amounts carry their formatting locale until they are reformatted for
+the editor, preserving the numeric value across decimal/grouping conventions.
+The template's strict external grammar and the model's typed internal response
+serve different contracts; neither needs to be routed through the other.
+
 ## Version 1 contract
 
 The identifier is `# Incomes Item Template`, followed immediately by
@@ -59,8 +93,8 @@ There is no inline Markdown unescaping, HTML rendering, or resource loading.
 One optional outer code fence is accepted, labeled `markdown` or unlabeled.
 Surrounding prose, other fences, unknown headings, additional bullets, duplicate
 sections, and unsupported versions are errors. CRLF document line endings are
-accepted and normalized to LF. Saved text containing lone carriage returns is
-outside the export subset. Limits are 16,384 UTF-8 bytes and 512 LF-delimited
+accepted and normalized to LF. Lone carriage returns are rejected on both read
+and export. Limits are 16,384 UTF-8 bytes and 512 LF-delimited
 lines, including the wrapper; export enforces the same limits.
 
 ## Field meaning
@@ -120,4 +154,5 @@ dependency. Rendering or accepting arbitrary Markdown is not part of this
 contract. Its behavior is covered by shared-library tests.
 
 Related: [#414](https://github.com/muhiro12/Incomes/issues/414),
+[input qualification](item-input-qualification.md),
 [backup and restore](data-import-export.md).

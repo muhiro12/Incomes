@@ -17,7 +17,8 @@ enum DecimalTextParser {
             return [fixedGroupingLocale]
         }
 
-        return [fixedGroupingLocale, currentLocale]
+        // A separator in native user input belongs to the current locale first.
+        return [currentLocale, fixedGroupingLocale]
     }
 
     static func parse(_ text: String) -> Decimal? {

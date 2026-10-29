@@ -10,13 +10,12 @@ import MHPlatform
 
 @available(iOS 26.0, *)
 enum ItemFormInferenceApplier {
-    static func apply(
+    static func makeUpdate(
         text: String,
-        currentInput: ItemFormInput,
         locale: Locale,
         currentDate: Date,
         logger: MHLogger
-    ) async throws -> ItemFormInput {
+    ) async throws -> ItemFormInferenceUpdate {
         let result = try await ItemInferenceService.inferForm(
             text: text,
             locale: locale,
@@ -26,21 +25,17 @@ enum ItemFormInferenceApplier {
         let update = ItemFormInferenceUpdate(
             dateString: result.date,
             content: result.content,
-            income: result.income,
-            outgo: result.outgo,
+            income: result.hasUnspecifiedAmount ? nil : result.income,
+            outgo: result.hasUnspecifiedAmount ? nil : result.outgo,
             category: result.category
         )
-        let updatedInput = update.applied(to: currentInput)
         logger.notice(
-            "inference.apply_completed",
+            "inference.suggestions_prepared",
             metadata: IncomesLogging.metadata(
-                ("date_present", updatedInput.date == currentInput.date ? "unchanged" : "updated"),
-                ("content_present", IncomesLogging.presence(updatedInput.content)),
-                ("income_present", IncomesLogging.presence(updatedInput.incomeText)),
-                ("outgo_present", IncomesLogging.presence(updatedInput.outgoText)),
-                ("category_present", IncomesLogging.presence(updatedInput.category))
+                ("date_unspecified", IncomesLogging.bool(update.hasUnspecifiedDate)),
+                ("amount_unspecified", IncomesLogging.bool(update.hasUnspecifiedAmount))
             )
         )
-        return updatedInput
+        return update
     }
 }

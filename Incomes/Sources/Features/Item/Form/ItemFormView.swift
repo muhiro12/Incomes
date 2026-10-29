@@ -81,6 +81,7 @@ extension ItemFormView {
 
         Form {
             inputAssistanceSection
+            inferenceReviewSection
             ItemFormInformationSection(
                 model: model,
                 income: incomeBinding,
@@ -218,6 +219,19 @@ extension ItemFormView {
 }
 
 extension ItemFormView {
+    @ViewBuilder var inferenceReviewSection: some View {
+        if model.needsInferredDateReview || model.needsInferredAmountReview {
+            Section("Review Suggested Values") {
+                if model.needsInferredDateReview {
+                    Text("No exact date was read. The selected form date is kept for you to review.")
+                }
+                if model.needsInferredAmountReview {
+                    Text("The amount is unspecified. This draft uses 0 for income and outgo. Review before saving.")
+                }
+            }
+        }
+    }
+
     @ViewBuilder var inputAssistanceSection: some View {
         if supportsInputAssistance {
             Section {

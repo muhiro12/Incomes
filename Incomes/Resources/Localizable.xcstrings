@@ -20103,6 +20103,146 @@
     },
     "~" : {
       "shouldTranslate" : false
+    },
+    "Review Suggested Values" : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Review Suggested Values"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "読み取り結果の確認"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revisar valores sugeridos"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifier les valeurs proposées"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "检查建议值"
+          }
+        }
+      }
+    },
+    "We will extract date, amounts, content, and category from this text." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "We will extract date, amounts, content, and category from this text."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "文章から日付、金額、内容、カテゴリを読み取ります。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Extraeremos la fecha, los importes, el contenido y la categoría de este texto."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nous extrairons la date, les montants, le contenu et la catégorie de ce texte."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "我们将从此文本提取日期、金额、内容和类别。"
+          }
+        }
+      }
+    },
+    "No exact date was read. The selected form date is kept for you to review." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No exact date was read. The selected form date is kept for you to review."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "正確な日付を読み取れませんでした。フォームで選択中の日付を保持しています。保存前に確認してください。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No se pudo leer una fecha exacta. Se conserva la fecha del formulario para que la revises."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Aucune date précise n’a été lue. La date sélectionnée dans le formulaire est conservée pour vérification."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "未能读取确切日期。已保留表单中所选的日期，请在保存前检查。"
+          }
+        }
+      }
+    },
+    "The amount is unspecified. This draft uses 0 for income and outgo. Review before saving." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The amount is unspecified. This draft uses 0 for income and outgo. Review before saving."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "金額は未定です。この下書きでは収入・支出を0にしています。保存前に確認してください。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "El importe está sin determinar. Este borrador usa 0 en ingresos y gastos. Revísalo antes de guardar."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Le montant n’est pas précisé. Ce brouillon utilise 0 pour les revenus et les dépenses. Vérifiez avant d’enregistrer."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "金额未定。此草稿的收入和支出均设为 0。请在保存前检查。"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

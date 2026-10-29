@@ -25,6 +25,9 @@ enum ItemTemplateCodec {
         try validateSize(text)
         var lines = text.replacingOccurrences(of: "\r\n", with: "\n")
             .components(separatedBy: "\n")
+        guard !lines.contains(where: { $0.contains("\r") }) else {
+            throw ItemTemplateError.invalidStructure
+        }
         while lines.first?.isEmpty == true {
             lines.removeFirst()
         }

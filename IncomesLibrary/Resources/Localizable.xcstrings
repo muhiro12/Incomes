@@ -2245,6 +2245,41 @@
           }
         }
       }
+    },
+    "The suggested date or amounts are invalid. Check the text or enter the item manually." : {
+      "extractionState" : "manual",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The suggested date or amounts are invalid. Check the text or enter the item manually."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "読み取った日付または金額が無効です。文章を確認するか、項目を手入力してください。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La fecha o los importes sugeridos no son válidos. Revisa el texto o introduce el registro manualmente."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La date ou les montants proposés sont invalides. Vérifiez le texte ou saisissez l’entrée manuellement."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "建议的日期或金额无效。请检查文本或手动输入条目。"
+          }
+        }
+      }
     }
   },
   "version" : "1.1"

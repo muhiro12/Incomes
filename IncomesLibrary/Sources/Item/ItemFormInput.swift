@@ -35,6 +35,7 @@ public struct ItemFormInput: Equatable {
     public let category: String
     /// Priority value entered as text.
     public let priorityText: String
+    private let amountLocale: Locale?
 
     /// True when all form values pass `validate()`.
     public var isValid: Bool {
@@ -43,12 +44,12 @@ public struct ItemFormInput: Equatable {
 
     /// Income value parsed from `incomeText`.
     public var income: Decimal {
-        incomeText.decimalValue
+        parsedAmount(incomeText) ?? .zero
     }
 
     /// Outgo value parsed from `outgoText`.
     public var outgo: Decimal {
-        outgoText.decimalValue
+        parsedAmount(outgoText) ?? .zero
     }
 
     /// Priority value parsed from `priorityText`.
@@ -64,6 +65,8 @@ public struct ItemFormInput: Equatable {
     }
 
     /// Creates an item form input snapshot.
+    /// An explicit locale fixes the interpretation of localized amount strings.
+    /// Omission uses the manual editor's current-locale and English fallback rules.
     public init(
         date: Date,
         content: String,
@@ -71,7 +74,8 @@ public struct ItemFormInput: Equatable {
         outgoText: String,
         category: String,
         priorityText: String,
-        ledgerIdentifier: LedgerIdentifier = .default
+        ledgerIdentifier: LedgerIdentifier = .default,
+        locale: Locale? = nil
     ) {
         self.date = date
         self.content = content
@@ -80,6 +84,7 @@ public struct ItemFormInput: Equatable {
         self.category = category
         self.priorityText = priorityText
         self.ledgerIdentifier = ledgerIdentifier
+        amountLocale = locale
     }
 
     /// Creates an item form input snapshot from typed amount and priority values.
@@ -100,7 +105,8 @@ public struct ItemFormInput: Equatable {
             outgoText: outgo.groupedDecimalText(locale: locale),
             category: category,
             priorityText: "\(priority)",
-            ledgerIdentifier: ledgerIdentifier
+            ledgerIdentifier: ledgerIdentifier,
+            locale: locale
         )
     }
 
@@ -138,7 +144,8 @@ public struct ItemFormInput: Equatable {
                 forStoredName: item.category?.name
             ),
             priorityText: "\(item.priority)",
-            ledgerIdentifier: item.ledgerIdentifier
+            ledgerIdentifier: item.ledgerIdentifier,
+            locale: locale
         )
     }
 
@@ -147,7 +154,7 @@ public struct ItemFormInput: Equatable {
         guard !content.isEmpty else {
             throw ValidationError.contentIsEmpty
         }
-        switch incomeText.decimalRejection {
+        switch amountRejection(incomeText) {
         case .none:
             break
         case .notANumber:
@@ -155,7 +162,7 @@ public struct ItemFormInput: Equatable {
         case .unsupportedAmount:
             throw ValidationError.unsupportedIncome
         }
-        switch outgoText.decimalRejection {
+        switch amountRejection(outgoText) {
         case .none:
             break
         case .notANumber:
@@ -194,9 +201,48 @@ public struct ItemFormInput: Equatable {
             return self
         }
     }
+
+    /// Reformats valid amounts for another editor locale without reinterpreting separators.
+    /// Invalid source text remains visible so the editor can surface its validation error.
+    public func localizedAmounts(locale: Locale = .current) -> Self {
+        .init(
+            date: date,
+            content: content,
+            incomeText: localizedAmountText(incomeText, locale: locale),
+            outgoText: localizedAmountText(outgoText, locale: locale),
+            category: category,
+            priorityText: priorityText,
+            ledgerIdentifier: ledgerIdentifier,
+            locale: locale
+        )
+    }
 }
 
 private extension ItemFormInput {
+    func parsedAmount(_ text: String) -> Decimal? {
+        if let amountLocale {
+            return DecimalTextParser.parse(text, locale: amountLocale)
+        }
+        return DecimalTextParser.parse(text)
+    }
+
+    func amountRejection(_ text: String) -> DecimalTextRejection? {
+        guard !text.isEmpty else {
+            return nil
+        }
+        if let amountLocale {
+            return DecimalTextParser.rejection(for: text, locale: amountLocale)
+        }
+        return text.decimalRejection
+    }
+
+    func localizedAmountText(_ text: String, locale: Locale) -> String {
+        guard let amount = parsedAmount(text) else {
+            return text
+        }
+        return amount.groupedDecimalText(locale: locale)
+    }
+
     func replacing(date: Date) -> ItemFormInput {
         .init(
             date: date,
@@ -205,7 +251,8 @@ private extension ItemFormInput {
             outgoText: outgoText,
             category: category,
             priorityText: priorityText,
-            ledgerIdentifier: ledgerIdentifier
+            ledgerIdentifier: ledgerIdentifier,
+            locale: amountLocale
         )
     }
 
@@ -217,7 +264,8 @@ private extension ItemFormInput {
             outgoText: outgoText,
             category: category,
             priorityText: priorityText,
-            ledgerIdentifier: ledgerIdentifier
+            ledgerIdentifier: ledgerIdentifier,
+            locale: amountLocale
         )
     }
 
@@ -229,7 +277,8 @@ private extension ItemFormInput {
             outgoText: outgoText,
             category: category,
             priorityText: priorityText,
-            ledgerIdentifier: ledgerIdentifier
+            ledgerIdentifier: ledgerIdentifier,
+            locale: amountLocale
         )
     }
 }
@@ -244,7 +293,8 @@ public extension ItemFormInput {
             outgoText: outgoText,
             category: category,
             priorityText: priorityText,
-            ledgerIdentifier: identifier
+            ledgerIdentifier: identifier,
+            locale: amountLocale
         )
     }
 }

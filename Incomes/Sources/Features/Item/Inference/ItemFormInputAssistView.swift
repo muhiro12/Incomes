@@ -96,14 +96,13 @@ struct ItemFormInputAssistView: View {
                 return
             }
             hasLoadedInitialText = true
-            if let initialText {
-                scanner.recognizedText = initialText
-            }
+            scanner.recognizedText = initialText ?? model.inferenceText
         }
         .onDisappear {
             inferenceState.cancel()
         }
         .onChange(of: scanner.recognizedText) {
+            model.inferenceText = scanner.recognizedText
             inferenceState.cancel()
         }
         .onChange(of: model.draftChangeKey) {
@@ -205,9 +204,8 @@ private extension ItemFormInputAssistView {
             return
         }
         do {
-            let updatedInput = try await ItemFormInferenceApplier.apply(
+            let update = try await ItemFormInferenceApplier.makeUpdate(
                 text: request.text,
-                currentInput: request.input,
                 locale: locale,
                 currentDate: Date(),
                 logger: inferenceLogger
@@ -216,7 +214,7 @@ private extension ItemFormInputAssistView {
             guard completeInference(request) else {
                 return
             }
-            model.apply(updatedInput)
+            model.applyInference(update)
             if let onApply {
                 onApply()
             } else {

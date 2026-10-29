@@ -13,6 +13,9 @@ final class ItemFormModel {
     var repeatMonthSelections: Set<RepeatMonthSelection> = []
     var isRepeatEnabled = false
     var templateText = ""
+    var inferenceText = ""
+    private(set) var needsInferredDateReview = false
+    private(set) var needsInferredAmountReview = false
 
     private let hasDraft: Bool
     private var hasAppliedInitialContext = false
@@ -112,13 +115,16 @@ extension ItemFormModel {
     }
 
     func apply(_ formInput: ItemFormInput) {
-        ledgerIdentifier = formInput.ledgerIdentifier
-        date = formInput.date
-        content = formInput.content
-        updateIncomeText(formInput.incomeText)
-        updateOutgoText(formInput.outgoText)
-        category = formInput.category
-        priority = formInput.priorityText
+        let localizedInput = formInput.localizedAmounts()
+        needsInferredDateReview = false
+        needsInferredAmountReview = false
+        ledgerIdentifier = localizedInput.ledgerIdentifier
+        date = localizedInput.date
+        content = localizedInput.content
+        updateIncomeText(localizedInput.incomeText)
+        updateOutgoText(localizedInput.outgoText)
+        category = localizedInput.category
+        priority = localizedInput.priorityText
         syncRepeatMonthSelectionsWithBaseDate()
     }
 
@@ -128,15 +134,24 @@ extension ItemFormModel {
         repeatMonthSelections = [baseSelection]
     }
 
+    func applyInference(_ update: ItemFormInferenceUpdate) {
+        apply(update.applied(to: formInputData))
+        needsInferredDateReview = update.hasUnspecifiedDate
+        needsInferredAmountReview = update.hasUnspecifiedAmount
+    }
+
     func updateIncomeText(_ text: String) {
+        needsInferredAmountReview = false
         income = text.groupedDecimalInputText()
     }
 
     func updateOutgoText(_ text: String) {
+        needsInferredAmountReview = false
         outgo = text.groupedDecimalInputText()
     }
 
     func handleDateChange() {
+        needsInferredDateReview = false
         syncRepeatMonthSelectionsWithBaseDate()
     }
 
