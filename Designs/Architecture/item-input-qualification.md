@@ -1,13 +1,15 @@
-# Item input logic qualification
+# Item input qualification
 
 ## Scope
 
-This record covers the logic of the two paths in
+This record covers deterministic logic and UI-free real-model evaluation of
+the two paths in
 [Item template exchange](item-template-exchange.md), verified on 2026-10-29.
 Inference tests supply fixed typed results; they do not invoke a model.
 Template tests supply literal documents. Both exercise the shared Item value
-and persistence contracts. UI tests and live-generation quality are separate
-from this qualification.
+and persistence contracts. A separate opt-in probe calls Foundation Models
+with the production generation type and prompt code. Neither requires app UI
+automation; their evidence is reported separately below.
 
 ## Behavioral coverage
 
@@ -26,7 +28,7 @@ locale, and a lone carriage return accepted on import but refused on export.
 Unspecified-amount metadata also implements the selected zero-draft policy
 without changing the persisted Item schema.
 
-## Results
+## Deterministic test results
 
 - Full IncomesLibrary test plan: 1,762 passed, no failures or skips.
 - Final focused inference/qualification run: 21 passed, no failures or skips.
@@ -39,6 +41,39 @@ without changing the persisted Item schema.
 The shared tests run with the Apple SDK and isolated temporary stores on an
 iOS Simulator. They exercise logic, not simulated taps or the app's screens.
 The qualification fixtures contain synthetic data only.
+
+## UI-free real-model results
+
+Run the [Item inference evaluator](../../Tools/Experiments/ItemInference/README.md)
+to compile the production generation type and prompt helpers directly and
+call `SystemLanguageModel.default` through `LanguageModelSession`. It uses
+framework-default generation options and compares actual outputs afterwards;
+the expected values are not supplied to the model. The process runs on macOS,
+without app screens, Simulator taps, app records or settings changes. It does
+not execute the iOS service's error wrapper or persistence path.
+
+Final run on macOS 27.2 (26B123), arm64, Swift 6.4.2, SDK 27.2, with reference
+date October 29, 2026, Asia/Tokyo: **16 requests completed, 10 matched, 6 semantic
+mismatches, no request errors or timeouts**. Each case ran twice in a fresh
+process/session. Elapsed times including process startup were 1.227–2.221 s;
+these are Mac measurements, not iPhone performance or an accuracy estimate.
+
+| Case | Matches | Observed issue |
+| --- | ---: | --- |
+| Explicit expense | 2/2 | None in the scored fields |
+| Explicit income | 2/2 | None in the scored fields |
+| Exact day, unknown amount | 2/2 | Zero amounts with unspecified-amount state |
+| Explicit zero | 2/2 | Correctly distinct from unknown amount |
+| Ambiguous month | 0/2 | Invented November 1 or October 29 instead of an empty date |
+| Missing date | 0/2 | Supplied October 29 instead of an empty date |
+| Yesterday | 0/2 | Returned October 29 instead of October 28 |
+| English fractional expense | 2/2 | Decimal amount preserved |
+
+Scored fields are exact day, income, outgo and unknown-amount state; content
+must also be nonempty. Description wording and category meaning are recorded
+without semantic scoring. The evaluator returns a failing exit status for
+these mismatches. Reports retain raw fields, generated JSON, actual rendered
+prompts, source hashes and host configuration outside the repository.
 
 ## Evidence boundary
 
@@ -53,4 +88,6 @@ Generated unknown-state metadata describes what the model reported. It does
 not independently verify that the source omitted a value. Proposals remain
 editable and require the ordinary explicit Create action. These unit-test
 results do not establish general extraction accuracy, UI quality, physical
-phone performance, or release qualification.
+phone performance, or release qualification. The real-model results above
+demonstrate that date extraction still has concrete quality gaps despite the
+typed-value tests passing.

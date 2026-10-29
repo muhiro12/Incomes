@@ -1,0 +1,50 @@
+[
+  {
+    "id": "expense",
+    "text": "2026年10月28日に昼食代として1,200円を支払いました。",
+    "locale": "ja_JP",
+    "expected": {"date": "20261028", "income": "0", "outgo": "1200", "hasUnspecifiedAmount": false}
+  },
+  {
+    "id": "income",
+    "text": "2026年10月28日に給与250,000円を受け取りました。",
+    "locale": "ja_JP",
+    "expected": {"date": "20261028", "income": "250000", "outgo": "0", "hasUnspecifiedAmount": false}
+  },
+  {
+    "id": "unknown_amount",
+    "text": "2026年11月1日の家賃は金額未定です。",
+    "locale": "ja_JP",
+    "expected": {"date": "20261101", "income": "0", "outgo": "0", "hasUnspecifiedAmount": true}
+  },
+  {
+    "id": "explicit_zero",
+    "text": "2026年10月28日の無料イベント、料金は0円でした。",
+    "locale": "ja_JP",
+    "expected": {"date": "20261028", "income": "0", "outgo": "0", "hasUnspecifiedAmount": false}
+  },
+  {
+    "id": "ambiguous_month",
+    "text": "来月の家賃、金額未定です。",
+    "locale": "ja_JP",
+    "expected": {"date": "", "income": "0", "outgo": "0", "hasUnspecifiedAmount": true}
+  },
+  {
+    "id": "missing_date",
+    "text": "昼食代として1,200円を支払いました。",
+    "locale": "ja_JP",
+    "expected": {"date": "", "income": "0", "outgo": "1200", "hasUnspecifiedAmount": false}
+  },
+  {
+    "id": "relative_day",
+    "text": "昨日の昼食代として1,200円を支払いました。",
+    "locale": "ja_JP",
+    "expected": {"date": "20261028", "income": "0", "outgo": "1200", "hasUnspecifiedAmount": false}
+  },
+  {
+    "id": "fractional_expense",
+    "text": "On October 28, 2026, I paid 12.50 for lunch.",
+    "locale": "en_US",
+    "expected": {"date": "20261028", "income": "0", "outgo": "12.50", "hasUnspecifiedAmount": false}
+  }
+]
