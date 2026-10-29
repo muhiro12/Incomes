@@ -8,8 +8,9 @@ struct ItemTemplateInputView: View {
     @Environment(\.modelContext)
     private var context
 
-    @AppStorage(\.currencyCode, default: "")
-    private var currencyCode
+    // The descriptor shorthand fixes .standard and bypasses scene-injected defaults.
+    @AppStorage(MHPreferenceDescriptors().currencyCode.storageKey)
+    private var currencyCode = ""
 
     @State private var review: ItemTemplateReview?
     @State private var errorMessage: String?
@@ -192,7 +193,7 @@ private extension ItemTemplateInputView {
         review.isCurrent(
             input: model.formInputData,
             sourceText: model.templateText,
-            currencyCode: IncomesCurrencyPreference.preferredCurrencyCode()
+            currencyCode: currencyCode
         )
     }
 

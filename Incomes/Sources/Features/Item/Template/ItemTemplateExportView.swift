@@ -1,3 +1,4 @@
+import MHPlatform
 import SwiftUI
 
 struct ItemTemplateExportView: View {
@@ -5,6 +6,10 @@ struct ItemTemplateExportView: View {
     private var dismiss
     @Environment(Item.self)
     private var item
+
+    // The descriptor shorthand fixes .standard and bypasses scene-injected defaults.
+    @AppStorage(MHPreferenceDescriptors().currencyCode.storageKey)
+    private var currencyCode = ""
 
     @State private var text = ""
     @State private var errorMessage: String?
@@ -43,13 +48,15 @@ struct ItemTemplateExportView: View {
                 }
             }
         }
-        .task {
+        .task(id: currencyCode) {
             do {
                 text = try ItemTemplateOperations.text(
                     for: item,
-                    currencyCode: IncomesCurrencyPreference.preferredCurrencyCode()
+                    currencyCode: currencyCode
                 )
+                errorMessage = nil
             } catch {
+                text = ""
                 errorMessage = ErrorMessageOperations.message(from: error)
             }
         }
