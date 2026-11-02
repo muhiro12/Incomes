@@ -11,6 +11,23 @@ struct MainNavigationRestorationTests {
     }
 
     @Test
+    func selecting_another_year_clears_its_child_but_reselecting_the_year_preserves_it() throws {
+        let firstYear = try Tag.create(context: context, name: "2002", type: .year)
+        let nextYear = try Tag.create(context: context, name: "2003", type: .year)
+        let month = try Tag.create(context: context, name: "200204", type: .yearMonth)
+        var selection = MainNavigationSelection(yearTagID: firstYear.persistentModelID, selectedTag: month)
+
+        let reselected = selection.selectYear(firstYear.persistentModelID)
+        #expect(!reselected)
+        #expect(selection.selectedTag?.persistentModelID == month.persistentModelID)
+
+        let changed = selection.selectYear(nextYear.persistentModelID)
+        #expect(changed)
+        #expect(selection.yearTagID == nextYear.persistentModelID)
+        #expect(selection.selectedTag == nil)
+    }
+
+    @Test
     func restorable_route_prefers_the_selected_month() throws {
         let yearTag = try Tag.create(context: context, name: "2002", type: .year)
         let monthTag = try Tag.create(context: context, name: "200204", type: .yearMonth)
