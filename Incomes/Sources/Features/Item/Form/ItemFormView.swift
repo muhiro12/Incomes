@@ -99,13 +99,13 @@ extension ItemFormView {
                     Label("Preview Balance", systemImage: "chart.line.uptrend.xyaxis")
                 }
                 .disabled(!model.isValid)
-                if let review = presentation.balanceProjectionReview {
+                if let review = presentation.projection.review {
                     ItemFormReviewedProjectionSummary(review: review)
                 }
             } footer: {
-                if presentation.requiresBalanceProjectionReview {
+                if presentation.projection.requiresNewReview {
                     Text("Preview the balance again before saving.")
-                } else if presentation.balanceProjectionReview != nil {
+                } else if presentation.projection.review != nil {
                     Text("Saving applies this reviewed change. Editing this entry needs a new preview.")
                 }
             }
@@ -207,7 +207,7 @@ extension ItemFormView {
                         mode: mode,
                         input: model.formInputData,
                         repeatMonthSelections: model.effectiveRepeatMonthSelections,
-                        reviewedScope: presentation.reviewedScope,
+                        reviewedScope: presentation.projection.reviewedScope,
                         onReview: applyBalanceProjectionReview
                     )
                 }
