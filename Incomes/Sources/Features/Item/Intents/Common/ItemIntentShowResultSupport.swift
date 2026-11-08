@@ -11,7 +11,8 @@ enum ItemIntentShowResultSupport {
     static func singleItem(
         _ item: Item?,
         defaultDate: Date,
-        ledgerIdentifier: LedgerIdentifier = .default
+        ledgerIdentifier: LedgerIdentifier = .default,
+        opensItemDetail: Bool = false
     ) -> some ProvidesDialog & ShowsSnippetView {
         let defaultOpenIntent = IncomesIntentRouteOpener.monthIntent(
             for: defaultDate, ledgerIdentifier: ledgerIdentifier
@@ -22,10 +23,17 @@ enum ItemIntentShowResultSupport {
                 dialog: notFoundDialog
             )
         }
-        return .result(
-            opensIntent: IncomesIntentRouteOpener.monthIntent(
+        let openIntent: OpenIncomesRouteIntent
+        if opensItemDetail,
+           let url = MainNavigationOperations.preferredURL(for: item) {
+            openIntent = .init(url: url)
+        } else {
+            openIntent = IncomesIntentRouteOpener.monthIntent(
                 for: item.localDate, ledgerIdentifier: item.ledgerIdentifier
-            ),
+            )
+        }
+        return .result(
+            opensIntent: openIntent,
             dialog: itemContentDialog(for: item)
         ) {
             IntentItemSection()
