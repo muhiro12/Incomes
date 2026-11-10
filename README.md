@@ -1,5 +1,14 @@
 # Incomes
 
+## Branches and release review
+
+Use `develop` for daily development. Keep agent review and the documented
+verification checks in the daily workflow. `main` tracks the released baseline.
+Before shipping, review `main...develop` and record the exact candidate commit.
+After publication, merge that released commit into `main`; do not include later
+work added to `develop`. Preserve commit ancestry so the next release comparison
+starts from the previous released candidate.
+
 ## Overview
 
 Incomes is a budget planner for looking ahead at future balances and deciding
@@ -204,8 +213,8 @@ Models.
 
 Follow these steps to run a local build:
 
-1. Clone the repository, check out `main` for Incomes 6.x, and open the project
-   directory. The `5.12` tag preserves the released 5.x baseline.
+1. Clone the repository, check out `develop`, and open the project directory.
+   Release tags preserve the corresponding published baselines.
 2. Update bundle identifiers and the app group constant to match your
    provisioning profile if you are not using the production identifiers.
 3. If you are shipping a fork with your own identifiers, update
@@ -388,11 +397,12 @@ TestFlight feedback inspection, and reviewed version, metadata, screenshot,
 build-attachment, and submission operations.
 
 Xcode Cloud continues to own formal builds, tests, archives, and binary upload.
-The workflow targets `main` with **Latest Beta or Release**. Check the actual
-Xcode version in each candidate's build record and match it for local release
-verification. Apogee creates App Store versions and changes publication policy
-only through explicit, reviewed operations, and never builds or uploads
-binaries.
+The existing workflow was configured for `main` with **Latest Beta or Release**.
+Before the next candidate build, configure Xcode Cloud to build the reviewed
+commit from `develop` or a fixed candidate branch. Confirm the source commit and
+actual Xcode version in the build record and match that toolchain locally.
+Apogee creates App Store versions and changes publication policy only through
+explicit, reviewed operations, and never builds or uploads binaries.
 
 ## Useful links
 
