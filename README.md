@@ -73,7 +73,7 @@ Models.
 
 ### Debug
 
-- Open Debug from Settings to inspect local logs and saved data without
+- Open Settings > Advanced > Debug to inspect local logs and saved data without
   changing financial records or Premium access.
 - Open the log console from Debug on the startup-error screen when the database
   cannot be opened. This entry does not require a model container.

@@ -69,6 +69,8 @@ private extension SettingsNavigationView {
         switch destination {
         case .root:
             EmptyView()
+        case .advanced:
+            SettingsAdvancedListView(navigateToRoute: navigateToRoute)
         case .subscription:
             StoreListView()
         case .license:
@@ -125,14 +127,16 @@ private extension SettingsNavigationView {
             []
         case .subscription,
              .license,
-             .debug:
+             .advanced:
             [destination]
+        case .debug:
+            [.advanced, .debug]
         case .debugAllItems,
              .debugDiagnostics,
              .debugNaturalLanguageSearch,
              .debugAllTags,
              .debugTag:
-            [.debug, destination]
+            [.advanced, .debug, destination]
         }
     }
 }

@@ -1,5 +1,6 @@
 enum SettingsNavigationDestination: Hashable {
     case root
+    case advanced
     case subscription
     case license
     case debug

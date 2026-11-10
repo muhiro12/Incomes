@@ -265,7 +265,9 @@ living in the app targets.
 
 ### 14. Debug and development tools
 
-- Open Debug from Settings in both DEBUG and Release builds.
+- Open Debug through Settings > Advanced in both DEBUG and Release builds.
+  Advanced also contains Offline Editing and Maintenance, keeping these tools
+  one level below the main settings list.
 - Open the log console through Debug on the startup-error screen without a
   model container or an automatic startup retry.
 - Inspect diagnostic logs, change the capture level, and explicitly copy/export
@@ -275,8 +277,8 @@ living in the app targets.
   survives subsequent launches and does not grant Premium access.
 - In DEBUG only, seed sample profiles, test TipKit state, inspect ad/subscription
   placements, and experiment with natural-language search.
-- Open Debug directly from Settings without an activation command. Existing
-  Debug URLs open the same screen in both configurations.
+- Open Debug without an activation command. Existing Debug URLs open the same
+  screen in both configurations, with Advanced in the back-navigation path.
 - Remove previously added samples through the normal Settings maintenance flow.
 
 See [diagnostic boundaries](../Architecture/sample-data-profiles.md#diagnostic-boundaries)

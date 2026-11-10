@@ -128,10 +128,12 @@ has the same action in DEBUG builds.
 
 ## Diagnostic Boundaries
 
-Settings exposes Debug in both DEBUG and Release. The existing Debug route
-opens this same visible screen. The iOS console can inspect current and previous
-logs, adjust capture level, and copy or export logs explicitly. Clearing logs
-requires confirmation and does not clear financial records. Release starts with
+Settings exposes an Advanced destination containing Offline Editing, Maintenance,
+and Debug in both DEBUG and Release. The existing Debug route opens this same
+screen with Advanced in its back-navigation path. The iOS console can inspect
+current and previous logs, adjust capture level, and copy or export logs
+explicitly. Clearing logs requires confirmation and does not clear financial
+records. Release starts with
 warning/error capture; changing diagnostic visibility does not change capture
 level. Users should inspect logs before sharing them.
 

@@ -3,8 +3,6 @@ import SwiftData
 import SwiftUI
 
 struct SettingsListView {
-    @Environment(\.modelContext)
-    private var context
     @Environment(NotificationService.self)
     private var notificationService
     @Environment(IncomesTipController.self)
@@ -57,7 +55,11 @@ extension SettingsListView: View {
                 selectedLedgerIdentifier: selectedLedgerIdentifier,
                 duplicateYearItems: duplicateYearItems
             )
-            advancedSection(model: model)
+            Section {
+                NavigationLink(value: SettingsNavigationDestination.advanced) {
+                    Label("Advanced", systemImage: "gearshape.2")
+                }
+            }
             aboutSection
             ShortcutsLinkSection()
         }
@@ -86,9 +88,6 @@ extension SettingsListView: View {
             model.apply(notificationSettings: notificationSettings)
             await notificationService.refreshAuthorizationStatus()
         }
-        .task {
-            await loadDeferredSettingsState()
-        }
         .onChange(of: scenePhase) {
             guard scenePhase == .active else {
                 return
@@ -98,22 +97,6 @@ extension SettingsListView: View {
                 await notificationService.refreshAuthorizationStatus()
             }
         }
-    }
-}
-
-private extension SettingsListView {
-    var canDeleteAllLedgers: Bool {
-        guard let ledgers = try? LedgerOperations.ledgers(context: context) else {
-            return false
-        }
-        return ledgers.allSatisfy { LedgerAccessOperations.canEdit($0.id, isPremium: isSubscribeOn) }
-    }
-
-    @MainActor
-    func loadDeferredSettingsState() async {
-        await Task.yield()
-
-        model.loadStatus(context: context)
     }
 }
 
@@ -193,37 +176,6 @@ private extension SettingsListView {
                 }
             }
             notificationLink(model: model)
-        }
-    }
-
-    func advancedSection(model: SettingsScreenModel) -> some View {
-        Section("Advanced") {
-            NavigationLink {
-                RemoteUpdateEditingSettingsView()
-            } label: {
-                Label("Offline Editing", systemImage: "wifi.slash")
-            }
-            NavigationLink {
-                SettingsMaintenanceList(
-                    model: model,
-                    canDeleteAll: canDeleteAllLedgers,
-                    openDuplicateTags: {
-                        navigateToRoute(.duplicateTags)
-                    },
-                    openOrphanTags: {
-                        navigateToRoute(.orphanTags)
-                    }
-                )
-            } label: {
-                Label("Maintenance", systemImage: "wrench.and.screwdriver")
-            }
-            SettingsNavigationRowButton(
-                title: "Debug",
-                systemImage: "ladybug",
-                accessibilityHint: "Opens logs and read-only data inspection."
-            ) {
-                navigateToRoute(.settingsDebug)
-            }
         }
     }
 
