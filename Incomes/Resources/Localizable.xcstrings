@@ -5071,6 +5071,42 @@
         }
       }
     },
+    "Diagnostics Console" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Log Console"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Consola de registros"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Console des journaux"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ログコンソール"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "日志控制台"
+          }
+        }
+      },
+      "extractionState" : "manual",
+      "comment" : "MHLogConsoleView supplies this title from MHPlatform. Keep this dependency-owned key mapped to the app’s Log Console wording."
+    },
     "Log Console" : {
       "localizations" : {
         "en" : {
