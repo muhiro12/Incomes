@@ -16,9 +16,9 @@ final class IncomesStartupCoordinator {
     }
 
     private(set) var state: State
+    let logging: MHLoggingBootstrap
 
     private let preferenceStore: MHPreferenceStore
-    private let logging: MHLoggingBootstrap
     private let startupLogger: MHLogger
 
     init(

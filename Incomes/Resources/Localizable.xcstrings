@@ -5071,70 +5071,36 @@
         }
       }
     },
-    "Diagnostics" : {
+    "Log Console" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diagnostics"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "診断"
+            "value" : "Log Console"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diagnóstico"
+            "value" : "Consola de registros"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Diagnostic"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "诊断"
-          }
-        }
-      }
-    },
-    "Diagnostics Console" : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Diagnostics Console"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Consola de diagnóstico"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Console de diagnostic"
+            "value" : "Console des journaux"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "診断コンソール"
+            "value" : "ログコンソール"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "诊断控制台"
+            "value" : "日志控制台"
           }
         }
       }
@@ -11848,36 +11814,36 @@
         }
       }
     },
-    "Opens diagnostic logs and read-only data inspection." : {
+    "Opens logs and read-only data inspection." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Opens diagnostic logs and read-only data inspection."
+            "value" : "Opens logs and read-only data inspection."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "診断ログと読み取り専用のデータ確認を開きます。"
+            "value" : "ログと読み取り専用のデータ確認を開きます。"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Abre los registros de diagnóstico y la inspección de datos de solo lectura."
+            "value" : "Abre los registros y la consulta de datos de solo lectura."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Ouvre les journaux de diagnostic et la consultation des données en lecture seule."
+            "value" : "Ouvre les journaux et la consultation des données en lecture seule."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "打开诊断日志和只读数据查看。"
+            "value" : "打开日志和只读数据查看。"
           }
         }
       }
@@ -16111,36 +16077,36 @@
         }
       }
     },
-    "Show Item Diagnostics" : {
+    "Show Item Debug Information" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Show Item Diagnostics"
+            "value" : "Show Item Debug Information"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "明細に診断情報を表示"
+            "value" : "項目にデバッグ情報を表示"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Mostrar diagnósticos de las partidas"
+            "value" : "Mostrar información de depuración del elemento"
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Afficher les diagnostics des écritures"
+            "value" : "Afficher les informations de débogage de l’élément"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "显示明细诊断信息"
+            "value" : "显示项目调试信息"
           }
         }
       }

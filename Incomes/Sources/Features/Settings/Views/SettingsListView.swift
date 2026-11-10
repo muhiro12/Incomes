@@ -218,9 +218,9 @@ private extension SettingsListView {
                 Label("Maintenance", systemImage: "wrench.and.screwdriver")
             }
             SettingsNavigationRowButton(
-                title: "Diagnostics",
-                systemImage: "stethoscope",
-                accessibilityHint: "Opens diagnostic logs and read-only data inspection."
+                title: "Debug",
+                systemImage: "ladybug",
+                accessibilityHint: "Opens logs and read-only data inspection."
             ) {
                 navigateToRoute(.settingsDebug)
             }

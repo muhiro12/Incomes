@@ -22,7 +22,7 @@ extension WatchDebugView: View {
             }
             #endif
         }
-        .navigationTitle("Diagnostics")
+        .navigationTitle("Debug")
         #if DEBUG
         .task {
             refreshDebugPresence()

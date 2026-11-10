@@ -26,7 +26,7 @@ extension SettingsListView: View {
                 NavigationLink {
                     WatchDebugView()
                 } label: {
-                    Label("Diagnostics", systemImage: "stethoscope")
+                    Label("Debug", systemImage: "ladybug")
                 }
             }
         }

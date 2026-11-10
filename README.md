@@ -71,10 +71,12 @@ Models.
   Intelligence ready in a supported language. Their App Intent adapters remain
   undiscoverable while the system experience is qualified.
 
-### Diagnostics
+### Debug
 
-- Open Diagnostics from Settings to inspect local logs and saved data without
+- Open Debug from Settings to inspect local logs and saved data without
   changing financial records or Premium access.
+- Open the log console from Debug on the startup-error screen when the database
+  cannot be opened. This entry does not require a model container.
 - Export logs explicitly after reviewing them. Sample insertion, TipKit test
   controls, and other development tools are available only in DEBUG builds.
 - See [Diagnostic Boundaries](Designs/Architecture/sample-data-profiles.md#diagnostic-boundaries)

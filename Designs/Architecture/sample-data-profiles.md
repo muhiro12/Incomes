@@ -66,7 +66,7 @@ records separate from released financial records:
 - SwiftUI previews use `IncomesSampleData.makePreviewContext(profile:)`, which
   seeds an in-memory, CloudKit-disabled container. Watch previews do likewise.
 - Tests use isolated contexts or temporary store directories.
-- Diagnostics "Add Sample Data" is compiled only in DEBUG builds. After
+- Debug "Add Sample Data" is compiled only in DEBUG builds. After
   confirmation, it adds the chosen profile only when the development store has
   no items. The operation validates the context's actual store URL, writable
   persistent configuration, and absence of a CloudKit container before mutation.
@@ -128,7 +128,7 @@ has the same action in DEBUG builds.
 
 ## Diagnostic Boundaries
 
-Settings exposes Diagnostics in both DEBUG and Release. The existing Debug route
+Settings exposes Debug in both DEBUG and Release. The existing Debug route
 opens this same visible screen. The iOS console can inspect current and previous
 logs, adjust capture level, and copy or export logs explicitly. Clearing logs
 requires confirmation and does not clear financial records. Release starts with
@@ -148,10 +148,10 @@ The data-inspection paths are read-only: all items and tags lead to diagnostic
 values without edit, duplicate, delete, or recalculation controls. The optional
 item-diagnostics toggle uses the existing preference and adds raw values to the
 ordinary item detail screen; launching the app does not override that choice.
-Watch Diagnostics only browses its received item/tag snapshot in Release.
+Watch Debug only browses its received item/tag snapshot in Release.
 
 Sample insertion, TipKit test controls, ad/subscription test placements, and the
-experimental natural-language-search UI remain behind `#if DEBUG`. Diagnostics
+experimental natural-language-search UI remain behind `#if DEBUG`. Debug
 uses the Settings entry without an item-form activation command. A persisted
 diagnostic preference cannot enable development controls in Release. Screenshot
 fixtures that simulate subscription state remain DEBUG-only and use isolated
@@ -163,7 +163,30 @@ purchase status and normal financial mutations retain their existing checks.
 
 Technical safety and App Review disclosure are separate requirements. The visible
 Settings entry explains the support purpose of these tools rather than relying
-on a secret gesture. Review notes for a release exposing Diagnostics should
-identify Settings > Advanced > Diagnostics, describe local log export and
+on a secret gesture. Review notes for a release exposing Debug should
+identify Settings > Advanced > Debug, describe local log export and
 read-only inspection, and distinguish these from excluded development controls.
 This source change does not update App Store Connect or establish review approval.
+
+### Naming and Startup Access
+
+The visible name is **Debug** (Japanese: **デバッグ**), with the `ladybug` icon.
+The screen also contains development tools in DEBUG builds, so its name does not
+imply an automated diagnosis. The log destination is **Log Console**, and the
+item-detail preference is **Show Item Debug Information**. Existing preference
+keys and the `settings/debug` route remain unchanged.
+
+The startup-error screen also offers Debug. It opens only the existing log
+console using the startup coordinator's logging instance, without opening a
+database, retrying startup, or accessing item inspectors. Log capture and export
+retain the same behavior as the Settings console; closing it returns to the
+unchanged recovery screen. The separate Try Again action owns startup retries.
+
+This follows Stally's discoverable access and startup-failure inspection pattern.
+Incomes retains its own capabilities: explicit log export, legacy sample removal
+in Settings maintenance, and the DEBUG-only local store shared with widgets.
+Stally's next-launch store-selection controls are not required for this access
+pattern. Incomes continues to use a deliberately prepared Release environment
+for production-store integration checks. Manual sample insertion still validates
+the actual development store and pending edits at the operation boundary; a
+visible or disabled button is not its authorization mechanism.

@@ -10,14 +10,14 @@ struct DebugListView: View {
     var body: some View {
         List {
             Section {
-                navigationButton("Diagnostics Console", route: .diagnostics)
+                navigationButton("Log Console", route: .diagnostics)
             } footer: {
                 Text("Logs are stored on this device. Review them before sharing.")
             }
             Section {
                 navigationButton("All Items", route: .allItems)
                 navigationButton("All Tags", route: .allTags)
-                Toggle("Show Item Diagnostics", isOn: $isDebugOn)
+                Toggle("Show Item Debug Information", isOn: $isDebugOn)
             } footer: {
                 Text("Inspection does not change your saved items.")
             }
@@ -28,7 +28,7 @@ struct DebugListView: View {
             DebugDevelopmentSections()
             #endif
         }
-        .navigationTitle("Diagnostics")
+        .navigationTitle("Debug")
         .toolbar {
             ToolbarItem {
                 CloseButton()

@@ -25,7 +25,7 @@ living in the app targets.
 | Surface | Current role | Key responsibilities |
 | --- | --- | --- |
 | `Incomes` | Primary product surface | Data entry, browsing, charts, search, notifications, subscription, sync settings, ads, deep links, App Intents, debug tools |
-| `Watch` | Lightweight companion | Show upcoming items, reload recent months from phone, inspect received items in Diagnostics |
+| `Watch` | Lightweight companion | Show upcoming items, reload recent months from phone, inspect received items in Debug |
 | `Widgets` | Passive glanceable surface | Show month totals, month net income, next or previous item, deep-link back into the app |
 | `IncomesLibrary` | Shared domain layer | SwiftData models, predicates, calculators, yearly duplication, notification planning, maintenance services, routes |
 
@@ -263,9 +263,11 @@ living in the app targets.
 - Request App Store review opportunistically after create or save flows and on
   foreground activation using randomized policies.
 
-### 14. Diagnostics and development tools
+### 14. Debug and development tools
 
-- Open Diagnostics from Settings in both DEBUG and Release builds.
+- Open Debug from Settings in both DEBUG and Release builds.
+- Open the log console through Debug on the startup-error screen without a
+  model container or an automatic startup retry.
 - Inspect diagnostic logs, change the capture level, and explicitly copy/export
   logs or confirm clearing log history without changing financial records.
 - Browse all items and tags through read-only diagnostic screens.
@@ -273,7 +275,7 @@ living in the app targets.
   survives subsequent launches and does not grant Premium access.
 - In DEBUG only, seed sample profiles, test TipKit state, inspect ad/subscription
   placements, and experiment with natural-language search.
-- Open Diagnostics directly from Settings without an activation command. Existing
+- Open Debug directly from Settings without an activation command. Existing
   Debug URLs open the same screen in both configurations.
 - Remove previously added samples through the normal Settings maintenance flow.
 
@@ -290,7 +292,7 @@ for the Release/development split and disclosure expectations.
 - Show the upcoming day of items on the main watch screen.
 - Show a manual reload action.
 - Show a Settings entry point.
-- Inspect received items and tags in Diagnostics in both build configurations.
+- Inspect received items and tags in Debug in both build configurations.
 - In DEBUG builds, remove sample data from the local Watch mirror.
 
 ## Widget Features
