@@ -1,27 +1,21 @@
 import Foundation
 
-/// A bounded reader for the documented Markdown subset, not a general Markdown renderer.
+/// Dispatches supported template-format and schema pairs before interpreting fields.
 enum ItemTemplateCodec {
-    enum Field: String, CaseIterable {
-        case date = "Date"
-        case content = "Content"
-        case income = "Income"
-        case outgo = "Outgo"
-        case category = "Category"
-        case priority = "Priority"
-        case currency = "Currency"
-    }
-
     static let identifier = "# Incomes Item Template"
-    static let version = "Template-Version: 1"
-    private static let minimumFencedLineCount = 4
-    private static let headingPrefix = "## "
-    private static let bulletPrefix = "- "
-    private static let continuationPrefix = "  "
     static let maximumByteCount = 16_384
     static let maximumLineCount = 512
 
-    static func read(_ text: String) throws -> [Field: String] {
+    private static let minimumFencedLineCount = 5
+    private static let headerLineCount = 3
+    private static let formatPrefix = "Template-Version: "
+    private static let schemaPrefix = "Schema-Version: "
+
+    static func read(
+        _ text: String,
+        ledgerIdentifier: LedgerIdentifier,
+        currencyCode: String
+    ) throws -> ItemFormInput {
         try validateSize(text)
         var lines = text.replacingOccurrences(of: "\r\n", with: "\n")
             .components(separatedBy: "\n")
@@ -41,38 +35,44 @@ enum ItemTemplateCodec {
             lines.removeFirst()
             lines.removeLast()
         }
-        guard lines.first == identifier else {
+        guard lines.count >= headerLineCount, lines.first == identifier else {
             throw ItemTemplateError.invalidStructure
         }
         lines.removeFirst()
-        guard lines.first == version else {
-            if lines.first?.hasPrefix("Template-Version:") == true {
-                throw ItemTemplateError.unsupportedVersion
-            }
+        let formatText = try headerValue(lines.removeFirst(), prefix: formatPrefix)
+        let schemaText = try headerValue(lines.removeFirst(), prefix: schemaPrefix)
+        guard let formatVersion = Int(formatText), formatVersion > .zero,
+              String(formatVersion) == formatText,
+              let schemaVersion = IncomesFileValueCoding.version(from: schemaText),
+              IncomesFileValueCoding.versionString(from: schemaVersion) == schemaText else {
             throw ItemTemplateError.invalidStructure
         }
-        lines.removeFirst()
-        return try readFields(lines)
+        switch (formatVersion, schemaVersion) {
+        case (ItemTemplateFormatV1.formatVersion, ItemTemplateFormatV1.schemaVersion):
+            return try ItemTemplateFormatV1.input(
+                from: lines,
+                ledgerIdentifier: ledgerIdentifier,
+                currencyCode: currencyCode
+            )
+        default:
+            throw ItemTemplateError.unsupportedVersion
+        }
     }
 
-    static func write(_ fields: [Field: String]) throws -> String {
-        var sections = [String]()
-        for field in Field.allCases {
-            let value = fields[field] ?? ""
-            guard !value.contains("\r") else {
-                throw ItemTemplateError.invalidField(field.rawValue)
-            }
-            let lines = value.components(separatedBy: "\n")
-            let bullet = lines.enumerated()
-                .map { index, line in
-                    (index == .zero ? bulletPrefix : continuationPrefix) + line
-                }
-                .joined(separator: "\n")
-            sections.append("## \(field.rawValue)\n\(bullet)")
-        }
-        let text = identifier + "\n" + version + "\n\n" + sections.joined(separator: "\n\n") + "\n"
+    static func write(_ fields: [ItemTemplateFormatV1.Field: String]) throws -> String {
+        let formatVersion = ItemTemplateFormatV1.formatVersion
+        let schemaVersion = IncomesFileValueCoding.versionString(from: ItemTemplateFormatV1.schemaVersion)
+        let body = try ItemTemplateFormatV1.body(fields)
+        let text = "\(identifier)\n\(formatPrefix)\(formatVersion)\n\(schemaPrefix)\(schemaVersion)\n\n\(body)"
         try validateSize(text)
         return text
+    }
+
+    private static func headerValue(_ line: String, prefix: String) throws -> String {
+        guard line.hasPrefix(prefix) else {
+            throw ItemTemplateError.invalidStructure
+        }
+        return String(line.dropFirst(prefix.count))
     }
 
     private static func validateSize(_ text: String) throws {
@@ -80,41 +80,5 @@ enum ItemTemplateCodec {
               text.components(separatedBy: "\n").count <= maximumLineCount else {
             throw ItemTemplateError.tooLarge
         }
-    }
-
-    private static func readFields(_ lines: [String]) throws -> [Field: String] {
-        var fields = [Field: String]()
-        var currentField: Field?
-        for line in lines {
-            if line.isEmpty {
-                continue
-            }
-            if line.hasPrefix(headingPrefix) {
-                let name = String(line.dropFirst(headingPrefix.count))
-                guard let field = Field(rawValue: name) else {
-                    throw ItemTemplateError.unknownField(name)
-                }
-                if let currentField, fields[currentField] == nil {
-                    throw ItemTemplateError.invalidField(currentField.rawValue)
-                }
-                guard fields[field] == nil, currentField != field else {
-                    throw ItemTemplateError.duplicateField(name)
-                }
-                currentField = field
-            } else if let currentField, line.hasPrefix(bulletPrefix), fields[currentField] == nil {
-                fields[currentField] = String(line.dropFirst(bulletPrefix.count))
-            } else if let currentField, let value = fields[currentField], line.hasPrefix(continuationPrefix) {
-                guard currentField == .content || currentField == .category else {
-                    throw ItemTemplateError.invalidField(currentField.rawValue)
-                }
-                fields[currentField] = value + "\n" + line.dropFirst(continuationPrefix.count)
-            } else {
-                throw ItemTemplateError.invalidStructure
-            }
-        }
-        for field in Field.allCases where fields[field] == nil {
-            throw ItemTemplateError.missingField(field.rawValue)
-        }
-        return fields
     }
 }

@@ -4,9 +4,9 @@ import Foundation
 public enum ItemTemplateError: LocalizedError, Equatable {
     /// Input exceeds the documented byte or line limit.
     case tooLarge
-    /// The identifier, version declaration, or bullet structure is malformed.
+    /// The identifier, format/schema declarations, or bullet structure is malformed.
     case invalidStructure
-    /// No reader exists for this template version.
+    /// No reader exists for this template-format and schema-version pair.
     case unsupportedVersion
     /// A required section is absent.
     case missingField(String)

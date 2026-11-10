@@ -64,14 +64,40 @@ serve different contracts; neither needs to be routed through the other.
 ## Version 1 contract
 
 The identifier is `# Incomes Item Template`, followed immediately by
-`Template-Version: 1`. Headings and metadata use these stable English spellings
-in every app language. This version is independent of SwiftData and the
-`.incomes` backup format. Future changes must explicitly retain a reader or
-document the unsupported version; existing text is never silently relabeled.
+`Template-Version: 1` and `Schema-Version: 2.0.0`, in that order. Headings and
+metadata use these stable English spellings in every app language. The template
+format version describes its Markdown representation; the schema version names
+the financial meaning represented by its supported fields. It uses the same
+`IncomesSchemaV2.versionIdentifier` as the current `.incomes` writer, independently
+of the app release number.
+
+`ItemTemplateCodec` validates the header and explicitly dispatches the supported
+(format 1, schema 2.0.0) pair to `ItemTemplateFormatV1`. The version-specific reader
+owns the fields, grammar and conversion to current `ItemFormInput`. The writer
+uses that same fixed pair for saved-item export, blank templates and copied AI
+prompts. Export still reads its completed output back before returning it.
+Missing, malformed or duplicate headers are rejected; unsupported pairs are
+rejected before field interpretation, with no persistence or AI fallback.
+
+This follows `.incomes` import/export's version-pair policy without making their
+format numbers interchangeable. Future schema changes require an explicit
+compatibility decision and, when needed, a version-specific value adapter. Keep
+an old reader's meaning frozen; do not change its schema label to whichever
+schema is current. A schema change that leaves these fields unchanged can share
+a template format only through an explicitly supported pair. Format/field meaning
+changes need their own version and reader. Support retirement must be deliberate;
+no perpetual support or automatic expiry is implied.
+
+The earlier 6.2 development template without `Schema-Version` was not part of
+6.1. It is superseded before the template feature's first release and is rejected,
+not guessed to mean the current schema. Generate a fresh template for existing
+development drafts. Published `.incomes` formats and their legacy adapter are
+unchanged by this template revision.
 
 ```markdown
 # Incomes Item Template
 Template-Version: 1
+Schema-Version: 2.0.0
 
 ## Date
 - 2026-10-28

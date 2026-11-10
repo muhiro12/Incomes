@@ -13,38 +13,11 @@ public enum ItemTemplateOperations {
         currencyCode: String
     ) throws -> ItemFormInput {
         try requireCurrency(currencyCode)
-        let fields = try ItemTemplateCodec.read(text)
-        guard fields[.currency] == currencyCode else {
-            throw ItemTemplateError.currencyMismatch
-        }
-        guard let date = IncomesFileValueCoding.day(from: fields[.date] ?? "") else {
-            throw ItemTemplateError.invalidField("Date")
-        }
-        guard let income = IncomesFileValueCoding.amount(from: fields[.income] ?? "") else {
-            throw ItemTemplateError.invalidField("Income")
-        }
-        guard let outgo = IncomesFileValueCoding.amount(from: fields[.outgo] ?? "") else {
-            throw ItemTemplateError.invalidField("Outgo")
-        }
-        guard let priorityText = fields[.priority], let priority = Int(priorityText),
-              String(priority) == priorityText else {
-            throw ItemTemplateError.invalidField("Priority")
-        }
-        let content = fields[.content] ?? ""
-        guard !content.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty else {
-            throw ItemTemplateError.invalidField("Content")
-        }
-        let input = ItemFormInput(
-            date: Calendar.current.shiftedDate(componentsFrom: date, in: .utc),
-            content: content,
-            income: income,
-            outgo: outgo,
-            category: fields[.category] ?? "",
-            priority: priority,
-            ledgerIdentifier: ledgerIdentifier
+        return try ItemTemplateCodec.read(
+            text,
+            ledgerIdentifier: ledgerIdentifier,
+            currencyCode: currencyCode
         )
-        try input.validate()
-        return input
     }
 
     /// Writes the supported fields of one saved Item; does not include identity, balances, or recurrence.
@@ -74,7 +47,8 @@ public enum ItemTemplateOperations {
         let template = try blankTemplate(currencyCode: currencyCode)
         return """
         Fill this Incomes template for one income or expense from the source I provide.
-        Return only the completed template. Keep its identifier, version, and English headings.
+        Return only the completed template.
+        Keep its identifier, Template-Version, Schema-Version, and English headings unchanged.
         Use Date as a real Gregorian yyyy-MM-dd day, not a timestamp or relative date.
         Use plain exact decimal amounts with a period and no grouping or currency symbols.
         Income and Outgo must both be explicit; use 0 for an amount known to be zero.

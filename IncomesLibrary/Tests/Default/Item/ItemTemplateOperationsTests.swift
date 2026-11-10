@@ -7,6 +7,7 @@ struct ItemTemplateOperationsTests {
     private let example = """
     # Incomes Item Template
     Template-Version: 1
+    Schema-Version: 2.0.0
 
     ## Date
     - 2026-10-28
@@ -52,9 +53,39 @@ struct ItemTemplateOperationsTests {
     @Test
     func section_order_and_outer_fence_do_not_change_values() throws {
         let reordered = example.replacingOccurrences(of: "\n## Currency\n- JPY", with: "")
-            .replacingOccurrences(of: "Template-Version: 1", with: "Template-Version: 1\n\n## Currency\n- JPY")
+            .replacingOccurrences(of: "Schema-Version: 2.0.0", with: "Schema-Version: 2.0.0\n\n## Currency\n- JPY")
         #expect(try read("```markdown\n" + reordered + "\n```\n") == read(example))
         #expect(try read(example.replacingOccurrences(of: "\n", with: "\r\n")) == read(example))
+    }
+
+    @Test(arguments: [("2", "2.0.0"), ("1", "1.0.0"), ("1", "2.0.1"), ("1", "3.0.0"), ("2", "3.0.0")])
+    func rejects_unsupported_pairs_before_interpreting_fields(format: String, schema: String) throws {
+        let text = example
+            .replacingOccurrences(of: "Template-Version: 1", with: "Template-Version: \(format)")
+            .replacingOccurrences(of: "Schema-Version: 2.0.0", with: "Schema-Version: \(schema)")
+            .replacingOccurrences(of: "- 1234.56", with: "- invalid")
+        #expect(throws: ItemTemplateError.unsupportedVersion) {
+            try read(text)
+        }
+    }
+
+    @Test(arguments: [
+        "", "Schema-Version: ", "Schema-Version: 2.0", "Schema-Version: 02.0.0",
+        "Schema-Version: -1.0.0", "Schema-Version: unknown",
+        "Schema-Version: 2.0.0\nSchema-Version: 2.0.0"
+    ])
+    func refuses_missing_malformed_or_duplicate_schema_headers(_ header: String) throws {
+        let text = example.replacingOccurrences(of: "Schema-Version: 2.0.0", with: header)
+        #expect(throws: ItemTemplateError.invalidStructure) {
+            try read(text)
+        }
+    }
+
+    @Test(arguments: ["", "0", "-1", "01", "1.0", "unknown"])
+    func refuses_malformed_format_headers(_ version: String) throws {
+        #expect(throws: ItemTemplateError.invalidStructure) {
+            try read(example.replacingOccurrences(of: "Template-Version: 1", with: "Template-Version: \(version)"))
+        }
     }
 
     @Test(arguments: ["", "unknown", "1,234", "1.234,56", "1e3", "NaN", "12345678901234567890"])
@@ -119,6 +150,8 @@ struct ItemTemplateOperationsTests {
         }
         let prompt = try ItemTemplateOperations.promptAndTemplate(currencyCode: "JPY")
         #expect(prompt.contains(blank))
+        #expect(blank.hasPrefix("# Incomes Item Template\nTemplate-Version: 1\nSchema-Version: 2.0.0\n"))
+        #expect(prompt.contains("Template-Version, Schema-Version"))
     }
 
     @Test
@@ -133,6 +166,14 @@ struct ItemTemplateOperationsTests {
         ).value
         let dataBeforeReading = try ItemExportOperations.prepareFile(context: context).items
         let text = try ItemTemplateOperations.text(for: item, currencyCode: "JPY")
+        #expect(text.hasPrefix("# Incomes Item Template\nTemplate-Version: 1\nSchema-Version: 2.0.0\n"))
+        let exportedFile = try ItemExportOperations.incomesFileData(
+            fileItems: dataBeforeReading,
+            currencyCode: "JPY"
+        )
+        let fileContents = try ItemImportOperations.read(data: exportedFile)
+        #expect(fileContents.schemaVersion == "2.0.0")
+        #expect(text.contains("Schema-Version: \(fileContents.schemaVersion)\n"))
         let imported = try read(text)
         #expect(imported == original)
         #expect(!text.contains("repeatID"))
