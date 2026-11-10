@@ -29,6 +29,7 @@ struct DebugListView: View {
             #endif
         }
         .navigationTitle("Debug")
+        .navigationBarTitleDisplayMode(.large)
         .toolbar {
             ToolbarItem {
                 CloseButton()
