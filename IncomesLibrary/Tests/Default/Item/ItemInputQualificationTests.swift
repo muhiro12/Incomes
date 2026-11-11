@@ -6,8 +6,8 @@ import Testing
 struct ItemInputQualificationTests {
     private let template = """
     # Incomes Item Template
-    Template-Version: 1
-    Schema-Version: 2.0.0
+    formatVersion: 1
+    schemaVersion: 2.0.0
 
     ## Date
     - 2026-10-29

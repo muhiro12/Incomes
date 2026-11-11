@@ -8,8 +8,8 @@ enum ItemTemplateCodec {
 
     private static let minimumFencedLineCount = 5
     private static let headerLineCount = 3
-    private static let formatPrefix = "Template-Version: "
-    private static let schemaPrefix = "Schema-Version: "
+    private static let formatPrefix = "formatVersion: "
+    private static let schemaPrefix = "schemaVersion: "
 
     static func read(
         _ text: String,

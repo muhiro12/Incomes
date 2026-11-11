@@ -64,8 +64,10 @@ serve different contracts; neither needs to be routed through the other.
 ## Version 1 contract
 
 The identifier is `# Incomes Item Template`, followed immediately by
-`Template-Version: 1` and `Schema-Version: 2.0.0`, in that order. Headings and
-metadata use these stable English spellings in every app language. The template
+`formatVersion: 1` and `schemaVersion: 2.0.0`, in that order. Headings and
+metadata use these stable English spellings in every app language. Version keys
+use the same lowerCamelCase names as `.incomes` JSON, while the format identifier
+continues to distinguish the two contracts. The template
 format version describes its Markdown representation; the schema version names
 the financial meaning represented by its supported fields. It uses the same
 `IncomesSchemaV2.versionIdentifier` as the current `.incomes` writer, independently
@@ -88,16 +90,17 @@ a template format only through an explicitly supported pair. Format/field meanin
 changes need their own version and reader. Support retirement must be deliberate;
 no perpetual support or automatic expiry is implied.
 
-The earlier 6.2 development template without `Schema-Version` was not part of
-6.1. It is superseded before the template feature's first release and is rejected,
-not guessed to mean the current schema. Generate a fresh template for existing
+Earlier 6.2 development templates without a schema header or with the old
+`Template-Version` / `Schema-Version` spellings were not part of 6.1. They are
+superseded before the template feature's first release and are rejected, not
+guessed to mean the current contract. Generate a fresh template for existing
 development drafts. Published `.incomes` formats and their legacy adapter are
 unchanged by this template revision.
 
 ```markdown
 # Incomes Item Template
-Template-Version: 1
-Schema-Version: 2.0.0
+formatVersion: 1
+schemaVersion: 2.0.0
 
 ## Date
 - 2026-10-28

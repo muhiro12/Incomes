@@ -48,7 +48,7 @@ public enum ItemTemplateOperations {
         return """
         Fill this Incomes template for one income or expense from the source I provide.
         Return only the completed template.
-        Keep its identifier, Template-Version, Schema-Version, and English headings unchanged.
+        Keep its identifier, formatVersion, schemaVersion, and English headings unchanged.
         Use Date as a real Gregorian yyyy-MM-dd day, not a timestamp or relative date.
         Use plain exact decimal amounts with a period and no grouping or currency symbols.
         Income and Outgo must both be explicit; use 0 for an amount known to be zero.
