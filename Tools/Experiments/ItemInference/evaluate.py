@@ -21,6 +21,12 @@ SOURCES = [
     "Incomes/Sources/Features/Item/Inference/ItemFormInferenceGeneratedFields.swift",
     "Incomes/Sources/Features/Item/Inference/ItemFormInferenceResult.swift",
     "IncomesLibrary/Sources/Item/ItemInferenceDateOperations.swift",
+    "IncomesLibrary/Sources/Item/ItemInferenceAmountOperations.swift",
+    "IncomesLibrary/Sources/Item/ItemInferenceError.swift",
+    "IncomesLibrary/Sources/Formatting/DecimalTextParser.swift",
+    "IncomesLibrary/Sources/Formatting/DecimalTextRejection.swift",
+    "IncomesLibrary/Sources/Formatting/AmountPrecision.swift",
+    "IncomesLibrary/Sources/Formatting/DateFormatter.swift",
     "IncomesLibrary/Sources/Item/ItemFormInferencePromptBuilder.swift",
     "IncomesLibrary/Sources/Item/Inference/FoundationModelPromptTemplate.swift",
     "IncomesLibrary/Sources/Item/PromptLiteralSupport.swift",
@@ -41,6 +47,8 @@ def command_output(arguments):
 
 def fields_needing_correction(candidate, expected):
     differences = []
+    if candidate.get("normalizationError"):
+        differences.append("normalization")
     for field, value in expected.items():
         actual = candidate.get(field)
         if field in ("income", "outgo"):
@@ -122,7 +130,7 @@ def main():
                  "osBuild": command_output(["sw_vers", "-buildVersion"]),
                  "sdk": command_output(["xcrun", "--sdk", "macosx", "--show-sdk-version"]),
                  "toolchain": command_output(["xcrun", "swiftc", "--version"])},
-        "configuration": {"model": "SystemLanguageModel.default", "sampling": "framework default",
+        "configuration": {"model": "SystemLanguageModel.default", "sampling": "greedy",
                           "referenceDate": "20261029", "timeZone": "Asia/Tokyo",
                           "host": "standalone macOS process; no Simulator or app UI",
                           "session": "new process and session per request"},

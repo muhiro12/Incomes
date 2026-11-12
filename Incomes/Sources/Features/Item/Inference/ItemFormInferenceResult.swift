@@ -16,7 +16,7 @@ struct ItemFormInferenceResult: Sendable {
     let outgo: Decimal
     let category: String
 
-    init(generated: ItemFormInferenceGeneratedFields, sourceText: String, referenceDate: Date, locale: Locale) {
+    init(generated: ItemFormInferenceGeneratedFields, sourceText: String, referenceDate: Date, locale: Locale) throws {
         date = ItemInferenceDateOperations.dateString(
             expression: generated.dateExpression,
             sourceText: sourceText,
@@ -24,9 +24,25 @@ struct ItemFormInferenceResult: Sendable {
             locale: locale
         )
         content = generated.content
-        hasUnspecifiedAmount = generated.hasUnspecifiedAmount
-        income = generated.income
-        outgo = generated.outgo
+        let amount: Decimal?
+        if generated.direction == .unspecified {
+            // An unusable number cannot resolve an unknown direction. Keep the
+            // review state; only a source-backed zero can be known in either direction.
+            amount = try? ItemInferenceAmountOperations.amount(
+                expression: generated.amountExpression,
+                sourceText: sourceText,
+                locale: locale
+            )
+        } else {
+            amount = try ItemInferenceAmountOperations.amount(
+                expression: generated.amountExpression,
+                sourceText: sourceText,
+                locale: locale
+            )
+        }
+        hasUnspecifiedAmount = amount == nil || (generated.direction == .unspecified && amount != .zero)
+        income = generated.direction == .income ? amount ?? .zero : .zero
+        outgo = generated.direction == .outgo ? amount ?? .zero : .zero
         category = generated.category
     }
 }

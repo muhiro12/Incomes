@@ -19647,37 +19647,37 @@
         }
       }
     },
-    "The amount is unspecified. This draft uses 0 for income and outgo. Review before saving." : {
+    "The amount or payment direction could not be determined. This draft uses 0 for income and outgo. Review before saving." : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The amount is unspecified. This draft uses 0 for income and outgo. Review before saving."
+            "value" : "The amount or payment direction could not be determined. This draft uses 0 for income and outgo. Review before saving."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "金額は未定です。この下書きでは収入・支出を0にしています。保存前に確認してください。"
+            "value" : "金額または収入・支出の区分を特定できませんでした。この下書きでは収入・支出を0にしています。保存前に確認してください。"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "El importe está sin determinar. Este borrador usa 0 en ingresos y gastos. Revísalo antes de guardar."
+            "value" : "No se pudo determinar el importe o si se trata de un ingreso o un gasto. Este borrador usa 0 en ingresos y gastos. Revísalo antes de guardar."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Le montant n’est pas précisé. Ce brouillon utilise 0 pour les revenus et les dépenses. Vérifiez avant d’enregistrer."
+            "value" : "Le montant ou le type de transaction (revenu ou dépense) n’a pas pu être déterminé. Ce brouillon utilise 0 pour les revenus et les dépenses. Vérifiez avant d’enregistrer."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "金额未定。此草稿的收入和支出均设为 0。请在保存前检查。"
+            "value" : "无法确定金额或收支类型。此草稿的收入和支出均设为 0。请在保存前检查。"
           }
         }
       }

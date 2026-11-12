@@ -218,7 +218,10 @@ extension ItemFormView {
                     Text("No exact date was read. The selected form date is kept for you to review.")
                 }
                 if model.needsInferredAmountReview {
-                    Text("The amount is unspecified. This draft uses 0 for income and outgo. Review before saving.")
+                    Text("""
+                    The amount or payment direction could not be determined. \
+                    This draft uses 0 for income and outgo. Review before saving.
+                    """)
                 }
             }
         }

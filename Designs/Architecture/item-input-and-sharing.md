@@ -76,6 +76,24 @@ Unsupported output leaves the source text available for correction or manual
 entry. Cancellation and source/draft changes prevent an older response from
 replacing the current form.
 
+Generation uses greedy sampling for this extraction task. The model selects one
+transaction amount and a separate income/outgo/unspecified direction, so cash
+tendered, change or points cannot populate a second monetary field. Purchase
+receipts should use the final total; explicit description/category fields should
+retain their text and description line breaks. These instructions are evaluated
+behavior, not guarantees for arbitrary source documents.
+
+The amount is generated as text, avoiding the numeric conversion artifacts
+observed with generated `Decimal` values. `ItemInferenceAmountOperations` parses
+complete source numbers with the input locale and requires the generated number
+to identify one exactly storable, nonnegative source value. It permits normalized
+decimal notation or restores dropped separators from a matching complete digit
+sequence only when there is one possible source value. The source determines
+decimal placement; competing interpretations are rejected. Numeric prefixes,
+unsupported scaled expressions and values
+requiring rounding are rejected. This checks numeric fidelity, not whether the
+model chose the right number among several source amounts.
+
 The generated `dateExpression` copies a date phrase verbatim from the source.
 `ItemInferenceDateOperations` first verifies that it occurs in that source,
 then resolves supported expressions with a Gregorian calendar in the reference
@@ -92,8 +110,8 @@ arithmetic across month/year boundaries, leap days and DST. Other expressions,
 including ambiguous slash notation and relative weekdays, remain unresolved
 for review; this is not a general natural-language date parser.
 
-An unspecified amount is represented
-separately from an explicit zero in the generated result. By product policy,
+An absent amount or unspecified payment direction is represented
+separately from an explicit zero in the normalized result. By product policy,
 it becomes an editable draft with income and outgo set to zero and a visible
 review notice; the ordinary Create action remains available. Explicit zero
 does not produce the unspecified-amount notice. These notices describe the
@@ -110,11 +128,12 @@ measured results and the distinction between value validation and model quality.
 Typed inference updates continue through `ItemFormInput` and canonical saving.
 Amounts carry their formatting locale until reformatted for the editor.
 
-## Subsequent quality work
+## Quality evaluation
 
-This change settles the offered capabilities and navigation first. OCR accuracy,
-ambiguous income/expense handling, extracted facts, models, and prompts are a
-subsequent workstream in #426. The retained behavior described above is not a
-claim that arbitrary pasted text is interpreted correctly. See the
-[qualification record](item-input-qualification.md) for historical model
-measurements and their limits.
+The interface simplification preceded extraction changes. The
+[extraction-quality record](item-extraction-quality.md) covers the subsequent
+text/model evaluation, including real copied Item output, exact source amounts,
+receipt totals and unresolved direction. Receipt descriptions/categories,
+photo OCR and device qualification remain follow-up work in #426. Arbitrary
+pasted text is not guaranteed to be interpreted correctly. The earlier
+[qualification record](item-input-qualification.md) remains historical evidence.
