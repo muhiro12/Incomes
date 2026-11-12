@@ -392,6 +392,30 @@ Missing resolution or tool mismatches are incomplete verification, not a reason
 to install another linter. Boundary searches likewise distinguish no matches
 from failed or unavailable searches.
 
+### SDK mismatch during test linking
+
+If package tests report a macOS sysroot while targeting iOS Simulator, inspect
+the actual link command and the build service's `SDKROOT` environment first.
+A host macOS SDK can reach Clang even when Swift's `-sdk` points to the correct
+Simulator SDK. This was reproduced with Xcode 27.2; it does not require changing
+the package's supported platforms or suppressing the warning. See the
+[Swift compiler discussion](https://forums.swift.org/t/getting-incompatible-sysroot-warning-when-compiling-for-ios-with-sdk-and-target-set/80584).
+
+When the native integration retains that environment and cannot override it,
+use the selected Xcode's executable directly with `SDKROOT` removed for this
+invocation. Replace the destination placeholder with the app's discovered
+Simulator UUID:
+
+```sh
+env -u SDKROOT "$(xcode-select -p)/usr/bin/xcodebuild" \
+  -project Incomes.xcodeproj -scheme IncomesLibrary \
+  -destination 'platform=iOS Simulator,id=<discovered-simulator-uuid>' test
+```
+
+This is a scoped fallback, not a change to the running native build service.
+Verify that the affected test bundles actually relink and inspect their
+diagnostics; a cached build alone does not demonstrate that the warning is gone.
+
 ## Release operations
 
 Incomes 6.x uses [Apogee release tools](Tools/Release/README.md) in a separate
