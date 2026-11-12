@@ -36,10 +36,13 @@ validation, form handoff or persistence. Those boundaries retain unit tests.
 
 ## Cases and interpretation
 
-Sixteen synthetic cases cover expense, income, an unknown amount, explicit zero,
+Twenty-eight synthetic text cases cover expense, income, an unknown amount, explicit zero,
 an ambiguous month, a missing date, a relative day and an English fractional
 amount, plus year/leap-day boundaries, other app languages, a specified month
-without a day, and an invalid calendar day. The default reference day is
+without a day, and an invalid calendar day. Additional cases cover receipt totals,
+cash tendered and change, discounts, refunds, rent received, formatted external
+output, decimal precision, nonfinancial numbers, literal instructions, multiple
+dates and an explicitly unknown payment direction. The default reference day is
 October 29, 2026, in Asia/Tokyo; a case can override `referenceDate`. Missing
 or ambiguous dates are expected to remain empty; unknown amounts are expected
 to be explicitly marked and become zero-valued drafts under app policy.
@@ -48,6 +51,14 @@ The runner compares the normalized day, numeric Decimal values and unknown-amoun
 and requires nonempty content. Category labels and description wording are
 recorded but not judged for semantic quality. Mismatches fail the command;
 they are not corrected with expected values or counted as successful reads.
+
+Seven additional [copy fixtures](../../../IncomesLibrary/Tests/Default/Fixtures/ItemInferenceCopyCases.json)
+cover five languages, multiline content, income, fractional amounts, and explicit
+zero without a configured currency. `ItemInferenceCopyFixtureTests` verifies
+that their source text equals the production `ItemContentOperations` output for
+the specified synthetic Items. These cases also score exact content and category
+preservation. This measures information loss without promising a copy/import
+round trip. Use repeated `--case <id>` arguments to evaluate selected cases.
 
 Each request starts a new process/session. A request error or deadline stops
 the remaining cases and is recorded separately from a semantic mismatch.

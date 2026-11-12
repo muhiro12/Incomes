@@ -32,6 +32,7 @@ RESOURCES = [
     "IncomesLibrary/Resources/FoundationModels/item-form-inference-instructions.prompt",
     "IncomesLibrary/Resources/FoundationModels/item-form-inference-user-prompt.prompt",
 ]
+COPY_CASES = "IncomesLibrary/Tests/Default/Fixtures/ItemInferenceCopyCases.json"
 
 
 def command_output(arguments):
@@ -91,6 +92,7 @@ def main():
     parser.add_argument("--output", required=True, type=Path)
     parser.add_argument("--repetitions", type=int, default=2)
     parser.add_argument("--timeout", type=int, default=45)
+    parser.add_argument("--case", action="append", dest="case_ids", help="Run only this case ID; repeat to select several")
     arguments = parser.parse_args()
     if not 1 <= arguments.repetitions <= 3:
         parser.error("Use one to three repetitions")
@@ -100,7 +102,14 @@ def main():
     if output == ROOT or ROOT in output.parents:
         parser.error("Write generated reports outside the repository")
     cases = json.loads((DIRECTORY / "cases.json").read_text())
+    cases += json.loads((ROOT / COPY_CASES).read_text())
+    if arguments.case_ids:
+        unknown = set(arguments.case_ids) - {case["id"] for case in cases}
+        if unknown:
+            parser.error("Unknown case IDs: " + ", ".join(sorted(unknown)))
+        cases = [case for case in cases if case["id"] in arguments.case_ids]
     paths = SOURCES + RESOURCES + [
+        COPY_CASES,
         "Tools/Experiments/ItemInference/cases.json",
         "Tools/Experiments/ItemInference/evaluate.py",
     ]
