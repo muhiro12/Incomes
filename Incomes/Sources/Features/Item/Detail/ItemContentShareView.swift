@@ -18,7 +18,7 @@ struct ItemContentShareView: View {
 
         Form {
             Section {
-                CopyTextContextMenuButton("Copy Content", text: text)
+                CopyTextContextMenuButton("Copy Content", text: text, systemImage: "clipboard")
                 ShareLink(item: text) {
                     Label("Share Content", systemImage: "square.and.arrow.up")
                 }

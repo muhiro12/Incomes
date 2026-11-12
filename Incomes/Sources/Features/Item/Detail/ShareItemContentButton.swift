@@ -9,13 +9,14 @@ struct ShareItemContentButton: View {
     var action: (() -> Void)?
 
     var body: some View {
-        Button("Copy or Share Content", systemImage: "doc.on.doc") {
+        Button("Copy Content…", systemImage: "clipboard") {
             if let action {
                 action()
             } else {
                 isPresented = true
             }
         }
+        .accessibilityHint(Text("Review content before copying or sharing."))
         .sheet(isPresented: $isPresented) {
             NavigationStack {
                 ItemContentShareView()

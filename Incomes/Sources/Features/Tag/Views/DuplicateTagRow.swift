@@ -25,7 +25,7 @@ struct DuplicateTagRow: View {
             Divider()
             Button(
                 "Resolve",
-                systemImage: "checkmark.seal",
+                systemImage: "arrow.triangle.merge",
                 role: .destructive,
                 action: presentResolveDialog
             )
