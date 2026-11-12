@@ -10,6 +10,8 @@ struct ItemInferenceAmountOperationsTests {
         ("1\u{202F}234,56", "fr_FR", "1234.56"),
         ("1234,567", "es_ES", "1234.567"),
         ("1.234567", "en_US", "1.234567"),
+        (".50", "en_US", "0.50"),
+        (",50", "fr_FR", "0.50"),
         ("0", "ja_JP", "0")
     ])
     func amounts_preserve_source_decimal_digits(expression: String, locale: String, expected: String) throws {
@@ -31,6 +33,8 @@ struct ItemInferenceAmountOperationsTests {
         ("-100", "Refund -100"),
         ("-100", "Paid 100"),
         ("100", "Refund -100"),
+        ("50", "Refund -.50"),
+        ("0.50", "Refund −.50"),
         ("1234567890123456", "Paid 1234567890123456")
     ])
     func rewritten_partial_negative_or_inexact_amounts_are_rejected(expression: String, source: String) {
@@ -101,6 +105,25 @@ struct ItemInferenceAmountOperationsTests {
             sourceText: "Total 12.50; reference 1250",
             locale: .init(identifier: "en_US")
         ) == Decimal(string: "12.50"))
+    }
+
+    @available(iOS 26.0, *)
+    @Test(arguments: [(".50", "en_US"), (",50", "fr_FR")], ["50", "0.50"])
+    func omitted_leading_zero_keeps_the_source_fraction(
+        source: (String, String), expression: String
+    ) throws {
+        #expect(try ItemInferenceAmountOperations.amount(
+            expression: expression,
+            sourceText: "Total: \(source.0)",
+            locale: .init(identifier: source.1)
+        ) == Decimal(string: "0.50"))
+        #expect(throws: ItemInferenceError.invalidResult) {
+            try ItemInferenceAmountOperations.amount(
+                expression: "50",
+                sourceText: "Total: \(source.0); reference 50",
+                locale: .init(identifier: source.1)
+            )
+        }
     }
 
     @available(iOS 26.0, *)

@@ -57,7 +57,7 @@ private extension ItemInferenceAmountOperations {
     }
 
     static func sourceNumbers(_ sourceText: String) -> [String] {
-        let pattern = #"[+−-]?\p{Nd}+(?:[.,，．'’\u00A0\u202F\u2009 ]\p{Nd}+)*(?:[eE][+-]?\p{Nd}+)?"#
+        let pattern = #"[+−-]?(?:[.,]\p{Nd}+|\p{Nd}+(?:[.,，．'’\u00A0\u202F\u2009 ]\p{Nd}+)*)(?:[eE][+-]?\p{Nd}+)?"#
         guard let regularExpression = try? NSRegularExpression(pattern: pattern) else {
             return []
         }
