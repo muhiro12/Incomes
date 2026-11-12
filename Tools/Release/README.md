@@ -176,29 +176,48 @@ Successful metadata validation does not authorize review submission or release.
 
 ## Subsequent 6.x releases
 
-1. Develop on `main`; the `5.12` tag preserves the released 5.x baseline.
+1. Develop and commit on `develop`. Keep `main` at the latest published baseline;
+   version tags identify the corresponding released source commits.
 2. Verify library behavior, affected app surfaces, and relevant runtime flows.
-   The Xcode Cloud workflow targets `main` with **Latest Beta or Release**.
-   Match local release verification to the actual Xcode version recorded for
-   the candidate's Cloud build.
-3. Use Xcode Cloud to build, test, archive, and upload the intended candidate.
-   Apogee does not build or upload app binaries.
-4. Prepare the App Store version, locales, publication timing, and any review,
+   The current Xcode Cloud workflow starts from `develop`. Confirm its settings
+   before each candidate and match local release verification to the actual
+   Xcode version recorded for that candidate's Cloud build.
+3. Open a pull request from `develop` into `main`, record the exact candidate
+   commit, and share the release diff with the owner. Wait for the owner's review
+   and approval before merging. Do not create a separate candidate branch by
+   default. The PR can remain open while App Store review is pending.
+4. Use Xcode Cloud to build, test, archive, and upload that candidate. Confirm
+   the source SHA, required action results, and uploaded build number in the
+   Cloud build record. Apogee does not build or upload app binaries.
+5. Prepare the App Store version, locales, publication timing, and any review,
    privacy, or subscription updates. `create-version` defaults to manual release;
    pass `--release-type AFTER_APPROVAL` to preserve Incomes' automatic release
    policy, or explicitly select another policy for the intended release.
    `update-version-settings` can change copyright or release policy. Both
    commands plan first and apply only when approved.
    Locale creation and review declarations stay in App Store Connect.
-5. Validate metadata, inspect release status, and review/apply the intended
+6. Validate metadata, inspect release status, and review/apply the intended
    metadata update. `read-metadata` exports the stored remote values, and
    `update-screenshots` plans Asset Library placements and applies an approved
    plan with private recovery storage. Attach an exact processed build through
    a separate `attach-build --dry-run`, followed by its approved `--apply`.
-6. Treat `submit-for-review` as a separate release decision after all evidence
+7. Treat `submit-for-review` as a separate release decision after all evidence
    is ready. Read `build-feedback` for the candidate build, then check the dry
    run, attached build, and publication timing before applying. Monitor with
-   `release-status`; confirm publication separately.
+   `release-status`. Pending review is not publication: leave the release tag,
+   published GitHub Release, `main` integration, and next-version increment
+   until the release is complete.
+8. Confirm the intended version is available on the App Store, then match its
+   attached App Store Connect build to the Cloud source SHA. Create the version
+   tag and GitHub Release for that exact released source commit. After the
+   owner's PR approval, merge `develop` into `main` while preserving candidate
+   ancestry and excluding later development. If `develop` has advanced beyond
+   the approved candidate, avoid including that work and consult the owner when
+   needed. The merge commit may have a different SHA from the release tag;
+   verify its source tree matches the published candidate.
+9. Once the release is complete, increment the next development version on
+   `develop` using the existing version-commit convention. Keep that increment
+   out of the completed release tag and `main` baseline.
 
 No operation runs automatically from an app build or Git push in this package.
 Use Apogee's [adoption guide](https://github.com/muhiro12/Apogee/blob/1.6.0/docs/adoption.md)
