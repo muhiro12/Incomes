@@ -10,10 +10,7 @@ import MHPreferencesUI
 import SwiftData
 import SwiftUI
 
-struct SettingsListView {
-    @AppStorage(\.isDebugOn)
-    private var isDebugOn
-}
+struct SettingsListView {}
 
 extension SettingsListView: View {
     var body: some View {
@@ -25,13 +22,11 @@ extension SettingsListView: View {
                     Label("Items", systemImage: "list.bullet")
                 }
             }
-            if isDebugOn {
-                Section {
-                    NavigationLink {
-                        WatchDebugView()
-                    } label: {
-                        Label("Debug", systemImage: "flask")
-                    }
+            Section {
+                NavigationLink {
+                    WatchDebugView()
+                } label: {
+                    Label("Debug", systemImage: "ladybug")
                 }
             }
         }

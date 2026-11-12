@@ -12,10 +12,9 @@ struct ItemInferenceErrorTests {
 
     @available(iOS 26.0, *)
     @Test
-    func errorDescription_describes_unsupported_locale() {
-        #expect(
-            ItemInferenceError.unsupportedLocale.errorDescription ==
-                "On-device item inference is unavailable in the current language."
-        )
+    func unsupported_locale_has_a_distinct_recovery_message() {
+        let message = ItemInferenceError.unsupportedLocale.errorDescription
+        #expect(message != ItemInferenceError.unavailableModel.errorDescription)
+        #expect(message != ItemInferenceError.generationFailed.errorDescription)
     }
 }

@@ -1,3 +1,4 @@
+#if DEBUG
 import SwiftUI
 
 struct DebugNaturalLanguageSearchMessageSection: View {
@@ -74,3 +75,4 @@ private extension DebugNaturalLanguageSearchMessageSection {
         }
     }
 }
+#endif

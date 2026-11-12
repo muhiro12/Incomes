@@ -1,5 +1,14 @@
 # Incomes
 
+## Branches and release review
+
+Use `develop` for daily development. Keep agent review and the documented
+verification checks in the daily workflow. `main` tracks the released baseline.
+Before shipping, review `main...develop` and record the exact candidate commit.
+After publication, merge that released commit into `main`; do not include later
+work added to `develop`. Preserve commit ancestry so the next release comparison
+starts from the previous released candidate.
+
 ## Overview
 
 Incomes is a budget planner for looking ahead at future balances and deciding
@@ -20,8 +29,8 @@ Models.
   views, SwiftData, and on-device services such as notifications, ads, and App
   Intents.
 - **Watch** – a watchOS companion that mirrors upcoming payments, settings, and
-  debug utilities while staying in sync with the phone via WatchConnectivity
-  snapshots.
+  read-only diagnostics while staying in sync with the phone via
+  WatchConnectivity snapshots.
 - **Widgets** – a WidgetKit bundle that surfaces balances, upcoming
   transactions, and monthly breakdowns on the Home Screen and StandBy.
 - **IncomesLibrary** – the shared domain layer containing the SwiftData models,
@@ -32,6 +41,12 @@ Models.
 
 ### Capture and inference
 
+- Use Input Assistance to interpret prose with on-device AI or read an explicit
+  Markdown template without AI. Both paths prefill the ordinary editable form;
+  creating the Item remains an explicit action. Copy a prompt/template for an
+  external tool or export one saved Item's supported fields. See
+  [Item template exchange](Designs/Architecture/item-template-exchange.md)
+  for field coverage, currency requirements, and validation rules.
 - Capture receipts through the photo library or camera, then run on-device
   VisionKit text recognition to assemble a transcript.
 - Use Apple Foundation Models to infer the date, amounts, and category that
@@ -55,6 +70,17 @@ Models.
 - Generative features require iOS 26 or later, a compatible device, and Apple
   Intelligence ready in a supported language. Their App Intent adapters remain
   undiscoverable while the system experience is qualified.
+
+### Debug
+
+- Open Settings > Advanced > Debug to inspect local logs and saved data without
+  changing financial records or Premium access.
+- Open the log console from Debug on the startup-error screen when the database
+  cannot be opened. This entry does not require a model container.
+- Export logs explicitly after reviewing them. Sample insertion, TipKit test
+  controls, and other development tools are available only in DEBUG builds.
+- See [Diagnostic Boundaries](Designs/Architecture/sample-data-profiles.md#diagnostic-boundaries)
+  for available operations and release disclosure expectations.
 
 ### Notifications and schedules
 
@@ -99,6 +125,12 @@ Models.
 - **WatchConnectivity bridge** – `PhoneWatchBridge` answers watch requests with
   typed `WatchSyncReply` payloads, while `PhoneSyncClient` manages activation
   and message replies on watchOS.
+- **Development data** – normal DEBUG builds use a separate persistent
+  `Incomes-Development.sqlite` store without iCloud sync. The first creation
+  seeds the standard sample profile; later launches preserve edits and empty
+  states. See [Sample Data Profiles](Designs/Architecture/sample-data-profiles.md)
+  for disabling seeding and testing an empty store. Release keeps its existing
+  store, migration, and sync behavior.
 - **Preview infrastructure** – `IncomesSampleData` provisions an in-memory
   store, a named sample-data profile, and mock services so SwiftUI previews
   remain functional. See
@@ -183,8 +215,8 @@ Models.
 
 Follow these steps to run a local build:
 
-1. Clone the repository, check out `main` for Incomes 6.x, and open the project
-   directory. The `5.12` tag preserves the released 5.x baseline.
+1. Clone the repository, check out `develop`, and open the project directory.
+   Release tags preserve the corresponding published baselines.
 2. Update bundle identifiers and the app group constant to match your
    provisioning profile if you are not using the production identifiers.
 3. If you are shipping a fork with your own identifiers, update
@@ -367,11 +399,12 @@ TestFlight feedback inspection, and reviewed version, metadata, screenshot,
 build-attachment, and submission operations.
 
 Xcode Cloud continues to own formal builds, tests, archives, and binary upload.
-The workflow targets `main` with **Latest Beta or Release**. Check the actual
-Xcode version in each candidate's build record and match it for local release
-verification. Apogee creates App Store versions and changes publication policy
-only through explicit, reviewed operations, and never builds or uploads
-binaries.
+The existing workflow was configured for `main` with **Latest Beta or Release**.
+Before the next candidate build, configure Xcode Cloud to build the reviewed
+commit from `develop` or a fixed candidate branch. Confirm the source commit and
+actual Xcode version in the build record and match that toolchain locally.
+Apogee creates App Store versions and changes publication policy only through
+explicit, reviewed operations, and never builds or uploads binaries.
 
 ## Useful links
 

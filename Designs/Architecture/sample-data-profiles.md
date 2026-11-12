@@ -52,21 +52,54 @@ that already holds records leaves those records untouched.
 
 ## Store Safety
 
-Seeding writes into the context it receives. Only explicit actions seed the
-user's store:
+Seeding writes into the context it receives. Store selection keeps development
+records separate from released financial records:
 
+- Normal DEBUG startup opens `Incomes-Development.sqlite` in the App Group,
+  with CloudKit disabled, and seeds the standard profile only when creating that
+  database file. No launch arguments are needed. DEBUG widgets read this same
+  development file; App Intents use the host's development container. Watch
+  continues to receive phone snapshots in its isolated in-memory store.
+- Release continues to use `Incomes.sqlite` and its existing iCloud preference.
+  DEBUG startup never relocates, copies, or opens the released or legacy store.
+  Existing development records previously stored there remain in that file.
 - SwiftUI previews use `IncomesSampleData.makePreviewContext(profile:)`, which
-  seeds an in-memory, CloudKit-disabled container. The Watch preview wrapper
-  also uses an in-memory container.
-- Tests seed in-memory contexts.
-- Debug "Add Sample Data" requires the Debug option and a confirmation, then
-  adds the chosen profile to the user's store.
-- UI smoke seeding runs only in Debug builds, only with the
-  `--incomes-ui-smoke-seed-if-empty` launch argument, and only when the store
-  is empty.
+  seeds an in-memory, CloudKit-disabled container. Watch previews do likewise.
+- Tests use isolated contexts or temporary store directories.
+- Debug "Add Sample Data" is compiled only in DEBUG builds. After
+  confirmation, it adds the chosen profile only when the development store has
+  no items. The operation validates the context's actual store URL, writable
+  persistent configuration, and absence of a CloudKit container before mutation.
+  Other stores and populated stores are rejected without changing their records.
+  This action works without restarting after disabling automatic seeding or
+  deleting samples, independently of the initial-seeding setting.
+- The explicit `--incomes-ui-smoke-seed-if-empty` argument remains available for
+  smoke workflows. Unlike automatic initialization, it intentionally refills an
+  empty development store when requested. Screenshot mode keeps its independent
+  in-memory fixtures.
 
-Settings removes seeded data with the debug-data delete action. Watch Debug
-has the same action.
+The database file itself records initialization, independently of item count.
+Subsequent launches preserve developer edits and intentional empty states. A
+failed initial seed surfaces through startup recovery; retry opens the existing
+store without adding another dataset. Use the explicit Debug action if samples
+are needed after recovery. An unreadable store fails instead of being replaced.
+
+To disable automatic seeding, set `automaticallySeedsSampleData` to `false` in
+`IncomesStartupDebugOptions.swift` and rebuild. This changes only initialization;
+it never deletes existing records. For an empty-state check on an existing
+installation, separately use Settings maintenance to remove the records, without
+the explicit smoke-seeding argument. Re-enabling automatic seeding still leaves
+that existing empty database empty. Only removing the development database file
+(or using a fresh installation) makes it new again.
+
+DEBUG ignores the saved iCloud preference and omits the iCloud toggle and restart
+notice. The former `--incomes-ui-smoke-icloud-on` argument no longer enables
+CloudKit in DEBUG. Use a deliberately prepared Release environment for CloudKit
+integration checks. This does not change the saved Release sync preference.
+
+Settings removes seeded data with the debug-data delete action, including in
+Release builds so previously added samples can still be removed. Watch Debug
+has the same action in DEBUG builds.
 
 ## Surfaces
 
@@ -92,3 +125,70 @@ has the same action.
 3. Tag every seeded item with the debug "Sample Data" tag.
 4. Cover the profile in `SampleDataOperationsTests`.
 5. Add it to the table above and to any surface that uses it.
+
+## Diagnostic Boundaries
+
+Settings exposes an Advanced destination containing Offline Editing, Maintenance,
+and Debug in both DEBUG and Release. The existing Debug route opens this same
+screen with Advanced in its back-navigation path. The iOS console can inspect
+current and previous logs, adjust capture level, and copy or export logs
+explicitly. Clearing logs requires confirmation and does not clear financial
+records. Release starts with
+warning/error capture; changing diagnostic visibility does not change capture
+level. Users should inspect logs before sharing them.
+
+The ordinary Settings entry is also the intended entry in TestFlight and App
+Store builds. Removing the former `Enable Debug` secret command was deliberate:
+the owner needs occasional inspection in the distributed app, and a discoverable
+entry avoids relying on hidden functionality that needs separate App Review
+consideration. Do not restore a secret command, gesture, or saved mode as an
+unlock requirement. Individual development tools remain build-gated; the
+item-detail preference only controls optional diagnostic values. See the
+[owner clarification](https://github.com/muhiro12/Incomes/issues/417#issuecomment-6465664421).
+
+The data-inspection paths are read-only: all items and tags lead to diagnostic
+values without edit, duplicate, delete, or recalculation controls. The optional
+item-diagnostics toggle uses the existing preference and adds raw values to the
+ordinary item detail screen; launching the app does not override that choice.
+Watch Debug only browses its received item/tag snapshot in Release.
+
+Sample insertion, TipKit test controls, ad/subscription test placements, and the
+experimental natural-language-search UI remain behind `#if DEBUG`. Debug
+uses the Settings entry without an item-form activation command. A persisted
+diagnostic preference cannot enable development controls in Release. Screenshot
+fixtures that simulate subscription state remain DEBUG-only and use isolated
+stores and preferences.
+
+Release retains the explicit Settings maintenance operation for removing samples
+added by older versions. Diagnostic visibility does not grant Premium access;
+purchase status and normal financial mutations retain their existing checks.
+
+Technical safety and App Review disclosure are separate requirements. The visible
+Settings entry explains the support purpose of these tools rather than relying
+on a secret gesture. Review notes for a release exposing Debug should
+identify Settings > Advanced > Debug, describe local log export and
+read-only inspection, and distinguish these from excluded development controls.
+This source change does not update App Store Connect or establish review approval.
+
+### Naming and Startup Access
+
+The visible name is **Debug** (Japanese: **デバッグ**), with the `ladybug` icon.
+The screen also contains development tools in DEBUG builds, so its name does not
+imply an automated diagnosis. The log destination is **Log Console**, and the
+item-detail preference is **Show Item Debug Information**. Existing preference
+keys and the `settings/debug` route remain unchanged.
+
+The startup-error screen also offers Debug. It opens only the existing log
+console using the startup coordinator's logging instance, without opening a
+database, retrying startup, or accessing item inspectors. Log capture and export
+retain the same behavior as the Settings console; closing it returns to the
+unchanged recovery screen. The separate Try Again action owns startup retries.
+
+This follows Stally's discoverable access and startup-failure inspection pattern.
+Incomes retains its own capabilities: explicit log export, legacy sample removal
+in Settings maintenance, and the DEBUG-only local store shared with widgets.
+Stally's next-launch store-selection controls are not required for this access
+pattern. Incomes continues to use a deliberately prepared Release environment
+for production-store integration checks. Manual sample insertion still validates
+the actual development store and pending edits at the operation boundary; a
+visible or disabled button is not its authorization mechanism.

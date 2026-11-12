@@ -14,6 +14,33 @@ struct ItemBalanceProjectionReviewTests {
     }
 
     @Test
+    func editing_a_reviewed_draft_requires_another_review_even_after_further_edits() throws {
+        var state = ItemBalanceProjectionReviewState()
+        state.invalidate()
+        #expect(!state.requiresNewReview)
+
+        try Support.createRent(context: context, repeatCount: 3)
+        let item = fetchItems(context)[1]
+        let review = try ItemBalanceProjectionOperations.reviewUpdate(
+            context: context, item: item, input: Support.movedRentInput, scope: .futureItems
+        )
+        state.accept(review)
+        state.invalidate()
+        state.invalidate()
+        #expect(state.review == nil)
+        #expect(state.reviewedScope == .futureItems)
+        #expect(state.requiresNewReview)
+
+        let renewed = try ItemBalanceProjectionOperations.reviewUpdate(
+            context: context, item: item, input: Support.changedDraftInput, scope: .thisItem
+        )
+        state.accept(renewed)
+        #expect(!state.requiresNewReview)
+        #expect(state.review == renewed)
+        #expect(state.reviewedScope == .thisItem)
+    }
+
+    @Test
     func reviewUpdate_applies_the_reviewed_future_records_only() throws {
         try Support.createRent(
             context: context,

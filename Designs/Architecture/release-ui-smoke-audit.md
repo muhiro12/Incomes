@@ -50,6 +50,13 @@ The repository expectation is:
 7. Treat skipped targets and state-dependent coverage as explicit coverage
    gaps.
 
+For development sample changes, use the library's disk-store tests for insertion,
+duplicate refusal and reopen behavior. Revisit the live diagnostics screen when
+its controls, displayed counts, or Debug/Release wiring change. Library tests
+cover clearing the old month when the year changes and preserving it when the
+same year is selected. After changing native navigation, check Back and opening
+the same month again on the affected compact or split layout.
+
 ## Safety Rules
 
 Release UI smoke auditing is non-destructive by default.

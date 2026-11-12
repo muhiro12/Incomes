@@ -1,13 +1,13 @@
 # Incomes release tools
 
 This macOS SwiftPM package uses Apogee's command plugin for the Incomes 6.x
-release cycle. It pins Apogee **1.5.0** at
-`5492b06b750833fc945ae0fd041e011351d131d2`; commit `Package.resolved` with any
+release cycle. It pins Apogee **1.6.0** at
+`22aa373e40fa2fad0b33506e7afe14e2ab45074d`; commit `Package.resolved` with any
 deliberate dependency update. No app target links Apogee.
 
 Apogee publishes three-component semantic version tags, so the Git tag, the
 `Package.swift` requirement, and the `Package.resolved` version all read
-`1.5.0`. Check the resolved revision as well as the version when updating.
+`1.6.0`. Check the resolved revision as well as the version when updating.
 
 Match the selected local Xcode to the toolchain used for the intended release
 candidate. The current project-format qualification uses Xcode 27.2 RC
@@ -32,7 +32,7 @@ result. The flag is optional and does not change the dry-run or apply boundary.
 
 ## Screenshot migration from 1.4.0
 
-Apogee 1.5.0 uses Apple's App Asset Library, including `IPHONE_DUO`.
+Apogee uses Apple's App Asset Library, including `IPHONE_DUO`.
 Production input directories now use display classes instead of the former
 `APP_*` names. For the current Incomes captures, use these directories under
 each App Store locale:
@@ -65,7 +65,7 @@ server-verified checksum: the new API has no `sourceFileChecksum`. Verification
 checks processing, compatible specifications, byte counts, asset and placement
 identities, readiness, and order. Inspect the entire plan before applying.
 
-See the pinned [screenshot guide](https://github.com/muhiro12/Apogee/blob/1.5.0/docs/screenshots.md)
+See the pinned [screenshot guide](https://github.com/muhiro12/Apogee/blob/1.6.0/docs/screenshots.md)
 for input limits, recovery, and the verification contract.
 
 ## Local metadata
@@ -184,9 +184,11 @@ Successful metadata validation does not authorize review submission or release.
 3. Use Xcode Cloud to build, test, archive, and upload the intended candidate.
    Apogee does not build or upload app binaries.
 4. Prepare the App Store version, locales, publication timing, and any review,
-   privacy, or subscription updates. `create-version` can create a missing
-   version for manual release, and `update-version-settings` can change
-   copyright or release policy; both plan first and apply only when approved.
+   privacy, or subscription updates. `create-version` defaults to manual release;
+   pass `--release-type AFTER_APPROVAL` to preserve Incomes' automatic release
+   policy, or explicitly select another policy for the intended release.
+   `update-version-settings` can change copyright or release policy. Both
+   commands plan first and apply only when approved.
    Locale creation and review declarations stay in App Store Connect.
 5. Validate metadata, inspect release status, and review/apply the intended
    metadata update. `read-metadata` exports the stored remote values, and
@@ -199,7 +201,7 @@ Successful metadata validation does not authorize review submission or release.
    `release-status`; confirm publication separately.
 
 No operation runs automatically from an app build or Git push in this package.
-Use Apogee's [adoption guide](https://github.com/muhiro12/Apogee/blob/1.5.0/docs/adoption.md)
+Use Apogee's [adoption guide](https://github.com/muhiro12/Apogee/blob/1.6.0/docs/adoption.md)
 for command boundaries and failure recovery. After dependency updates, verify
 the published tag and resolved revision, run local metadata validation, and
 check release status and a fresh metadata dry run before the next write.

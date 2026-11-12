@@ -1,3 +1,4 @@
+#if DEBUG
 import SwiftUI
 
 struct DebugSearchConditionsSection: View {
@@ -70,3 +71,4 @@ private extension DebugSearchConditionsSection {
         amount.groupedDecimalText(locale: locale)
     }
 }
+#endif

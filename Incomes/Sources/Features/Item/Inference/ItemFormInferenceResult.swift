@@ -6,19 +6,27 @@
 //
 
 import Foundation
-import FoundationModels
 
 @available(iOS 26.0, *)
-@Generable(description: "A single household finance item inferred from user text.")
 struct ItemFormInferenceResult: Sendable {
-    @Guide(description: "The item date formatted as yyyyMMdd.")
-    var date: String
-    @Guide(description: "A short item description in the requested language.")
-    var content: String
-    @Guide(description: "Positive income amount, or 0 when this item is not income.")
-    var income: Decimal
-    @Guide(description: "Positive outgo amount, or 0 when this item is not outgo.")
-    var outgo: Decimal
-    @Guide(description: "A concise category name in the requested language.")
-    var category: String
+    let date: String
+    let content: String
+    let hasUnspecifiedAmount: Bool
+    let income: Decimal
+    let outgo: Decimal
+    let category: String
+
+    init(generated: ItemFormInferenceGeneratedFields, sourceText: String, referenceDate: Date, locale: Locale) {
+        date = ItemInferenceDateOperations.dateString(
+            expression: generated.dateExpression,
+            sourceText: sourceText,
+            referenceDate: referenceDate,
+            locale: locale
+        )
+        content = generated.content
+        hasUnspecifiedAmount = generated.hasUnspecifiedAmount
+        income = generated.income
+        outgo = generated.outgo
+        category = generated.category
+    }
 }

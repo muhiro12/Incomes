@@ -13,8 +13,21 @@ import SwiftData
 final class MainNavigationRouter {
     let ledgerIdentifier: LedgerIdentifier
 
-    var yearTagID: Tag.ID?
-    var selectedTag: Tag?
+    private var selection = MainNavigationSelection()
+
+    var yearTagID: Tag.ID? {
+        selection.yearTagID
+    }
+
+    var selectedTag: Tag? {
+        get {
+            selection.selectedTag
+        }
+        set {
+            selection.selectedTag = newValue
+        }
+    }
+
     var searchText = ""
     var predicate: ItemPredicate?
     var isSearchActive = false
@@ -31,10 +44,13 @@ final class MainNavigationRouter {
             yearTagID
         }
         set {
-            guard newValue != yearTagID else {
+            var next = selection
+            guard next.selectYear(newValue) else {
                 return
             }
-            selectYearTagID(newValue)
+            selection = next
+            dismissItemDetail()
+            clearSearchState()
         }
     }
 
@@ -63,14 +79,12 @@ final class MainNavigationRouter {
             // A deleted year keeps today's default instead of an empty selection.
             return
         }
-        self.yearTagID = yearTagID
-        self.selectedTag = selectedTag
+        selection = .init(yearTagID: yearTagID, selectedTag: selectedTag)
     }
 
     func loadState(context: ModelContext) throws {
         let state = try MainNavigationOperations.loadState(context: context, ledgerIdentifier: ledgerIdentifier)
-        yearTagID = state.yearTag?.persistentModelID
-        selectedTag = state.yearMonthTag
+        selection = .init(yearTagID: state.yearTag?.persistentModelID, selectedTag: state.yearMonthTag)
         dismissItemDetail()
     }
 
@@ -105,8 +119,7 @@ final class MainNavigationRouter {
     }
 
     func selectYearTagID(_ yearTagID: Tag.ID?) {
-        self.yearTagID = yearTagID
-        selectedTag = nil
+        selection = .init(yearTagID: yearTagID)
         dismissItemDetail()
         clearSearchState()
     }
@@ -175,8 +188,7 @@ private extension MainNavigationRouter {
 
     func selectDestination(yearTagID: Tag.ID?, selectedTag: Tag?) {
         settingsDestination = nil
-        self.yearTagID = yearTagID
-        self.selectedTag = selectedTag
+        selection = .init(yearTagID: yearTagID, selectedTag: selectedTag)
         dismissItemDetail()
         clearSearchState()
     }
@@ -191,8 +203,7 @@ private extension MainNavigationRouter {
             date: item.localDate,
             ledgerIdentifier: ledgerIdentifier
         )
-        yearTagID = state.yearTag?.persistentModelID
-        selectedTag = state.yearMonthTag
+        selection = .init(yearTagID: state.yearTag?.persistentModelID, selectedTag: state.yearMonthTag)
         clearSearchState()
         sheetRoute = .itemDetail(itemID)
     }

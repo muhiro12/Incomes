@@ -6,8 +6,8 @@ import SwiftData
 ///
 /// Every seeded item carries the debug "Sample Data" tag, so
 /// `deleteDebugData(context:)` can remove it again. Seeding writes into the
-/// context it receives; callers use an in-memory container unless an explicit
-/// Debug or launch-argument action targets the user's store.
+/// context it receives; development startup uses a separate persistent store,
+/// and previews and tests use isolated containers.
 public enum SampleDataOperations {
     /// Named sample datasets. Profiles compose the standard ledger where they can.
     public enum Profile: CaseIterable, Sendable {

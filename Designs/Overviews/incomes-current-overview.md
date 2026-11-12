@@ -25,7 +25,7 @@ living in the app targets.
 | Surface | Current role | Key responsibilities |
 | --- | --- | --- |
 | `Incomes` | Primary product surface | Data entry, browsing, charts, search, notifications, subscription, sync settings, ads, deep links, App Intents, debug tools |
-| `Watch` | Lightweight companion | Show upcoming items, reload recent months from phone, inspect items in debug mode |
+| `Watch` | Lightweight companion | Show upcoming items, reload recent months from phone, inspect received items in Debug |
 | `Widgets` | Passive glanceable surface | Show month totals, month net income, next or previous item, deep-link back into the app |
 | `IncomesLibrary` | Shared domain layer | SwiftData models, predicates, calculators, yearly duplication, notification planning, maintenance services, routes |
 
@@ -263,17 +263,26 @@ living in the app targets.
 - Request App Store review opportunistically after create or save flows and on
   foreground activation using randomized policies.
 
-### 14. Debug and internal maintenance features
+### 14. Debug and development tools
 
-- Enable or disable a debug option.
-- Seed the standard sample ledger, a large ledger for performance checks, or
-  sample data with duplicate tags for duplicate tag testing.
-- View all items and all tags from debug navigation.
-- Reset or force-show TipKit state for testing.
-- Inspect ads and subscription screens from debug mode.
-- Remove debug sample data from iPhone and Apple Watch surfaces.
-- Allow a hidden form gesture path where cancelling with the content text
-  `Enable Debug` turns on debug mode.
+- Open Debug through Settings > Advanced in both DEBUG and Release builds.
+  Advanced also contains Offline Editing and Maintenance, keeping these tools
+  one level below the main settings list.
+- Open the log console through Debug on the startup-error screen without a
+  model container or an automatic startup retry.
+- Inspect diagnostic logs, change the capture level, and explicitly copy/export
+  logs or confirm clearing log history without changing financial records.
+- Browse all items and tags through read-only diagnostic screens.
+- Choose whether ordinary item details show raw diagnostic values. The choice
+  survives subsequent launches and does not grant Premium access.
+- In DEBUG only, seed sample profiles, test TipKit state, inspect ad/subscription
+  placements, and experiment with natural-language search.
+- Open Debug without an activation command. Existing Debug URLs open the same
+  screen in both configurations, with Advanced in the back-navigation path.
+- Remove previously added samples through the normal Settings maintenance flow.
+
+See [diagnostic boundaries](../Architecture/sample-data-profiles.md#diagnostic-boundaries)
+for the Release/development split and disclosure expectations.
 
 ## Apple Watch Features
 
@@ -285,7 +294,8 @@ living in the app targets.
 - Show the upcoming day of items on the main watch screen.
 - Show a manual reload action.
 - Show a Settings entry point.
-- In debug mode, inspect all items and tags and remove debug sample data.
+- Inspect received items and tags in Debug in both build configurations.
+- In DEBUG builds, remove sample data from the local Watch mirror.
 
 ## Widget Features
 

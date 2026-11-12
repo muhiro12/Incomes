@@ -2,15 +2,22 @@ import MHPlatform
 import SwiftData
 
 enum IncomesPlatformEnvironmentFactory {
+    @MainActor
     static func makeAppModelContainer(
         isICloudEnabled: Bool
     ) throws -> ModelContainer {
+        #if DEBUG
+        try DevelopmentStore.makeContainer(
+            automaticallySeedsSampleData: IncomesStartupDebugOptions.automaticallySeedsSampleData
+        )
+        #else
         try ModelContainerFactory.make(
             configuration: .init(
                 url: Database.url,
                 cloudKitDatabase: isICloudEnabled ? .automatic : .none
             )
         )
+        #endif
     }
 
     static func makePreviewModelContainer() throws -> ModelContainer {

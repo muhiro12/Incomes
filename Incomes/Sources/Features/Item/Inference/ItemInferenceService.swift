@@ -32,25 +32,25 @@ enum ItemInferenceService {
                 unavailableModelError: ItemInferenceError.unavailableModel,
                 unsupportedLocaleError: ItemInferenceError.unsupportedLocale
             )
-            let instructions = ItemFormInferenceOperations.instructions()
             let session = LanguageModelSession(model: model) {
-                instructions
+                ItemFormInferenceOperations.instructions()
             }
             let prompt = ItemFormInferenceOperations.prompt(
                 text: text,
                 currentDate: currentDate,
                 locale: locale
             )
-            let response = try await session.respond(
-                generating: ItemFormInferenceResult.self
-            ) {
+            let response = try await session.respond(generating: ItemFormInferenceGeneratedFields.self) {
                 prompt
             }
+            let result = try validated(.init(
+                generated: response.content, sourceText: text, referenceDate: currentDate, locale: locale
+            ))
             logger.notice(
                 "inference.completed",
                 metadata: metadata
             )
-            return response.content
+            return result
         } catch {
             if error is CancellationError {
                 throw error
@@ -73,6 +73,19 @@ enum ItemInferenceService {
 
 @available(iOS 26.0, *)
 private extension ItemInferenceService {
+    static func validated(_ result: ItemFormInferenceResult) throws -> ItemFormInferenceResult {
+        try ItemFormInferenceOperations.validate(
+            dateString: result.date,
+            content: result.content,
+            income: result.income,
+            outgo: result.outgo
+        )
+        if result.hasUnspecifiedAmount, result.income != .zero || result.outgo != .zero {
+            throw ItemInferenceError.invalidResult
+        }
+        return result
+    }
+
     static func inferenceError(from error: Error) -> ItemInferenceError {
         if let error = error as? ItemInferenceError {
             return error

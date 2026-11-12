@@ -13,8 +13,8 @@ struct DebugTagItemListView: View {
                 context: context,
                 persistentID: tagID
             ) {
-                ItemListGroup()
-                    .environment(tag)
+                DebugItemInspectionList(items: TagQueryOperations.items(for: tag))
+                    .navigationTitle(tag.displayName)
             } else {
                 ContentUnavailableView(
                     "Unable to Load Debug Items",

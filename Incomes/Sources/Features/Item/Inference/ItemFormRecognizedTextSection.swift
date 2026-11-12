@@ -20,7 +20,7 @@ struct ItemFormRecognizedTextSection: View {
         } header: {
             Text("Recognized Text")
         } footer: {
-            Text("We will extract date, amounts, category, and priority from this text.")
+            Text("We will extract date, amounts, content, and category from this text.")
         }
     }
 }

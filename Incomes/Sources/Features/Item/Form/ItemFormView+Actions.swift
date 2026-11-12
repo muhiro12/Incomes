@@ -71,6 +71,7 @@ extension ItemFormView {
     }
 
     func presentAssist() {
+        focusedField = nil
         formPresentation.sheetRoute = .assist
     }
 
@@ -82,11 +83,11 @@ extension ItemFormView {
     func applyBalanceProjectionReview(
         _ review: ItemBalanceProjectionReview
     ) {
-        formPresentation.applyBalanceProjectionReview(review)
+        formPresentation.projection.accept(review)
     }
 
     func requiresNewBalanceProjection() -> Bool {
-        guard formPresentation.requiresBalanceProjectionReview else {
+        guard formPresentation.projection.requiresNewReview else {
             return false
         }
         presentBalanceProjection()
@@ -113,7 +114,7 @@ extension ItemFormView {
             )
             return
         }
-        if let review = formPresentation.balanceProjectionReview {
+        if let review = formPresentation.projection.review {
             await performSave(
                 scope: review.scope ?? .thisItem,
                 review: review
@@ -203,7 +204,7 @@ extension ItemFormView {
                     item: item,
                     formInputData: formModel.formInputData,
                     repeatMonthSelections: formModel.effectiveRepeatMonthSelections,
-                    review: formPresentation.balanceProjectionReview
+                    review: formPresentation.projection.review
                 ),
                 dependencies: mutationDependencies
             )
@@ -227,7 +228,7 @@ extension ItemFormView {
                 ErrorMessageOperations.message(from: error)
             )
         }
-        formPresentation.clearBalanceProjectionReview()
+        formPresentation.projection.invalidate()
         return .presentError(
             ErrorMessageOperations.message(from: reviewError)
         )
@@ -235,11 +236,6 @@ extension ItemFormView {
 
     func cancel() {
         guard !formPresentation.isSubmitting else {
-            return
-        }
-        if formModel.content == "Enable Debug" {
-            formModel.content = ""
-            formPresentation.presentDebugDialog()
             return
         }
         dismiss()

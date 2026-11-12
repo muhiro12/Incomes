@@ -7,7 +7,7 @@ struct DebugDiagnosticsView: View {
 
     var body: some View {
         MHLogConsoleView(logging: logging)
-            .navigationTitle("Diagnostics Console")
+            .navigationTitle("Log Console")
             .toolbar {
                 ToolbarItem {
                     CloseButton()

@@ -14,6 +14,7 @@ extension DuplicateTagItemRow: View {
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .contentShape(Rectangle())
+        .itemEntityIdentifier(item)
         .contextMenu {
             ItemContextMenuActions()
         } preview: {

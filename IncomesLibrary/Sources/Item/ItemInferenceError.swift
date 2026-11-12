@@ -9,15 +9,25 @@ public enum ItemInferenceError: LocalizedError, Equatable, Sendable, CaseIterabl
     case unsupportedLocale
     /// Inference failed after the request was prepared.
     case generationFailed
+    /// Generated fields do not meet the app's date, content, or amount rules.
+    case invalidResult
 
     public var errorDescription: String? {
         switch self {
         case .unavailableModel:
-            return String(localized: "On-device item inference is currently unavailable.")
+            return String(localized: "On-device item inference is currently unavailable.", bundle: .module)
         case .unsupportedLocale:
-            return String(localized: "On-device item inference is unavailable in the current language.")
+            return String(
+                localized: "On-device item inference is unavailable in the current language.",
+                bundle: .module
+            )
         case .generationFailed:
-            return String(localized: "Unable to infer item details.")
+            return String(localized: "Unable to infer item details.", bundle: .module)
+        case .invalidResult:
+            return String(
+                localized: "The suggested date or amounts are invalid. Check the text or enter the item manually.",
+                bundle: .module
+            )
         }
     }
 }

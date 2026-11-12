@@ -15,6 +15,11 @@ struct ListItemSheetContent: View {
         case .duplicate:
             ItemFormNavigationView(mode: .create)
                 .incomesSheetPresentation()
+        case .exportTemplate:
+            NavigationStack {
+                ItemTemplateExportView()
+            }
+            .incomesSheetPresentation()
         }
     }
 

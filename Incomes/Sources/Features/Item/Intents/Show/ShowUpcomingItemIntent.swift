@@ -35,7 +35,8 @@ struct ShowUpcomingItemIntent: AppIntent {
         return ItemIntentShowResultSupport.singleItem(
             item,
             defaultDate: date,
-            ledgerIdentifier: identifier
+            ledgerIdentifier: identifier,
+            opensItemDetail: true
         )
     }
 }

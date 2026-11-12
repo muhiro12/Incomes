@@ -59,6 +59,10 @@ detail view or the items of a list.
 - Duplicate tag rows: open and copy name, then resolve. Reordered so the
   destructive resolve action is last; resolve stays visible in section
   headers.
+- Item rows in duplicate tag comparison show one stored item and offer the
+  standard item context menu. Annotate the item row with its `ItemEntity`.
+- Year and ledger picker menus change navigation scope and offer no action
+  on a specific item or tag. They have no item or tag annotation.
 - Orphan tag rows, yearly duplication proposals, and the Settings version
   row: kept as they are.
 

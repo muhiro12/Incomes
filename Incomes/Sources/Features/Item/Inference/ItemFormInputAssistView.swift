@@ -20,6 +20,9 @@ struct ItemFormInputAssistView: View {
         }
     }
 
+    var initialText: String?
+    var onApply: (() -> Void)?
+
     @Environment(\.dismiss)
     private var dismiss
     @Environment(ItemFormModel.self)
@@ -36,6 +39,7 @@ struct ItemFormInputAssistView: View {
     @State private var errorMessage: String?
     @State private var selectedItem: PhotosPickerItem?
     @State private var scanner: ImageTextScanner = .init()
+    @State private var hasLoadedInitialText = false
 
     var body: some View {
         @Bindable var scanner = scanner
@@ -62,7 +66,7 @@ struct ItemFormInputAssistView: View {
         }
         .formStyle(.grouped)
         .contentMargins(.bottom, designMetrics.spacing.inline, for: .scrollContent)
-        .navigationTitle("Text Capture")
+        .navigationTitle("Extract from Text")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ItemFormInputAssistToolbarContent(
@@ -87,10 +91,18 @@ struct ItemFormInputAssistView: View {
         .task(id: inferenceState.pendingRequest) {
             await applyInferenceAndClose()
         }
+        .onAppear {
+            guard !hasLoadedInitialText else {
+                return
+            }
+            hasLoadedInitialText = true
+            scanner.recognizedText = initialText ?? model.inferenceText
+        }
         .onDisappear {
             inferenceState.cancel()
         }
         .onChange(of: scanner.recognizedText) {
+            model.inferenceText = scanner.recognizedText
             inferenceState.cancel()
         }
         .onChange(of: model.draftChangeKey) {
@@ -192,9 +204,8 @@ private extension ItemFormInputAssistView {
             return
         }
         do {
-            let updatedInput = try await ItemFormInferenceApplier.apply(
+            let update = try await ItemFormInferenceApplier.makeUpdate(
                 text: request.text,
-                currentInput: request.input,
                 locale: locale,
                 currentDate: Date(),
                 logger: inferenceLogger
@@ -203,8 +214,12 @@ private extension ItemFormInputAssistView {
             guard completeInference(request) else {
                 return
             }
-            model.apply(updatedInput)
-            dismiss()
+            model.applyInference(update)
+            if let onApply {
+                onApply()
+            } else {
+                dismiss()
+            }
         } catch is CancellationError {
             if inferenceState.pendingRequest == request {
                 inferenceState.cancel()

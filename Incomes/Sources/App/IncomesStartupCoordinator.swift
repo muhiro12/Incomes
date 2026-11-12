@@ -16,9 +16,9 @@ final class IncomesStartupCoordinator {
     }
 
     private(set) var state: State
+    let logging: MHLoggingBootstrap
 
     private let preferenceStore: MHPreferenceStore
-    private let logging: MHLoggingBootstrap
     private let startupLogger: MHLogger
 
     init(
@@ -42,8 +42,11 @@ final class IncomesStartupCoordinator {
 
 private extension IncomesStartupCoordinator {
     func makeState() -> State {
-        let isICloudEnabled = IncomesStartupDebugOptions.isICloudForced
-            || preferenceStore.bool(for: \.isICloudOn)
+        #if DEBUG
+        let isICloudEnabled = false
+        #else
+        let isICloudEnabled = preferenceStore.bool(for: \.isICloudOn)
+        #endif
         startupLogger.notice(
             "platform_environment.build_requested",
             metadata: IncomesLogging.metadata(

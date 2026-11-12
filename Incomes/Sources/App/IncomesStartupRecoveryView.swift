@@ -1,8 +1,11 @@
+import MHPlatform
 import SwiftUI
 
 /// Shown when stored data cannot be opened, so startup stays recoverable.
 struct IncomesStartupRecoveryView: View {
     private static let descriptionSpacing: CGFloat = 8
+
+    @State private var isDebugPresented = false
 
     let phase: IncomesStartupFailurePhase
     let retry: () -> Void
@@ -22,6 +25,14 @@ struct IncomesStartupRecoveryView: View {
         } actions: {
             Button("Try Again", action: retry)
                 .buttonStyle(.borderedProminent)
+            Button("Debug", systemImage: "ladybug") {
+                isDebugPresented = true
+            }
+        }
+        .sheet(isPresented: $isDebugPresented) {
+            NavigationStack {
+                DebugDiagnosticsView()
+            }
         }
     }
 
@@ -39,4 +50,9 @@ struct IncomesStartupRecoveryView: View {
     IncomesStartupRecoveryView(phase: .databaseMigration) {
         // Preview only.
     }
+    .environment(
+        MainActor.assumeIsolated {
+            IncomesLogging.makeBootstrap()
+        }
+    )
 }

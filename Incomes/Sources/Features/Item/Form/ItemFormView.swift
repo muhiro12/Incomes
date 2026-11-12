@@ -38,9 +38,6 @@ struct ItemFormView: View {
     @AppStorage(\.isSubscribeOn)
     var isSubscribeOn
 
-    @AppStorage(\.isDebugOn)
-    var isDebugOn
-
     @FocusState var focusedField: ItemFormFocusedField?
     @State private var model: ItemFormModel
     @State private var presentation: ItemFormPresentationModel = .init()
@@ -48,6 +45,16 @@ struct ItemFormView: View {
     var canSubmit: Bool {
         model.isValid && !presentation.isSubmitting
             && LedgerAccessOperations.canEdit(model.ledgerIdentifier, isPremium: isSubscribeOn)
+    }
+
+    var supportsInputAssistance: Bool {
+        if mode == .create {
+            return true
+        }
+        if #available(iOS 26.0, *) {
+            return true
+        }
+        return false
     }
 
     let mode: Mode
@@ -73,6 +80,8 @@ extension ItemFormView {
         @Bindable var presentation = presentation
 
         Form {
+            inputAssistanceSection
+            inferenceReviewSection
             ItemFormInformationSection(
                 model: model,
                 income: incomeBinding,
@@ -90,13 +99,13 @@ extension ItemFormView {
                     Label("Preview Balance", systemImage: "chart.line.uptrend.xyaxis")
                 }
                 .disabled(!model.isValid)
-                if let review = presentation.balanceProjectionReview {
+                if let review = presentation.projection.review {
                     ItemFormReviewedProjectionSummary(review: review)
                 }
             } footer: {
-                if presentation.requiresBalanceProjectionReview {
+                if presentation.projection.requiresNewReview {
                     Text("Preview the balance again before saving.")
-                } else if presentation.balanceProjectionReview != nil {
+                } else if presentation.projection.review != nil {
                     Text("Saving applies this reviewed change. Editing this entry needs a new preview.")
                 }
             }
@@ -114,8 +123,7 @@ extension ItemFormView {
                 content: $model.content,
                 category: $model.category,
                 cancel: cancel,
-                submit: submit,
-                presentAssist: presentAssist
+                submit: submit
             )
         }
         .gesture(
@@ -127,24 +135,6 @@ extension ItemFormView {
                     focusedField = nil
                 }
         )
-        .confirmationDialog(
-            Text("Debug"),
-            isPresented: isDialogPresented(.debug)
-        ) {
-            Button {
-                isDebugOn = true
-                dismiss()
-            } label: {
-                Text("OK")
-            }
-            Button(role: .cancel) {
-                // no-op
-            } label: {
-                Text("Cancel")
-            }
-        } message: {
-            Text("Turn on the debug option?")
-        }
         .alert(
             "Error",
             isPresented: Binding(
@@ -206,20 +196,18 @@ extension ItemFormView {
         .sheet(item: $presentation.sheetRoute) { route in
             switch route {
             case .assist:
-                if #available(iOS 26.0, *) {
-                    NavigationStack {
-                        ItemFormInputAssistView()
-                            .environment(self.model)
-                    }
-                    .incomesSheetPresentation()
+                NavigationStack {
+                    ItemInputAssistanceView(allowsTemplates: mode == .create)
                 }
+                .environment(self.model)
+                .incomesSheetPresentation()
             case .balanceProjection:
                 NavigationStack {
                     ItemFormBalanceProjectionSheet(
                         mode: mode,
                         input: model.formInputData,
                         repeatMonthSelections: model.effectiveRepeatMonthSelections,
-                        reviewedScope: presentation.reviewedScope,
+                        reviewedScope: presentation.projection.reviewedScope,
                         onReview: applyBalanceProjectionReview
                     )
                 }
@@ -231,6 +219,27 @@ extension ItemFormView {
 }
 
 extension ItemFormView {
+    @ViewBuilder var inferenceReviewSection: some View {
+        if model.needsInferredDateReview || model.needsInferredAmountReview {
+            Section("Review Suggested Values") {
+                if model.needsInferredDateReview {
+                    Text("No exact date was read. The selected form date is kept for you to review.")
+                }
+                if model.needsInferredAmountReview {
+                    Text("The amount is unspecified. This draft uses 0 for income and outgo. Review before saving.")
+                }
+            }
+        }
+    }
+
+    @ViewBuilder var inputAssistanceSection: some View {
+        if supportsInputAssistance {
+            Section {
+                Button("Input Assistance", systemImage: "text.badge.plus", action: presentAssist)
+            }
+        }
+    }
+
     var formModel: ItemFormModel {
         get { model }
         nonmutating set { model = newValue }

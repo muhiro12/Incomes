@@ -45,6 +45,7 @@ struct IncomesApp: App {
                 IncomesStartupRecoveryView(phase: phase) {
                     startupCoordinator.retry()
                 }
+                .environment(startupCoordinator.logging)
             }
         }
     }

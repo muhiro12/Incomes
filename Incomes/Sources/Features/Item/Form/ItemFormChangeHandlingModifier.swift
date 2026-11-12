@@ -18,7 +18,7 @@ struct ItemFormChangeHandlingModifier: ViewModifier {
                 }
             }
             .onChange(of: model.draftChangeKey) { _, _ in
-                presentation.clearBalanceProjectionReview()
+                presentation.projection.invalidate()
             }
     }
 }
