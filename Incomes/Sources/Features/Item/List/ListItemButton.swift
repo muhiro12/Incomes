@@ -61,8 +61,8 @@ struct ListItemButton: View {
                     Haptic.warning.impact()
                     isDeletePresented = true
                 },
-                exportTemplateAction: {
-                    route = .exportTemplate
+                shareContentAction: {
+                    route = .shareContent
                 }
             )
         } preview: {

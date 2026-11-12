@@ -2,7 +2,7 @@ enum ListItemRoute: Hashable, Identifiable {
     case detail
     case edit
     case duplicate
-    case exportTemplate
+    case shareContent
 
     var id: Self {
         self
