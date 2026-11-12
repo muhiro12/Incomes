@@ -47,16 +47,6 @@ struct ItemFormView: View {
             && LedgerAccessOperations.canEdit(model.ledgerIdentifier, isPremium: isSubscribeOn)
     }
 
-    var supportsInputAssistance: Bool {
-        if mode == .create {
-            return true
-        }
-        if #available(iOS 26.0, *) {
-            return true
-        }
-        return false
-    }
-
     let mode: Mode
     let onCreate: (() -> Void)?
     let priorityRange = ItemFormInput.priorityRange
@@ -196,11 +186,13 @@ extension ItemFormView {
         .sheet(item: $presentation.sheetRoute) { route in
             switch route {
             case .assist:
-                NavigationStack {
-                    ItemInputAssistanceView(allowsTemplates: mode == .create)
+                if #available(iOS 26.0, *) {
+                    NavigationStack {
+                        ItemFormInputAssistView()
+                    }
+                    .environment(self.model)
+                    .incomesSheetPresentation()
                 }
-                .environment(self.model)
-                .incomesSheetPresentation()
             case .balanceProjection:
                 NavigationStack {
                     ItemFormBalanceProjectionSheet(
@@ -233,9 +225,11 @@ extension ItemFormView {
     }
 
     @ViewBuilder var inputAssistanceSection: some View {
-        if supportsInputAssistance {
+        if #available(iOS 26.0, *) {
             Section {
                 Button("Input Assistance", systemImage: "text.badge.plus", action: presentAssist)
+            } footer: {
+                Text("Extract item details from pasted text or a photo using Apple Intelligence.")
             }
         }
     }

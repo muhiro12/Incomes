@@ -2,9 +2,16 @@
 
 ## Scope
 
+This is a historical qualification record. The 6.3 development change in
+[#426](https://github.com/muhiro12/Incomes/issues/426) retires the template path.
+The retained inference value, locale, save/reopen, and file-export tests now use
+direct typed fixtures; template-only grammar and round-trip tests are removed.
+Readable content copying has separate tests. The model measurements below have
+not been rerun for this interface simplification and are not new release evidence.
+
 This record covers deterministic logic and UI-free real-model evaluation of
-the two paths in
-[Item template exchange](item-template-exchange.md), verified on 2026-10-29.
+the inference and template paths present on 2026-10-29. See
+[Item input and content sharing](item-input-and-sharing.md) for current behavior.
 Inference tests supply fixed typed results; they do not invoke a model.
 Template tests supply literal documents. Both exercise the shared Item value
 and persistence contracts. A separate opt-in probe calls Foundation Models
@@ -102,7 +109,7 @@ establish whether rent was income or expense. Its date expectation remains
 empty. The baseline eight cases were not rewritten to fit outputs.
 
 Supported expressions and unresolved formats are documented in the
-[date boundary](item-template-exchange.md#inference-and-shared-form-boundaries).
+[date boundary](item-input-and-sharing.md#inference-and-shared-form-boundaries).
 This sample demonstrates the tested app behavior; it does not establish that
 the model itself performs reliable calendar arithmetic or reads arbitrary prose
 correctly. Description/category meaning and physical-device performance remain
