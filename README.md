@@ -416,6 +416,34 @@ This is a scoped fallback, not a change to the running native build service.
 Verify that the affected test bundles actually relink and inspect their
 diagnostics; a cached build alone does not demonstrate that the warning is gone.
 
+### App Intents extraction in package tests
+
+With Xcode 27.2, both generated library test bundles report
+`Metadata extraction skipped, no AppIntents.framework dependency found`.
+`IncomesLibrary`, its tests, and their current dependencies contain no App Intents;
+these diagnostics do not indicate missing metadata in the app's Shortcuts.
+
+For the library-only command-line fallback, skip the unnecessary extraction task
+with `LM_SKIP_METADATA_EXTRACTION=YES`. Swift Build checks this setting before
+[creating the metadata tasks](https://github.com/swiftlang/swift-build/blob/9222a8ade22dead4273fa5f10d3550a988e6c094/Sources/SWBApplePlatform/AppIntentsMetadataTaskProducer.swift).
+Keep these build products separate from normal app builds:
+
+```sh
+env -u SDKROOT "$(xcode-select -p)/usr/bin/xcodebuild" \
+  -project Incomes.xcodeproj -scheme IncomesLibrary \
+  -destination 'platform=iOS Simulator,id=<discovered-simulator-uuid>' \
+  -derivedDataPath /tmp/incomes-library-tests-no-appintents \
+  LM_SKIP_METADATA_EXTRACTION=YES test
+```
+
+This invocation-wide override is limited to the library scheme. Do not apply it
+to app, widget, watch, or archive builds, which need App Intents metadata.
+Reassess it if the library or its dependencies start defining App Intents.
+The native integration tools cannot currently override settings for these generated
+SwiftPM test targets, so its unmodified test builds may still emit the warnings.
+Do not add an unused AppIntents dependency or suppress all extractor warnings
+to make those builds quiet.
+
 ## Release operations
 
 Incomes 6.x uses [Apogee release tools](Tools/Release/README.md) in a separate
