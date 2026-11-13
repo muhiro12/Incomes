@@ -14189,6 +14189,40 @@
         }
       }
     },
+    "Resuming Incomes from the background does not apply this change." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resuming Incomes from the background does not apply this change."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volver a Incomes desde segundo plano no aplica este cambio."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revenir à Incomes depuis l’arrière-plan n’applique pas cette modification."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バックグラウンドから戻るだけでは、この変更は適用されません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅从后台返回 Incomes 不会应用此更改。"
+          }
+        }
+      }
+    },
     "Returns to search filters." : {
       "localizations" : {
         "en" : {
@@ -19369,6 +19403,40 @@
         }
       }
     },
+    "Your choice is on, but a subscription is required to enable iCloud sync at the next launch." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your choice is on, but a subscription is required to enable iCloud sync at the next launch."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu elección está activada, pero se necesita una suscripción para activar la sincronización con iCloud en el próximo inicio."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre choix reste activé, mais un abonnement est nécessaire pour activer la synchronisation iCloud au prochain lancement."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ONの選択は保存されていますが、次回起動時にiCloud同期を有効にするにはサブスクリプションが必要です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您已选择开启，但需要订阅才能在下次启动时启用 iCloud 同步。"
+          }
+        }
+      }
+    },
     "Your data has not changed. Please try exporting again." : {
       "localizations" : {
         "en" : {
@@ -19675,36 +19743,36 @@
         }
       }
     },
-    "iCloud sync requires a subscription. Your choice is kept when your subscription ends and used again after renewal. Changes take effect the next time Incomes launches." : {
+    "iCloud sync requires a subscription. Your choice is saved even when your subscription ends. Changes apply after you quit and reopen Incomes." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "iCloud sync requires a subscription. Your choice is kept when your subscription ends and used again after renewal. Changes take effect the next time Incomes launches."
+            "value" : "iCloud sync requires a subscription. Your choice is saved even when your subscription ends. Changes apply after you quit and reopen Incomes."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La sincronización con iCloud requiere una suscripción. Tu elección se conserva cuando la suscripción termina y se vuelve a usar al renovarla. Los cambios se aplican la próxima vez que abras Incomes."
+            "value" : "La sincronización con iCloud requiere una suscripción. Tu elección se guarda incluso cuando finaliza la suscripción. Los cambios se aplican después de cerrar y volver a abrir Incomes."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "La synchronisation iCloud nécessite un abonnement. Votre choix est conservé à la fin de l’abonnement et réutilisé après son renouvellement. Les modifications prennent effet au prochain lancement d’Incomes."
+            "value" : "La synchronisation iCloud nécessite un abonnement. Votre choix est conservé même à la fin de votre abonnement. Les modifications s’appliquent après avoir quitté puis rouvert Incomes."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "iCloud同期にはサブスクリプションが必要です。契約が終了しても選択は保持され、再契約後に再び使用されます。変更はIncomesの次回起動時に適用されます。"
+            "value" : "iCloud同期にはサブスクリプションが必要です。購読が終了しても選択は保存されます。変更はIncomesを終了して開き直すと適用されます。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "iCloud 同步需要订阅。订阅结束后会保留您的选择，并在续订后再次使用。更改将在下次启动 Incomes 时生效。"
+            "value" : "iCloud 同步需要订阅。订阅结束后，您的选择仍会保存。退出并重新打开 Incomes 后，更改才会生效。"
           }
         }
       }

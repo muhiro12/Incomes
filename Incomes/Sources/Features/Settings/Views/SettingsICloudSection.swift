@@ -18,16 +18,20 @@ struct SettingsICloudSection: View {
             VStack(alignment: .leading) {
                 Text(
                     """
-                    iCloud sync requires a subscription. Your choice is kept when your subscription ends and used \
-                    again after renewal. Changes take effect the next time Incomes launches.
+                    iCloud sync requires a subscription. Your choice is saved even when your subscription ends. \
+                    Changes apply after you quit and reopen Incomes.
                     """
                 )
+                if !isSubscribeOn, isICloudOn {
+                    Text("Your choice is on, but a subscription is required to enable iCloud sync at the next launch.")
+                }
                 if (isSubscribeOn && isICloudOn) != isICloudConfigured {
                     if isICloudConfigured {
                         Text("Restart Incomes to turn off iCloud sync. It remains enabled for this session until then.")
                     } else {
                         Text("Restart Incomes to turn on iCloud sync. It remains disabled for this session until then.")
                     }
+                    Text("Resuming Incomes from the background does not apply this change.")
                 }
             }
         }
@@ -56,6 +60,16 @@ struct SettingsICloudSection: View {
 
 #Preview("Inactive, explicit off") {
     @Previewable @State var isICloudOn = false
+    NavigationStack {
+        List {
+            SettingsICloudSection(isSubscribeOn: false, isICloudOn: $isICloudOn, isICloudConfigured: false)
+        }
+        .navigationTitle("Settings")
+    }
+}
+
+#Preview("Inactive, saved on, local session") {
+    @Previewable @State var isICloudOn = true
     NavigationStack {
         List {
             SettingsICloudSection(isSubscribeOn: false, isICloudOn: $isICloudOn, isICloudConfigured: false)

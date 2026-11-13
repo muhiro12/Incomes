@@ -30,6 +30,19 @@ During a lapse, an existing on choice can be turned off; off cannot be turned on
 until access is available again. A retained on resumes at a subsequent launch
 after active access has been saved.
 
+Settings describes the toggle as a saved choice and requires quitting and
+reopening Incomes to apply changes. When a retained on choice lacks subscription
+access, it explains why that choice cannot enable sync at the next launch.
+When a configuration change is pending, it also explains that returning from
+the background does not apply the change. These explanations do not promise
+that switching off the toggle immediately stops uploads or incoming changes.
+
+Startup uses the last resolved access before opening the store. A different
+access result received afterward updates the next-launch decision only. This
+can require a further launch after purchase, restore, or expiry is recognized.
+Do not block access to existing records on a network-dependent subscription
+check as part of this policy. No startup entitlement wait is added here.
+
 ## Current-session consumers
 
 The standard subscription section and StoreKit observer share MHPlatform's
@@ -126,6 +139,9 @@ not qualify a signed distribution build. The settings messages cover all five
 app languages. The subsequent direction-specific copy refinement passed an
 Incomes Debug build, translation validation, and repository rules; it did not
 change the shared subscription or persistence logic.
+The 2026-11-14 saved-choice and background-resume guidance passed the same build,
+translation validation, and repository rules. No shared logic changed, so the
+library tests were not rerun for that copy-only adjustment.
 The normal signed Debug launch reached `startup.ready` with iCloud disabled, as
 expected for the development store. That launch does not expose the Release-only
 iCloud settings section and does not replace its visual qualification.
@@ -138,6 +154,8 @@ After the copy refinement, the Japanese `Renewed, next-launch sync` Preview
 also failed during host launch with `SIGSEGV` before producing an image.
 The inactive-off preview remains unattempted. Visible layout and toggle
 interaction still need runtime qualification.
+The additional retained-on/local-session preview is also unattempted; the
+previous host-launch failures were not retried for the copy-only adjustment.
 
 - [#424](https://github.com/muhiro12/Incomes/issues/424) still needs real
   purchase/restore, pending/cancellation, expiry/revocation, verification-failure,
