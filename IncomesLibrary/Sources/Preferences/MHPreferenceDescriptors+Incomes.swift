@@ -11,7 +11,7 @@ public extension MHPreferenceDescriptors {
         )
     }
 
-    /// Subscription state persisted in the standard defaults domain.
+    /// Last resolved subscription access, retained while verification is unresolved.
     var isSubscribeOn: MHBoolPreferenceDescriptor {
         .init(
             storageKey: IncomesUserDefaultsKeys.Standard.isSubscribeOn.rawValue,
@@ -20,7 +20,7 @@ public extension MHPreferenceDescriptors {
         )
     }
 
-    /// iCloud sync preference persisted in the standard defaults domain.
+    /// The person's saved iCloud choice, independent of subscription access and active configuration.
     var isICloudOn: MHBoolPreferenceDescriptor {
         .init(
             storageKey: IncomesUserDefaultsKeys.Standard.isICloudOn.rawValue,
