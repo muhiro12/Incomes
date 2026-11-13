@@ -10,9 +10,9 @@ struct SettingsICloudSection: View {
             Toggle("iCloud Sync", isOn: $isICloudOn)
                 .disabled(!isSubscribeOn && !isICloudOn)
             if isICloudConfigured {
-                Text("This session uses iCloud sync.")
+                Text("iCloud sync is enabled for this session.")
             } else {
-                Text("This session saves on this device.")
+                Text("iCloud sync is disabled for this session.")
             }
         } footer: {
             VStack(alignment: .leading) {
@@ -23,9 +23,11 @@ struct SettingsICloudSection: View {
                     """
                 )
                 if (isSubscribeOn && isICloudOn) != isICloudConfigured {
-                    Text(
-                        "Restart Incomes to apply changes. The current iCloud sync setting remains active until then."
-                    )
+                    if isICloudConfigured {
+                        Text("Restart Incomes to turn off iCloud sync. It remains enabled for this session until then.")
+                    } else {
+                        Text("Restart Incomes to turn on iCloud sync. It remains disabled for this session until then.")
+                    }
                 }
             }
         }

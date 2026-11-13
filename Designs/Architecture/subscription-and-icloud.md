@@ -15,14 +15,17 @@ SwiftData schema change.
   when both preferences are true. DEBUG continues using the separate local
   development database without CloudKit.
 
-This decision changes configuration of the same production store URL. It does
-not delete, replace, or copy financial records. A previously erased choice
-cannot be reconstructed: an existing off value remains off.
+This decision changes configuration of the same production store URL. The
+preference-update path performs no record deletion, replacement, or copying.
+A previously erased choice cannot be reconstructed: an existing off value
+remains off.
 
 The open model container is not replaced when access or the choice changes.
 Until the next launch it keeps its actual configuration, including when a
 subscription expires. Settings shows that configuration independently of the
-saved toggle and displays a restart notice when the next-launch setting differs.
+saved toggle and displays a direction-specific restart notice when the
+next-launch setting differs. These messages describe the container configuration,
+not successful synchronization or a guarantee against data loss.
 During a lapse, an existing on choice can be turned off; off cannot be turned on
 until access is available again. A retained on resumes at a subsequent launch
 after active access has been saved.
@@ -63,8 +66,10 @@ They do not simulate StoreKit transactions or CloudKit delivery.
 For this change, all 1,825 library tests passed on iOS Simulator 27.2, including
 nine subscription-policy cases. The Incomes Debug build, Release compile check,
 and repository rules passed. Release compilation used signing disabled and does
-not qualify a signed distribution build. The three new messages cover all five
-app languages.
+not qualify a signed distribution build. The settings messages cover all five
+app languages. The subsequent direction-specific copy refinement passed an
+Incomes Debug build, translation validation, and repository rules; it did not
+change the shared subscription or persistence logic.
 The normal signed Debug launch reached `startup.ready` with iCloud disabled, as
 expected for the development store. That launch does not expose the Release-only
 iCloud settings section and does not replace its visual qualification.
@@ -73,8 +78,10 @@ The Japanese `Lapsed, current iCloud session` Preview failed twice during host
 launch with `SIGSEGV`, including after a successful app rebuild. Its crash stack
 passed through the Preview/JIT app entry point without identifying a settings
 view frame; ownership of that failure is unresolved. No image was captured.
-The renewed and inactive-off previews remain unattempted, so visible layout and
-toggle interaction still need runtime qualification.
+After the copy refinement, the Japanese `Renewed, next-launch sync` Preview
+also failed during host launch with `SIGSEGV` before producing an image.
+The inactive-off preview remains unattempted. Visible layout and toggle
+interaction still need runtime qualification.
 
 - [#424](https://github.com/muhiro12/Incomes/issues/424) still needs real
   purchase/restore, pending/cancellation, expiry/revocation, verification-failure,

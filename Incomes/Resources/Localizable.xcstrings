@@ -14087,36 +14087,70 @@
         }
       }
     },
-    "Restart Incomes to apply changes. The current iCloud sync setting remains active until then." : {
+    "Restart Incomes to turn off iCloud sync. It remains enabled for this session until then." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Restart Incomes to apply changes. The current iCloud sync setting remains active until then."
+            "value" : "Restart Incomes to turn off iCloud sync. It remains enabled for this session until then."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Los cambios se aplican tras reiniciar Incomes. Hasta entonces, la configuración actual de sincronización con iCloud sigue activa."
+            "value" : "Reinicia Incomes para desactivar la sincronización con iCloud. Hasta entonces, seguirá activada en esta sesión."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les modifications s’appliquent après le redémarrage d’Incomes. D’ici là, le réglage actuel de synchronisation iCloud reste actif."
+            "value" : "Redémarrez Incomes pour désactiver la synchronisation iCloud. Elle reste activée pour cette session jusque-là."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "変更はIncomesの再起動後に適用されます。それまでは、現在のiCloud同期設定が引き続き有効です。"
+            "value" : "iCloud同期を無効にするにはIncomesを再起動してください。それまでは、今回の起動時の有効な設定が続きます。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更改将在重新启动 Incomes 后生效。在此之前，当前的 iCloud 同步设置仍然有效。"
+            "value" : "请重新启动 Incomes 以停用 iCloud 同步。在此之前，本次启动中的同步设置仍保持启用。"
+          }
+        }
+      }
+    },
+    "Restart Incomes to turn on iCloud sync. It remains disabled for this session until then." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restart Incomes to turn on iCloud sync. It remains disabled for this session until then."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reinicia Incomes para activar la sincronización con iCloud. Hasta entonces, seguirá desactivada en esta sesión."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redémarrez Incomes pour activer la synchronisation iCloud. Elle reste désactivée pour cette session jusque-là."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud同期を有効にするにはIncomesを再起動してください。それまでは、今回の起動時の無効な設定が続きます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请重新启动 Incomes 以启用 iCloud 同步。在此之前，本次启动中的同步设置仍保持停用。"
           }
         }
       }
@@ -17763,74 +17797,6 @@
         }
       }
     },
-    "This session uses iCloud sync." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This session uses iCloud sync."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esta sesión usa la sincronización con iCloud."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cette session utilise la synchronisation iCloud."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "現在はiCloud同期を使用しています。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "当前会话使用 iCloud 同步。"
-          }
-        }
-      }
-    },
-    "This session saves on this device." : {
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This session saves on this device."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Esta sesión guarda los datos en este dispositivo."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Cette session enregistre les données sur cet appareil."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "現在はこのデバイスに保存しています。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "当前会话将数据保存在此设备上。"
-          }
-        }
-      }
-    },
     "This unused tag is no longer referenced by any items." : {
       "localizations" : {
         "en" : {
@@ -19603,6 +19569,74 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "iCloud 同步"
+          }
+        }
+      }
+    },
+    "iCloud sync is disabled for this session." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud sync is disabled for this session."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sincronización con iCloud está desactivada en esta sesión."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La synchronisation iCloud est désactivée pour cette session."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今回の起動ではiCloud同期が無効です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本次启动中，iCloud 同步已停用。"
+          }
+        }
+      }
+    },
+    "iCloud sync is enabled for this session." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud sync is enabled for this session."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sincronización con iCloud está activada en esta sesión."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La synchronisation iCloud est activée pour cette session."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今回の起動ではiCloud同期が有効です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本次启动中，iCloud 同步已启用。"
           }
         }
       }
