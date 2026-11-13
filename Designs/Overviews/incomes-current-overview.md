@@ -185,8 +185,13 @@ living in the app targets.
 
 - Show subscription entry points when premium is not active.
 - Use StoreKit 2 subscription state to determine premium access.
-- Gate iCloud sync behind the premium subscription state.
-- Disable iCloud sync automatically when premium is not active.
+- Retain the saved iCloud choice through subscription lapses; unresolved access
+  retains the last resolved Premium state.
+- Configure iCloud at launch only when both that choice and saved Premium access
+  are on. The open container keeps its configuration until the next launch.
+- Show the saved choice separately from this session's sync configuration, and
+  allow turning a retained choice off during a lapse. See
+  [Subscription and iCloud](../Architecture/subscription-and-icloud.md).
 - Allow currency code selection from all supported currency codes.
 - Export every item to a versioned Incomes file through the system exporter.
 - Import an Incomes file after reviewing its difference from the saved items,

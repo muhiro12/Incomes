@@ -137,6 +137,13 @@ Models.
   store, a named sample-data profile, and mock services so SwiftUI previews
   remain functional. See
   [Sample Data Profiles](Designs/Architecture/sample-data-profiles.md).
+- **Subscription and iCloud** – Premium consumers observe resolved access in
+  the current session. The saved iCloud choice survives a lapse; production
+  startup enables sync only when both that choice and last resolved access are
+  on. Settings identifies the current container's configuration, which remains
+  unchanged until the next launch. See
+  [Subscription and iCloud](Designs/Architecture/subscription-and-icloud.md)
+  for the StoreKit verification and live-transition boundaries.
 
 ## Architecture records
 

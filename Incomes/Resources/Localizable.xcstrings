@@ -17763,6 +17763,74 @@
         }
       }
     },
+    "This session uses iCloud sync." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This session uses iCloud sync."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta sesión usa la sincronización con iCloud."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette session utilise la synchronisation iCloud."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在はiCloud同期を使用しています。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当前会话使用 iCloud 同步。"
+          }
+        }
+      }
+    },
+    "This session saves on this device." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This session saves on this device."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esta sesión guarda los datos en este dispositivo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cette session enregistre les données sur cet appareil."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "現在はこのデバイスに保存しています。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "当前会话将数据保存在此设备上。"
+          }
+        }
+      }
+    },
     "This unused tag is no longer referenced by any items." : {
       "localizations" : {
         "en" : {
@@ -19569,6 +19637,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "iCloud 同步已开启。此次导入也会更改你的其他设备。如果其他设备的更改尚未同步过来，项目可能会重复或重新出现。"
+          }
+        }
+      }
+    },
+    "iCloud sync requires a subscription. Your choice is kept when your subscription ends and used again after renewal. Changes take effect the next time Incomes launches." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud sync requires a subscription. Your choice is kept when your subscription ends and used again after renewal. Changes take effect the next time Incomes launches."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sincronización con iCloud requiere una suscripción. Tu elección se conserva cuando la suscripción termina y se vuelve a usar al renovarla. Los cambios se aplican la próxima vez que abras Incomes."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La synchronisation iCloud nécessite un abonnement. Votre choix est conservé à la fin de l’abonnement et réutilisé après son renouvellement. Les modifications prennent effet au prochain lancement d’Incomes."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud同期にはサブスクリプションが必要です。契約が終了しても選択は保持され、再契約後に再び使用されます。変更はIncomesの次回起動時に適用されます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud 同步需要订阅。订阅结束后会保留您的选择，并在续订后再次使用。更改将在下次启动 Incomes 时生效。"
           }
         }
       }
