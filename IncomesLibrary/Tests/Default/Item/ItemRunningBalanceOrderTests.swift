@@ -33,7 +33,7 @@ struct ItemRunningBalanceOrderTests {
     }
 
     @Test
-    func creating_identical_names_still_needs_a_durable_tie_breaker() throws {
+    func creation_can_reorder_equal_keys_when_identifiers_become_permanent() throws {
         let context = ModelContext(try ModelContainerFactory.inMemory())
         try seed(context: context, contents: ["Same", "Same"], checkingEachSave: false)
         withKnownIssue("#420: temporary identifiers change the same-name order when creation is saved") {

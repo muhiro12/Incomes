@@ -36,12 +36,7 @@ public struct ItemFetchDescriptor {
                 predicate: #Predicate { item in
                     scope.evaluate(item) && base.evaluate(item)
                 },
-                sortBy: [
-                    .init(\.date, order: order),
-                    .init(\.priority, order: order == .forward ? .reverse : .forward),
-                    .init(\.content, order: order),
-                    .init(\.persistentModelID, order: order)
-                ]
+                sortBy: ItemOrdering.descriptors(order: order)
             ),
             ledgerIdentifier: ledgerIdentifier
         )

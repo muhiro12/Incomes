@@ -37,19 +37,12 @@ enum ItemImportBalancePlanner {
         let inserted = plan.insertedItems.enumerated().map { index, item in
             Row(item: item, importedBalance: item.balance, tieBreaker: .planned(index))
         }
-        return (retained + inserted).sorted { left, right in
-            if left.item.date != right.item.date {
-                return left.item.date < right.item.date
-            }
-            if left.item.priority != right.item.priority {
-                return left.item.priority > right.item.priority
-            }
-            let contentOrder = left.item.content.localizedStandardCompare(right.item.content)
-            if contentOrder != .orderedSame {
-                return contentOrder == .orderedAscending
-            }
-            return left.tieBreaker < right.tieBreaker
-        }
+        return (retained + inserted).sorted(using: ItemOrdering.descriptors(
+            date: \.item.date,
+            priority: \.item.priority,
+            content: \.item.content,
+            identity: \.tieBreaker
+        ))
     }
 
     static func balances(

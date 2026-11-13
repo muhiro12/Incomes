@@ -33,10 +33,11 @@ Three independent mismatches were reproduced:
 
 ## Implemented scope
 
-- Calculation consumes the chronological query directly. In-memory Item
-  comparison uses the query's localized standard content comparison and native
-  identifier comparison.
-- Balance projection and import review use those same comparison semantics.
+- `ItemOrdering` defines the date, priority, localized standard content, and
+  native identity descriptors once. Native queries and in-memory Item comparison
+  use this definition, reversing every key for reverse order. Calculation consumes
+  the chronological query directly without an additional independent sort.
+- Balance projection and import review use the same descriptor factory.
   Their planned rows have a typed request-index tie breaker, with no model debug
   descriptions. Newly inserted rows still have the unresolved save-time boundary.
 - Export priority preparation uses the same content comparison when deciding
@@ -51,7 +52,7 @@ The existing explicit recalculation operation can update a selected range using
 the corrected order. This investigation does not authorize automatic historical
 repair.
 
-## Verification and remaining decision
+## Verification and remaining boundary
 
 `ItemRunningBalanceOrderTests` covers numeric names, mixed case and accents,
 saved identity ties after explicit recalculation, amount/name/priority/date
@@ -60,12 +61,22 @@ second context. Each assertion checks the actual display query and running
 balance for every row. A separate `withKnownIssue` test retains the unresolved
 same-name creation reproduction; an expected failure is not a completed fix.
 
-A durable tie breaker needs a separate design covering existing records,
-new records before their first save, CloudKit, repeat-series identity, and
-backup/restore. Adding a save before balance calculation would split the
-existing single-save mutation and rollback contract, so it is not used here.
+`ItemBalanceRecalculationOrderTests` starts with deliberately inconsistent saved
+balances and verifies that explicit recalculation repairs each row in the current
+query order. Repeating the operation and reading from another context preserve
+that result. Amounts, dates, identities, stored priorities, previous-day balances,
+and another ledger remain unchanged. A second test changes a name in another
+context without recalculation, then verifies that recalculation repairs balances
+using the new order. This is a local persistence test, not CloudKit delivery.
 
-On 2026-11-13, the selected Xcode 27.2 toolchain ran 888 default library tests
+The save-time transition from temporary to permanent identity remains separate
+from recalculation of saved rows. A durable cross-store ordering key is not
+required for the latter repair and is not introduced here. Fixing the creation
+boundary needs to preserve the existing mutation and rollback contract; adding
+a save before calculation would split its single-save transaction. Cross-store
+order preservation is also a separate design decision.
+
+On 2026-11-13, the selected Xcode 27.2 toolchain ran 890 default library tests
 and 170 time-zone tests on iOS Simulator 27.2. The run succeeded with one known
 issue: same-name creation. The repository's formatter and static rules passed.
 The `Incomes` consumer scheme also built successfully on the same Simulator.

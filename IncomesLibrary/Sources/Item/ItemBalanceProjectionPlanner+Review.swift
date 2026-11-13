@@ -191,26 +191,12 @@ private extension ItemBalanceProjectionPlanner {
                 ledgerIdentifier: item.ledgerIdentifier
             )
         }
-        .sorted { left, right in
-            isOrderedBefore(left, right)
-        }
-    }
-
-    static func isOrderedBefore(
-        _ left: ItemBalanceProjectionReview.RecordSignature,
-        _ right: ItemBalanceProjectionReview.RecordSignature
-    ) -> Bool {
-        if left.utcDate != right.utcDate {
-            return left.utcDate < right.utcDate
-        }
-        if left.priority != right.priority {
-            return left.priority > right.priority
-        }
-        let contentOrder = left.content.localizedStandardCompare(right.content)
-        if contentOrder != .orderedSame {
-            return contentOrder == .orderedAscending
-        }
-        return left.itemID < right.itemID
+        .sorted(using: ItemOrdering.descriptors(
+            date: \.utcDate,
+            priority: \.priority,
+            content: \.content,
+            identity: \.itemID
+        ))
     }
 
     static func balancedRows(

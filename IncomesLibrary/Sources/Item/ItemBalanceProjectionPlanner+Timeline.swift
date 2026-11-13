@@ -11,19 +11,12 @@ extension ItemBalanceProjectionPlanner {
     }
 
     static func sortedRows(_ rows: [ProjectedRow]) -> [ProjectedRow] {
-        rows.sorted { left, right in
-            if left.utcDate != right.utcDate {
-                return left.utcDate < right.utcDate
-            }
-            if left.priority != right.priority {
-                return left.priority > right.priority
-            }
-            let contentOrder = left.content.localizedStandardCompare(right.content)
-            if contentOrder != .orderedSame {
-                return contentOrder == .orderedAscending
-            }
-            return left.tieBreaker < right.tieBreaker
-        }
+        rows.sorted(using: ItemOrdering.descriptors(
+            date: \.utcDate,
+            priority: \.priority,
+            content: \.content,
+            identity: \.tieBreaker
+        ))
     }
 
     static func projectedDateRange(
