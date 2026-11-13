@@ -15,7 +15,7 @@ public extension ItemExportOperations {
 
     /// Retains native tie order through file-only priorities when the standard range permits it.
     static func prepareFile(items: [Item]) -> ItemExportPreparation {
-        ItemExportPriorityPlanner.prepare(items.sorted(by: >).map { item in
+        ItemExportPriorityPlanner.prepare(items.sorted(using: ItemOrdering.descriptors(order: .forward)).map { item in
             IncomesFileItem(item: item, balance: item.balance)
                 .assigning(to: LedgerTagStorage.fileReference(for: item.ledgerIdentifier))
         })

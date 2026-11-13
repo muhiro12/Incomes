@@ -84,12 +84,12 @@ public enum UpcomingPaymentOperations {
             calendar: calendar
         )
 
-        return reminderPlans.compactMap { reminderPlan in
+        return sortedPlans(reminderPlans.compactMap { reminderPlan in
             plannedPayment(
                 for: reminderPlan,
                 itemsByIdentifier: itemsByIdentifier
             )
-        }
+        })
     }
 
     /// Builds sorted notification presentations for planned payments.
@@ -136,6 +136,17 @@ public enum UpcomingPaymentOperations {
         }
 
         return .presentation(presentation)
+    }
+}
+
+extension UpcomingPaymentOperations {
+    static func sortedPlans(_ plans: [PlannedPayment]) -> [PlannedPayment] {
+        plans.sorted(using: [SortDescriptor(\.notifyDate)] + ItemOrdering.descriptors(
+            date: \.item.utcDate,
+            priority: \.item.priority,
+            content: \.item.content,
+            identity: \.item.persistentModelID
+        ))
     }
 }
 

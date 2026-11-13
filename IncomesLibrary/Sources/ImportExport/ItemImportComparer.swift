@@ -83,7 +83,7 @@ private extension ItemImportComparer {
             if left.item != right.item {
                 return left.item.isOrderedByValue(before: right.item)
             }
-            return String(describing: left.id) < String(describing: right.id)
+            return left.id < right.id
         }
     }
 

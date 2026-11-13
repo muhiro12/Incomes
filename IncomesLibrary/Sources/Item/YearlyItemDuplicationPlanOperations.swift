@@ -146,9 +146,12 @@ private extension YearlyItemDuplicationPlanOperations {
         }
 
         func sortedEntries() -> [YearlyItemDuplicationEntry] {
-            entries.sorted { left, right in
-                left.targetDate < right.targetDate
-            }
+            entries.sorted(using: ItemOrdering.descriptors(
+                date: \.targetDate,
+                priority: \.sourceItem.priority,
+                content: \.sourceItem.content,
+                identity: \.sourceItem.persistentModelID
+            ))
         }
 
         func sortedGroups() -> [YearlyItemDuplicationGroup] {

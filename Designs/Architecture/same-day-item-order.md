@@ -1,6 +1,8 @@
 # Same-day Item order and running balances
 
 Investigation for [#420](https://github.com/muhiro12/Incomes/issues/420).
+The [consumer audit](item-order-consumers.md) records the subsequent review and
+corrections across Incomes' features and companion targets.
 The reported installed app version and original triggering operation remain
 unknown. The cases below use synthetic data in the current shared library.
 

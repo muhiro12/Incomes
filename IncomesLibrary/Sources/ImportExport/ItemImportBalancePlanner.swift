@@ -110,7 +110,7 @@ enum ItemImportBalancePlanner {
         affectedDates: [LedgerIdentifier: Date],
         policy: ItemImportBalancePolicy
     ) throws {
-        let ordered = items.sorted(by: >)
+        let ordered = items.sorted(using: ItemOrdering.descriptors(order: .forward))
         let rows = ordered.map { item in
             Row(
                 item: .init(item: item, balance: item.balance),

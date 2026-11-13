@@ -29,7 +29,7 @@ public enum LedgerBalanceOperations {
         let orderedItems = items.filter { item in
             item.ledgerIdentifier == ledgerIdentifier
         }
-        .sorted(by: >)
+        .sorted(using: ItemOrdering.descriptors(order: .forward))
         let values = orderedItems.map(\.balance)
         return .init(
             ledgerIdentifier: ledgerIdentifier,
