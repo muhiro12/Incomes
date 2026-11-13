@@ -219,10 +219,11 @@ extension Item: Comparable {
         if lhs.priority != rhs.priority {
             return lhs.priority < rhs.priority
         }
-        if lhs.content != rhs.content {
-            return lhs.content > rhs.content
+        let contentOrder = lhs.content.localizedStandardCompare(rhs.content)
+        if contentOrder != .orderedSame {
+            return contentOrder == .orderedDescending
         }
-        return String(describing: lhs.persistentModelID) > String(describing: rhs.persistentModelID)
+        return lhs.persistentModelID > rhs.persistentModelID
     }
 }
 

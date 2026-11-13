@@ -6,7 +6,7 @@ enum ItemImportBalancePlanner {
     struct Row {
         let item: IncomesFileItem
         let importedBalance: Decimal?
-        let tieBreaker: String
+        let tieBreaker: ItemOrderTieBreaker
     }
 
     static func affectedDates(
@@ -31,11 +31,11 @@ enum ItemImportBalancePlanner {
                 Row(
                     item: item.item,
                     importedBalance: plan.preservedBalanceItemIDs.contains(item.id) ? item.item.balance : nil,
-                    tieBreaker: String(describing: item.id)
+                    tieBreaker: .stored(item.id)
                 )
             }
         let inserted = plan.insertedItems.enumerated().map { index, item in
-            Row(item: item, importedBalance: item.balance, tieBreaker: "import.\(index)")
+            Row(item: item, importedBalance: item.balance, tieBreaker: .planned(index))
         }
         return (retained + inserted).sorted { left, right in
             if left.item.date != right.item.date {
@@ -44,8 +44,9 @@ enum ItemImportBalancePlanner {
             if left.item.priority != right.item.priority {
                 return left.item.priority > right.item.priority
             }
-            if left.item.content != right.item.content {
-                return left.item.content < right.item.content
+            let contentOrder = left.item.content.localizedStandardCompare(right.item.content)
+            if contentOrder != .orderedSame {
+                return contentOrder == .orderedAscending
             }
             return left.tieBreaker < right.tieBreaker
         }
@@ -121,7 +122,7 @@ enum ItemImportBalancePlanner {
             Row(
                 item: .init(item: item, balance: item.balance),
                 importedBalance: importedBalances[item.persistentModelID],
-                tieBreaker: String(describing: item.persistentModelID)
+                tieBreaker: .stored(item.persistentModelID)
             )
         }
         let balances = try balances(rows: rows, affectedDates: affectedDates, policy: policy)

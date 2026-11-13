@@ -90,7 +90,7 @@ extension ItemBalanceProjectionPlanner {
                     income: item.income,
                     outgo: item.outgo,
                     storedBalance: item.balance,
-                    tieBreaker: String(describing: item.persistentModelID)
+                    tieBreaker: .stored(item.persistentModelID)
                 )
             }
         )
@@ -206,10 +206,11 @@ private extension ItemBalanceProjectionPlanner {
         if left.priority != right.priority {
             return left.priority > right.priority
         }
-        if left.content != right.content {
-            return left.content < right.content
+        let contentOrder = left.content.localizedStandardCompare(right.content)
+        if contentOrder != .orderedSame {
+            return contentOrder == .orderedAscending
         }
-        return String(describing: left.itemID) < String(describing: right.itemID)
+        return left.itemID < right.itemID
     }
 
     static func balancedRows(
@@ -316,7 +317,7 @@ private extension ItemBalanceProjectionPlanner {
             income: item.income,
             outgo: item.outgo,
             storedBalance: item.balance,
-            tieBreaker: String(describing: item.persistentModelID)
+            tieBreaker: .stored(item.persistentModelID)
         )
     }
 }

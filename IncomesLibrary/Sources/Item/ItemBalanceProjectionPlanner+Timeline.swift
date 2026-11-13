@@ -18,8 +18,9 @@ extension ItemBalanceProjectionPlanner {
             if left.priority != right.priority {
                 return left.priority > right.priority
             }
-            if left.content != right.content {
-                return left.content < right.content
+            let contentOrder = left.content.localizedStandardCompare(right.content)
+            if contentOrder != .orderedSame {
+                return contentOrder == .orderedAscending
             }
             return left.tieBreaker < right.tieBreaker
         }

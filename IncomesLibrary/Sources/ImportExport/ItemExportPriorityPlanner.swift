@@ -45,7 +45,8 @@ private extension ItemExportPriorityPlanner {
         var lowerBounds = Array(repeating: range.lowerBound, count: items.count)
         // Equal or descending descriptions need a priority step; ascending descriptions can share one.
         for index in items.indices.dropLast().reversed() {
-            let step = items[index].content < items[index + 1].content ? 0 : 1
+            let order = items[index].content.localizedStandardCompare(items[index + 1].content)
+            let step = order == .orderedAscending ? 0 : 1
             lowerBounds[index] = lowerBounds[index + 1] + step
         }
         guard let firstLowerBound = lowerBounds.first, firstLowerBound <= range.upperBound else {
@@ -55,7 +56,8 @@ private extension ItemExportPriorityPlanner {
         for index in items.indices {
             let upperBound: Int
             if let previous = result.last {
-                let step = items[index - 1].content < items[index].content ? 0 : 1
+                let order = items[index - 1].content.localizedStandardCompare(items[index].content)
+                let step = order == .orderedAscending ? 0 : 1
                 upperBound = previous - step
             } else {
                 upperBound = range.upperBound
