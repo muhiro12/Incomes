@@ -48,6 +48,62 @@ ledgers readable/exportable under `LedgerAccessOperations`.
 which combines Premium and consent eligibility. There is no app-owned StoreKit
 refresh loop or second entitlement verifier.
 
+## Manual apply feasibility assessment
+
+The 2026-11-14 assessment stops before implementing an **Apply now** button.
+Keep the next-launch boundary. A deliberate button would improve control over
+when screens reload, but does not establish a safe persistence handoff in the
+current architecture. This is a bounded engineering decision, not a claim that
+every same-process switching design is impossible.
+
+The source and API review identified two unmet prerequisites:
+
+- **Stop and drain every user-data operation.**
+  `IncomesStartupCoordinator.registerDependencies` captures the platform
+  environment for App Intent dependencies. `NotificationService` also retains
+  its container. `CreateItemIntent` passes its context into
+  `ItemCreateCoordinator`, whose asynchronous workflow retains that context
+  across suspension. `IncomesMutationWorkflow.performDataMutation` launches a
+  task without retaining a handle for a global handoff. Replacing the root view
+  or registering new dependencies does not by itself revoke existing references
+  or wait for those operations. A settings-only busy flag would not cover them.
+- **Establish the old sync stack's shutdown boundary.**
+  The selected Xcode's iOS 27.2 SwiftData public interface and Apple's
+  [ModelContainer documentation][model-container] expose no explicit close or
+  await-shutdown operation for the default store. Apple documents a writable
+  [configurations property][container-configurations], but the reviewed contract
+  does not specify a live CloudKit transition's completion, outstanding-work
+  handling, or failure recovery. Its setter alone is insufficient evidence.
+  [TN3164][sync-troubleshooting] explains that retained model objects can keep
+  an old container alive and that overlapping containers can conflict.
+
+Startup `retry()` is recovery after an open failure, not a live-switch API:
+`state = makeState()` evaluates the replacement before assigning the new state.
+Calling it from a ready session would not first release the current environment.
+Neither saving the main context, waiting a fixed interval, nor user confirmation
+establishes either prerequisite. Local save completion also does not establish
+CloudKit delivery; TN3164 assigns synchronization timing to the system.
+
+This assessment inspected current production call paths and the public SDK and
+documentation. It did not run a live CloudKit switch, simulate data loss, or
+establish a runtime failure. No prototype, production data operation, new test,
+or app behavior change was made. A local-only reopen test would not qualify the
+missing CloudKit boundary, so it was not used as a substitute.
+
+Reconsider only with evidence for a supported sync handoff and an app-wide
+operation gate that drains existing work, rejects stale writes, and replaces
+all affected dependencies. Failure recovery and preservation of pending edits
+would then need qualification on supported OS versions and actual cloud stores.
+That scope is materially larger than adding a manual settings action and is
+not selected by this assessment. A button that terminates the process is also
+excluded; Apple's archived [QA1561][programmatic-exit] warns against `exit` and
+notes that termination callbacks and saving may be skipped.
+
+[model-container]: https://developer.apple.com/documentation/swiftdata/modelcontainer
+[container-configurations]: https://developer.apple.com/documentation/swiftdata/modelcontainer/configurations
+[sync-troubleshooting]: https://developer.apple.com/documentation/technotes/tn3164-debugging-the-synchronization-of-nspersistentcloudkitcontainer
+[programmatic-exit]: https://developer.apple.com/library/archive/qa/qa1561/_index.html
+
 ## Evidence and remaining qualification
 
 The 2026-11-13 review inspected the adopted MHPlatform 1.20.0
