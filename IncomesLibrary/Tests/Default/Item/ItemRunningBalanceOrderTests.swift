@@ -33,13 +33,20 @@ struct ItemRunningBalanceOrderTests {
     }
 
     @Test
-    func creation_can_reorder_equal_keys_when_identifiers_become_permanent() throws {
+    func recalculation_repairs_equal_keys_after_creation_is_saved() throws {
         let context = ModelContext(try ModelContainerFactory.inMemory())
         try seed(context: context, contents: ["Same", "Same"], checkingEachSave: false)
-        withKnownIssue("#420: temporary identifiers change the same-name order when creation is saved") {
-            let items = try context.fetch(.items(.all, order: .forward))
-            #expect(items.map(\.balance) == [1, 3])
-        }
+        let savedItems = try context.fetch(.items(.all, order: .forward))
+        let identifiers = savedItems.map(\.id)
+        let incomes = savedItems.map(\.income)
+
+        try ItemBalanceOperations.recalculateAndSave(context: context, date: .distantPast)
+
+        let repairedItems = try context.fetch(.items(.all, order: .forward))
+        #expect(repairedItems.map(\.id) == identifiers)
+        #expect(repairedItems.map(\.income) == incomes)
+        try assertRunningBalances(context: context)
+        try assertRunningBalances(context: ModelContext(context.container))
     }
 
     @Test

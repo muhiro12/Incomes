@@ -76,8 +76,11 @@ contexts and actual replacement, deterministic encoding, notification order and
 badges, yearly source entries, and Watch encode/decode/apply/reopen. A legacy
 Watch payload without priority still decodes and applies with priority zero.
 
-The previously recorded temporary-to-permanent identity issue remains visible
-as a known-issue test. It can affect creation, repeated creation, yearly
+The previously recorded temporary-to-permanent identity issue remains unresolved;
+its [separate reproduction](same-day-item-order.md#deferred-save-time-identity-reproduction)
+is retained outside the default acceptance suite. The two-row regression now
+checks explicit recalculation after creation is saved. The identity issue can
+affect creation, repeated creation, yearly
 application, import, and Watch cache reconstruction when every other Item key
 ties. The audit does not introduce a cross-store identity/order guarantee.
 Watch remains a bounded reconstructed cache: carrying priority does not make its

@@ -60,8 +60,9 @@ repair.
 saved identity ties after explicit recalculation, amount/name/priority/date
 edits, projection minimum balance, SQLite reopening, and updates saved by a
 second context. Each assertion checks the actual display query and running
-balance for every row. A separate `withKnownIssue` test retains the unresolved
-same-name creation reproduction; an expected failure is not a completed fix.
+balance for every row. The two-row same-name creation case verifies recovery
+after explicit recalculation, preserving the saved identifiers and amounts.
+It does not assert that creation itself repairs a save-time identity transition.
 
 `ItemBalanceRecalculationOrderTests` starts with deliberately inconsistent saved
 balances and verifies that explicit recalculation repairs each row in the current
@@ -77,6 +78,33 @@ required for the latter repair and is not introduced here. Fixing the creation
 boundary needs to preserve the existing mutation and rollback contract; adding
 a save before calculation would split its single-save transaction. Cross-store
 order preservation is also a separate design decision.
+
+### Deferred save-time identity reproduction
+
+The save-time defect is outside this repair's acceptance criteria. It was
+previously recorded as an expected failure in the default suite; that test now
+checks the supported recovery operation instead. The defect remains unresolved,
+and this change does not claim that immediate post-creation balances are correct
+when identifiers change their tie order.
+
+To reproduce separately with a fresh in-memory container:
+
+1. Call `ItemCreationOperations.createAndSaveWithOutcome` twice, with the same
+   date, content `Same`, category, and priority zero; use income 1, then income 2,
+   outgo zero, and no repeats.
+2. Fetch `.items(.all, order: .forward)` before requesting recalculation.
+3. Accumulate each fetched row's income minus outgo, and compare that cumulative
+   total with its saved balance. A mismatch demonstrates the defect; do not
+   assume which income the native identifier will order first.
+4. Run `ItemBalanceOperations.recalculateAndSave` from `.distantPast` and repeat
+   the comparison. Every balance must now match the current query sequence.
+
+On the investigated Xcode 27.2 / iOS Simulator 27.2 run, the two rows displayed
+balances 3 and 2 before recalculation. Different assigned identities may avoid
+that particular reproduction. Persisted-identity stability, new ordering keys,
+and changes to the single-save creation contract require separate work.
+
+### Earlier verification
 
 On 2026-11-13, the selected Xcode 27.2 toolchain ran 890 default library tests
 and 170 time-zone tests on iOS Simulator 27.2. The run succeeded with one known
