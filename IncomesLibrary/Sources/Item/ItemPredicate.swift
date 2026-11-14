@@ -296,12 +296,7 @@ public extension FetchDescriptor where T == Item {
 
     /// Explicit cross-ledger inventory for backup, recovery, and global data reset.
     static func allLedgerItems(order: SortOrder = .reverse) -> FetchDescriptor {
-        .init(sortBy: [
-            .init(\.date, order: order),
-            .init(\.priority, order: order == .forward ? .reverse : .forward),
-            .init(\.content, order: order),
-            .init(\.persistentModelID, order: order)
-        ])
+        .init(sortBy: ItemOrdering.descriptors(order: order))
     }
 }
 

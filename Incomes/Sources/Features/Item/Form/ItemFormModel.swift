@@ -12,7 +12,6 @@ final class ItemFormModel {
     var category: String = ""
     var repeatMonthSelections: Set<RepeatMonthSelection> = []
     var isRepeatEnabled = false
-    var templateText = ""
     var inferenceText = ""
     private(set) var needsInferredDateReview = false
     private(set) var needsInferredAmountReview = false
@@ -126,12 +125,6 @@ extension ItemFormModel {
         category = localizedInput.category
         priority = localizedInput.priorityText
         syncRepeatMonthSelectionsWithBaseDate()
-    }
-
-    func applyTemplate(_ formInput: ItemFormInput) {
-        apply(formInput)
-        isRepeatEnabled = false
-        repeatMonthSelections = [baseSelection]
     }
 
     func applyInference(_ update: ItemFormInferenceUpdate) {

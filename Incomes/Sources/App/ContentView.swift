@@ -15,11 +15,6 @@ struct ContentView {
     private var appRuntime
     @Environment(IncomesRoutePipeline.self)
     private var routePipeline
-
-    @AppStorage(\.isSubscribeOn)
-    private var isSubscribeOn
-    @AppStorage(\.isICloudOn)
-    private var isICloudOn
 }
 
 extension ContentView: View {
@@ -46,10 +41,7 @@ extension ContentView: View {
             } message: { invalidURL in
                 Text("Incomes could not open \(invalidURL.absoluteString)")
             }
-            .task {
-                syncSubscriptionStateIfNeeded()
-            }
-            .onChange(of: appRuntime.premiumStatus) {
+            .onChange(of: appRuntime.premiumStatus, initial: true) {
                 syncSubscriptionStateIfNeeded()
             }
     }
@@ -83,28 +75,21 @@ private extension ContentView {
 
     @MainActor
     func syncSubscriptionStateIfNeeded() {
-        let purchasedProductIDs: Set<String>
+        let access: SubscriptionStateOperations.SubscriptionAccess
 
         switch appRuntime.premiumStatus {
         case .unknown:
-            return
+            access = .unknown
         case .inactive:
-            purchasedProductIDs = []
+            access = .inactive
         case .active:
-            purchasedProductIDs = [
-                IncomesMonetizationConfiguration.subscriptionProductID
-            ]
+            access = .active
         }
 
-        let state = SubscriptionStateOperations.calculate(
-            purchasedProductIDs: purchasedProductIDs,
-            productID: IncomesMonetizationConfiguration.subscriptionProductID,
-            isICloudOn: isICloudOn
+        SubscriptionStateOperations.updateSubscriptionAccess(
+            access,
+            store: appRuntime.preferenceStore
         )
-        isSubscribeOn = state.isSubscribeOn
-        #if !DEBUG
-        isICloudOn = state.isICloudOn
-        #endif
     }
 }
 

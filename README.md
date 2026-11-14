@@ -4,10 +4,13 @@
 
 Use `develop` for daily development. Keep agent review and the documented
 verification checks in the daily workflow. `main` tracks the released baseline.
-Before shipping, review `main...develop` and record the exact candidate commit.
-After publication, merge that released commit into `main`; do not include later
-work added to `develop`. Preserve commit ancestry so the next release comparison
-starts from the previous released candidate.
+Before shipping, open a pull request from `develop` into `main`, share the release
+diff with the owner, and record the exact candidate commit. Wait for the owner's
+review and approval before merging; do not create a separate candidate branch
+by default. After publication, merge only the reviewed, released candidate.
+If `develop` has advanced, avoid including later work and consult the owner when
+needed. Preserve commit ancestry so the next release comparison starts from the
+previous released candidate.
 
 ## Overview
 
@@ -41,12 +44,11 @@ Models.
 
 ### Capture and inference
 
-- Use Input Assistance to interpret prose with on-device AI or read an explicit
-  Markdown template without AI. Both paths prefill the ordinary editable form;
-  creating the Item remains an explicit action. Copy a prompt/template for an
-  external tool or export one saved Item's supported fields. See
-  [Item template exchange](Designs/Architecture/item-template-exchange.md)
-  for field coverage, currency requirements, and validation rules.
+- Use Input Assistance to interpret typed or pasted text with on-device AI and
+  prefill the ordinary editable form; creating the Item remains explicit.
+  Copy or share one saved Item as readable text for use elsewhere. See
+  [Item input and content sharing](Designs/Architecture/item-input-and-sharing.md)
+  for the retained journeys and retirement of the 6.2 Markdown template.
 - Capture receipts through the photo library or camera, then run on-device
   VisionKit text recognition to assemble a transcript.
 - Use Apple Foundation Models to infer the date, amounts, and category that
@@ -135,6 +137,13 @@ Models.
   store, a named sample-data profile, and mock services so SwiftUI previews
   remain functional. See
   [Sample Data Profiles](Designs/Architecture/sample-data-profiles.md).
+- **Subscription and iCloud** – Premium consumers observe resolved access in
+  the current session. The saved iCloud choice survives a lapse; production
+  startup enables sync only when both that choice and last resolved access are
+  on. Settings identifies the current container's configuration, which remains
+  unchanged until the next launch. See
+  [Subscription and iCloud](Designs/Architecture/subscription-and-icloud.md)
+  for the StoreKit verification and live-transition boundaries.
 
 ## Architecture records
 
@@ -390,6 +399,58 @@ Missing resolution or tool mismatches are incomplete verification, not a reason
 to install another linter. Boundary searches likewise distinguish no matches
 from failed or unavailable searches.
 
+### SDK mismatch during test linking
+
+If package tests report a macOS sysroot while targeting iOS Simulator, inspect
+the actual link command and the build service's `SDKROOT` environment first.
+A host macOS SDK can reach Clang even when Swift's `-sdk` points to the correct
+Simulator SDK. This was reproduced with Xcode 27.2; it does not require changing
+the package's supported platforms or suppressing the warning. See the
+[Swift compiler discussion](https://forums.swift.org/t/getting-incompatible-sysroot-warning-when-compiling-for-ios-with-sdk-and-target-set/80584).
+
+When the native integration retains that environment and cannot override it,
+use the selected Xcode's executable directly with `SDKROOT` removed for this
+invocation. Replace the destination placeholder with the app's discovered
+Simulator UUID:
+
+```sh
+env -u SDKROOT "$(xcode-select -p)/usr/bin/xcodebuild" \
+  -project Incomes.xcodeproj -scheme IncomesLibrary \
+  -destination 'platform=iOS Simulator,id=<discovered-simulator-uuid>' test
+```
+
+This is a scoped fallback, not a change to the running native build service.
+Verify that the affected test bundles actually relink and inspect their
+diagnostics; a cached build alone does not demonstrate that the warning is gone.
+
+### App Intents extraction in package tests
+
+With Xcode 27.2, both generated library test bundles report
+`Metadata extraction skipped, no AppIntents.framework dependency found`.
+`IncomesLibrary`, its tests, and their current dependencies contain no App Intents;
+these diagnostics do not indicate missing metadata in the app's Shortcuts.
+
+For the library-only command-line fallback, skip the unnecessary extraction task
+with `LM_SKIP_METADATA_EXTRACTION=YES`. Swift Build checks this setting before
+[creating the metadata tasks](https://github.com/swiftlang/swift-build/blob/9222a8ade22dead4273fa5f10d3550a988e6c094/Sources/SWBApplePlatform/AppIntentsMetadataTaskProducer.swift).
+Keep these build products separate from normal app builds:
+
+```sh
+env -u SDKROOT "$(xcode-select -p)/usr/bin/xcodebuild" \
+  -project Incomes.xcodeproj -scheme IncomesLibrary \
+  -destination 'platform=iOS Simulator,id=<discovered-simulator-uuid>' \
+  -derivedDataPath /tmp/incomes-library-tests-no-appintents \
+  LM_SKIP_METADATA_EXTRACTION=YES test
+```
+
+This invocation-wide override is limited to the library scheme. Do not apply it
+to app, widget, watch, or archive builds, which need App Intents metadata.
+Reassess it if the library or its dependencies start defining App Intents.
+The native integration tools cannot currently override settings for these generated
+SwiftPM test targets, so its unmodified test builds may still emit the warnings.
+Do not add an unused AppIntents dependency or suppress all extractor warnings
+to make those builds quiet.
+
 ## Release operations
 
 Incomes 6.x uses [Apogee release tools](Tools/Release/README.md) in a separate
@@ -399,10 +460,12 @@ TestFlight feedback inspection, and reviewed version, metadata, screenshot,
 build-attachment, and submission operations.
 
 Xcode Cloud continues to own formal builds, tests, archives, and binary upload.
-The existing workflow was configured for `main` with **Latest Beta or Release**.
-Before the next candidate build, configure Xcode Cloud to build the reviewed
-commit from `develop` or a fixed candidate branch. Confirm the source commit and
-actual Xcode version in the build record and match that toolchain locally.
+The current workflow starts from `develop`. Before each candidate, confirm its
+settings and the source commit, action results, uploaded build, and actual Xcode
+version in the build record. Match that toolchain locally. Follow the
+[release procedure](Tools/Release/README.md#subsequent-6x-releases) to connect the
+published App Store build, release tag, GitHub Release, and owner-reviewed
+`develop`-to-`main` PR without including later development.
 Apogee creates App Store versions and changes publication policy only through
 explicit, reviewed operations, and never builds or uploads binaries.
 

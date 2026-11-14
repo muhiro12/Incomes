@@ -17,7 +17,7 @@ enum ItemBalanceProjectionPlanner {
         let income: Decimal
         let outgo: Decimal
         let storedBalance: Decimal?
-        let tieBreaker: String
+        let tieBreaker: ItemOrderTieBreaker
     }
 
     struct BalancedProjectedRow {
@@ -71,7 +71,7 @@ enum ItemBalanceProjectionPlanner {
         let changedRows = plannedValues.enumerated().map { index, values in
             projectedRow(
                 values: values,
-                tieBreaker: "projection.create.\(index)"
+                tieBreaker: .planned(index)
             )
         }
         return try review(
@@ -113,7 +113,7 @@ enum ItemBalanceProjectionPlanner {
         let changedRows = updates.map { update in
             projectedRow(
                 values: update.values,
-                tieBreaker: String(describing: update.itemID)
+                tieBreaker: .stored(update.itemID)
             )
         }
         return try review(
@@ -148,7 +148,7 @@ enum ItemBalanceProjectionPlanner {
             newRows: updates.map { update in
                 projectedRow(
                     values: update.values,
-                    tieBreaker: String(describing: update.itemID)
+                    tieBreaker: .stored(update.itemID)
                 )
             }
         )
@@ -179,7 +179,7 @@ enum ItemBalanceProjectionPlanner {
             newRows: values.enumerated().map { index, values in
                 projectedRow(
                     values: values,
-                    tieBreaker: "projection.planned.\(index)"
+                    tieBreaker: .planned(index)
                 )
             }
         )
@@ -268,7 +268,7 @@ private extension ItemBalanceProjectionPlanner {
 
     static func projectedRow(
         values: ItemStoredValues,
-        tieBreaker: String
+        tieBreaker: ItemOrderTieBreaker
     ) -> ProjectedRow {
         let utcDate = normalizedUTCDate(for: values.date)
         return .init(

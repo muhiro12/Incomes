@@ -6,7 +6,7 @@ enum ItemImportBalancePlanner {
     struct Row {
         let item: IncomesFileItem
         let importedBalance: Decimal?
-        let tieBreaker: String
+        let tieBreaker: ItemOrderTieBreaker
     }
 
     static func affectedDates(
@@ -31,24 +31,18 @@ enum ItemImportBalancePlanner {
                 Row(
                     item: item.item,
                     importedBalance: plan.preservedBalanceItemIDs.contains(item.id) ? item.item.balance : nil,
-                    tieBreaker: String(describing: item.id)
+                    tieBreaker: .stored(item.id)
                 )
             }
         let inserted = plan.insertedItems.enumerated().map { index, item in
-            Row(item: item, importedBalance: item.balance, tieBreaker: "import.\(index)")
+            Row(item: item, importedBalance: item.balance, tieBreaker: .planned(index))
         }
-        return (retained + inserted).sorted { left, right in
-            if left.item.date != right.item.date {
-                return left.item.date < right.item.date
-            }
-            if left.item.priority != right.item.priority {
-                return left.item.priority > right.item.priority
-            }
-            if left.item.content != right.item.content {
-                return left.item.content < right.item.content
-            }
-            return left.tieBreaker < right.tieBreaker
-        }
+        return (retained + inserted).sorted(using: ItemOrdering.descriptors(
+            date: \.item.date,
+            priority: \.item.priority,
+            content: \.item.content,
+            identity: \.tieBreaker
+        ))
     }
 
     static func balances(
@@ -116,12 +110,12 @@ enum ItemImportBalancePlanner {
         affectedDates: [LedgerIdentifier: Date],
         policy: ItemImportBalancePolicy
     ) throws {
-        let ordered = items.sorted(by: >)
+        let ordered = items.sorted(using: ItemOrdering.descriptors(order: .forward))
         let rows = ordered.map { item in
             Row(
                 item: .init(item: item, balance: item.balance),
                 importedBalance: importedBalances[item.persistentModelID],
-                tieBreaker: String(describing: item.persistentModelID)
+                tieBreaker: .stored(item.persistentModelID)
             )
         }
         let balances = try balances(rows: rows, affectedDates: affectedDates, policy: policy)

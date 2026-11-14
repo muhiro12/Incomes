@@ -158,7 +158,7 @@ public enum TagQueryOperations {
         matchingItems(for: tag).filter { item in
             ledgerIdentifier == nil || item.ledgerIdentifier == ledgerIdentifier
         }
-        .sorted()
+        .sorted(using: ItemOrdering.descriptors(order: .reverse))
     }
 
     /// Returns items for a given tag and year string.

@@ -45,7 +45,7 @@ private extension IncomesStartupCoordinator {
         #if DEBUG
         let isICloudEnabled = false
         #else
-        let isICloudEnabled = preferenceStore.bool(for: \.isICloudOn)
+        let isICloudEnabled = SubscriptionStateOperations.isICloudEnabled(store: preferenceStore)
         #endif
         startupLogger.notice(
             "platform_environment.build_requested",

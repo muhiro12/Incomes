@@ -20,9 +20,6 @@ struct ItemFormInputAssistView: View {
         }
     }
 
-    var initialText: String?
-    var onApply: (() -> Void)?
-
     @Environment(\.dismiss)
     private var dismiss
     @Environment(ItemFormModel.self)
@@ -96,7 +93,7 @@ struct ItemFormInputAssistView: View {
                 return
             }
             hasLoadedInitialText = true
-            scanner.recognizedText = initialText ?? model.inferenceText
+            scanner.recognizedText = model.inferenceText
         }
         .onDisappear {
             inferenceState.cancel()
@@ -215,11 +212,7 @@ private extension ItemFormInputAssistView {
                 return
             }
             model.applyInference(update)
-            if let onApply {
-                onApply()
-            } else {
-                dismiss()
-            }
+            dismiss()
         } catch is CancellationError {
             if inferenceState.pendingRequest == request {
                 inferenceState.cancel()

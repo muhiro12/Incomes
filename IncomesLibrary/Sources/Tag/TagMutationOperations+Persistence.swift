@@ -62,7 +62,7 @@ private extension TagMutationOperations {
                     let owners = Set((item.tags ?? []).filter { $0.type == .ledger }.map(\.id))
                     return !owners.isEmpty && owners.isSubset(of: identifiers)
                 }
-                .sorted(by: >)
+                .sorted(using: ItemOrdering.descriptors(order: .forward))
             _ = try BalanceCalculator.calculateBalances(
                 startingFrom: .zero,
                 inputs: try items.map { item in

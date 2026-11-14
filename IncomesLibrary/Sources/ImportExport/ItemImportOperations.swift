@@ -50,6 +50,19 @@ public extension ItemImportOperations {
 }
 
 public extension ItemImportOperations {
+    /// Rows shown by the replace preview, using the same canonical value order as other import reviews.
+    /// This is a change inventory; it does not represent recalculated running balances.
+    static func replacementItems(
+        difference: ItemImportDifference
+    ) -> (removed: [IncomesFileItem], added: [IncomesFileItem]) {
+        (
+            removed: IncomesFileItem.sortedByValue(
+                (difference.storeOnlyItems + difference.changeGroups.flatMap(\.storeItems)).map(\.item)
+            ),
+            added: IncomesFileItem.sortedByValue(difference.additions + difference.changeGroups.flatMap(\.fileItems))
+        )
+    }
+
     /// Owners actually changed by the reviewed policy, excluding records kept as-is.
     static func mutatedLedgerIdentifiers(
         difference: ItemImportDifference,

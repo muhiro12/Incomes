@@ -22,10 +22,7 @@ enum ItemInferenceService {
             ("language_code", languageCode),
             ("text_length", IncomesLogging.count(text.count))
         )
-        logger.notice(
-            "inference.requested",
-            metadata: metadata
-        )
+        logger.notice("inference.requested", metadata: metadata)
         do {
             let model = try FoundationModelAvailabilitySupport.defaultModel(
                 for: locale,
@@ -40,16 +37,16 @@ enum ItemInferenceService {
                 currentDate: currentDate,
                 locale: locale
             )
-            let response = try await session.respond(generating: ItemFormInferenceGeneratedFields.self) {
+            let response = try await session.respond(
+                generating: ItemFormInferenceGeneratedFields.self,
+                options: .init(samplingMode: .greedy)
+            ) {
                 prompt
             }
             let result = try validated(.init(
                 generated: response.content, sourceText: text, referenceDate: currentDate, locale: locale
             ))
-            logger.notice(
-                "inference.completed",
-                metadata: metadata
-            )
+            logger.notice("inference.completed", metadata: metadata)
             return result
         } catch {
             if error is CancellationError {

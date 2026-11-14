@@ -33,11 +33,9 @@ enum BalanceCalculator {
         after date: Date,
         ledgerIdentifier: LedgerIdentifier = .default
     ) throws {
-        let orderedItems =
-            try context.fetch(
-                .items(.all, order: .forward, ledgerIdentifier: ledgerIdentifier)
-            )
-            .sorted(by: >)
+        let orderedItems = try context.fetch(
+            .items(.all, order: .forward, ledgerIdentifier: ledgerIdentifier)
+        )
         let startDate = Calendar.current.startOfDay(for: date)
         guard let firstIndex = orderedItems.firstIndex(where: { $0.localDate >= startDate }) else {
             return

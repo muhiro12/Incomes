@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ExportItemTemplateButton: View {
+struct ShareItemContentButton: View {
     @Environment(Item.self)
     private var item
 
@@ -9,16 +9,17 @@ struct ExportItemTemplateButton: View {
     var action: (() -> Void)?
 
     var body: some View {
-        Button("Export Template", systemImage: "doc.text") {
+        Button("Copy Content…", systemImage: "clipboard") {
             if let action {
                 action()
             } else {
                 isPresented = true
             }
         }
+        .accessibilityHint(Text("Review content before copying or sharing."))
         .sheet(isPresented: $isPresented) {
             NavigationStack {
-                ItemTemplateExportView()
+                ItemContentShareView()
                     .environment(item)
             }
             .incomesSheetPresentation()

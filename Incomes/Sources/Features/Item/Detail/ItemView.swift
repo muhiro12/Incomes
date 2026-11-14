@@ -25,7 +25,7 @@ extension ItemView: View {
             Section {
                 EditItemButton()
                 DuplicateItemButton()
-                ExportItemTemplateButton()
+                ShareItemContentButton()
                 DeleteItemButton()
             }
         }

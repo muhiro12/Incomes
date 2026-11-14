@@ -1359,41 +1359,6 @@
         }
       }
     },
-    "Apply to Form" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apply to Form"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Aplicar al formulario"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Appliquer au formulaire"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "フォームに反映"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "应用到表单"
-          }
-        }
-      }
-    },
     "Applying Suggestions" : {
       "localizations" : {
         "en" : {
@@ -3503,41 +3468,6 @@
         }
       }
     },
-    "Completed Template" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Completed Template"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plantilla completada"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modèle rempli"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "記入済みテンプレート"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "已填写的模板"
-          }
-        }
-      }
-    },
     "Contains deficit items" : {
       "localizations" : {
         "en" : {
@@ -3640,6 +3570,40 @@
         }
       }
     },
+    "Copy Content" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copy Content"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar contenido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier le contenu"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "内容をコピー"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "复制内容"
+          }
+        }
+      }
+    },
     "Copy Link" : {
       "localizations" : {
         "en" : {
@@ -3708,41 +3672,6 @@
         }
       }
     },
-    "Copy Prompt and Template" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy Prompt and Template"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copiar instrucciones y plantilla"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copier les instructions et le modèle"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "プロンプトとテンプレートをコピー"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "复制提示词和模板"
-          }
-        }
-      }
-    },
     "Copy Summary" : {
       "localizations" : {
         "en" : {
@@ -3773,41 +3702,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "复制摘要"
-          }
-        }
-      }
-    },
-    "Copy Template" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copy Template"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copiar plantilla"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copier le modèle"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "テンプレートをコピー"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "复制模板"
           }
         }
       }
@@ -3846,37 +3740,36 @@
         }
       }
     },
-    "Copy only what you want to share with an external tool. Nothing is sent automatically." : {
-      "extractionState" : "manual",
+    "Copy Content…" : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Copy only what you want to share with an external tool. Nothing is sent automatically."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copia solo lo que quieras compartir con una herramienta externa. No se envía nada automáticamente."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Copiez uniquement ce que vous souhaitez partager avec un outil externe. Rien n’est envoyé automatiquement."
+            "value" : "Copy Content…"
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "外部ツールに共有したい内容だけをコピーしてください。自動で送信されることはありません。"
+            "value" : "内容をコピー…"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copiar contenido…"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Copier le contenu…"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "仅复制您想与外部工具共享的内容。不会自动发送任何内容。"
+            "value" : "复制内容…"
           }
         }
       }
@@ -5106,6 +4999,40 @@
       },
       "extractionState" : "manual",
       "comment" : "MHLogConsoleView supplies this title from MHPlatform. Keep this dependency-owned key mapped to the app’s Log Console wording."
+    },
+    "Item Content" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Item Content"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contenido del registro"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contenu de l’entrée"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "項目の内容"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "条目内容"
+          }
+        }
+      }
     },
     "Log Console" : {
       "localizations" : {
@@ -6366,41 +6293,6 @@
         }
       }
     },
-    "Export Template" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Export Template"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Exportar plantilla"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Exporter le modèle"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "テンプレートを書き出す"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "导出模板"
-          }
-        }
-      }
-    },
     "Export current data" : {
       "localizations" : {
         "en" : {
@@ -6567,41 +6459,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "导出时间"
-          }
-        }
-      }
-    },
-    "Extract This Text" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Extract This Text"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Extraer de este texto"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Extraire de ce texte"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "この文章から入力"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "提取此文本"
           }
         }
       }
@@ -7560,41 +7417,6 @@
         }
       }
     },
-    "Importing this template prepares a new item. It does not update this item." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Importing this template prepares a new item. It does not update this item."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Importar esta plantilla prepara un registro nuevo. No actualiza este registro."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "L’importation de ce modèle prépare une nouvelle entrée. Elle ne met pas à jour cette entrée."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "読み込むと新規項目の下書きを作成します。この項目は更新されません。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "导入此模板会准备一个新条目，不会更新此条目。"
-          }
-        }
-      }
-    },
     "In file" : {
       "localizations" : {
         "en" : {
@@ -7761,41 +7583,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "请为支出条件指定金额。"
-          }
-        }
-      }
-    },
-    "Includes date, content, income, outgo, category, priority, and currency." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Includes date, content, income, outgo, category, priority, and currency."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Incluye fecha, contenido, ingresos, gastos, categoría, prioridad y moneda."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Comprend la date, le contenu, les revenus, les dépenses, la catégorie, la priorité et la devise."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "日付、内容、収入、支出、カテゴリー、優先度、通貨を含みます。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "包含日期、内容、收入、支出、类别、优先级和货币。"
           }
         }
       }
@@ -10319,41 +10106,6 @@
         }
       }
     },
-    "New Category" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "New Category"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nueva categoría"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Nouvelle catégorie"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新しいカテゴリ"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "新类别"
-          }
-        }
-      }
-    },
     "New Name" : {
       "localizations" : {
         "en" : {
@@ -12462,41 +12214,6 @@
         }
       }
     },
-    "Paste or enter one completed template. Invalid text stays here so you can correct it." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Paste or enter one completed template. Invalid text stays here so you can correct it."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Pega o introduce una plantilla completada. El texto no válido se conserva para que puedas corregirlo."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Collez ou saisissez un modèle rempli. Le texte invalide reste disponible pour correction."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "記入済みのテンプレートを1件貼り付けるか入力してください。エラーがあっても原文は残り、修正できます。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "粘贴或输入一个已填写的模板。无效文本会保留，方便您修改。"
-          }
-        }
-      }
-    },
     "Period" : {
       "localizations" : {
         "en" : {
@@ -13245,41 +12962,6 @@
         }
       }
     },
-    "Prompt and Template" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Prompt and Template"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Instrucciones y plantilla"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Instructions et modèle"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "プロンプトとテンプレート"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "提示词和模板"
-          }
-        }
-      }
-    },
     "Proposals" : {
       "localizations" : {
         "en" : {
@@ -13514,76 +13196,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "只读：编辑此账簿需要 Monthly Plan。"
-          }
-        }
-      }
-    },
-    "Read Template" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Read Template"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Leer plantilla"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lire un modèle"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "テンプレートを読み込む"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "读取模板"
-          }
-        }
-      }
-    },
-    "Read explicit template values without AI. Fill the template yourself or with an external tool." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Read explicit template values without AI. Fill the template yourself or with an external tool."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lee los valores explícitos de la plantilla sin IA. Rellénala manualmente o con una herramienta externa."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Lisez les valeurs explicites du modèle sans IA. Remplissez-le vous-même ou avec un outil externe."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "AIを使わず、テンプレートに記載された値を読み込みます。手入力でも外部ツールでも記入できます。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "无需 AI，读取模板中明确填写的值。可手动填写或使用外部工具。"
           }
         }
       }
@@ -14475,36 +14087,70 @@
         }
       }
     },
-    "Restart Incomes to apply changes. The current iCloud sync setting remains active until then." : {
+    "Restart Incomes to turn off iCloud sync. It remains enabled for this session until then." : {
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Restart Incomes to apply changes. The current iCloud sync setting remains active until then."
+            "value" : "Restart Incomes to turn off iCloud sync. It remains enabled for this session until then."
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Los cambios se aplican tras reiniciar Incomes. Hasta entonces, la configuración actual de sincronización con iCloud sigue activa."
+            "value" : "Reinicia Incomes para desactivar la sincronización con iCloud. Hasta entonces, seguirá activada en esta sesión."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Les modifications s’appliquent après le redémarrage d’Incomes. D’ici là, le réglage actuel de synchronisation iCloud reste actif."
+            "value" : "Redémarrez Incomes pour désactiver la synchronisation iCloud. Elle reste activée pour cette session jusque-là."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "変更はIncomesの再起動後に適用されます。それまでは、現在のiCloud同期設定が引き続き有効です。"
+            "value" : "iCloud同期を無効にするにはIncomesを再起動してください。それまでは、今回の起動時の有効な設定が続きます。"
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "更改将在重新启动 Incomes 后生效。在此之前，当前的 iCloud 同步设置仍然有效。"
+            "value" : "请重新启动 Incomes 以停用 iCloud 同步。在此之前，本次启动中的同步设置仍保持启用。"
+          }
+        }
+      }
+    },
+    "Restart Incomes to turn on iCloud sync. It remains disabled for this session until then." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Restart Incomes to turn on iCloud sync. It remains disabled for this session until then."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reinicia Incomes para activar la sincronización con iCloud. Hasta entonces, seguirá desactivada en esta sesión."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Redémarrez Incomes pour activer la synchronisation iCloud. Elle reste désactivée pour cette session jusque-là."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud同期を有効にするにはIncomesを再起動してください。それまでは、今回の起動時の無効な設定が続きます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "请重新启动 Incomes 以启用 iCloud 同步。在此之前，本次启动中的同步设置仍保持停用。"
           }
         }
       }
@@ -14539,6 +14185,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "结果"
+          }
+        }
+      }
+    },
+    "Resuming Incomes from the background does not apply this change." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Resuming Incomes from the background does not apply this change."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Volver a Incomes desde segundo plano no aplica este cambio."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revenir à Incomes depuis l’arrière-plan n’applique pas cette modification."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "バックグラウンドから戻るだけでは、この変更は適用されません。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "仅从后台返回 Incomes 不会应用此更改。"
           }
         }
       }
@@ -14612,41 +14292,6 @@
         }
       }
     },
-    "Review Template" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Review Template"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Revisar plantilla"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Vérifier le modèle"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "テンプレートを確認"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "检查模板"
-          }
-        }
-      }
-    },
     "Review Unassigned Items" : {
       "localizations" : {
         "en" : {
@@ -14677,6 +14322,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "检查未归属的记录"
+          }
+        }
+      }
+    },
+    "Review content before copying or sharing." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Review content before copying or sharing."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "内容を確認してからコピーや共有ができます。"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Revisa el contenido antes de copiarlo o compartirlo."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vérifiez le contenu avant de le copier ou de le partager."
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "在复制或分享前查看内容。"
           }
         }
       }
@@ -15223,41 +14902,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "保存将应用已确认的更改。修改此条目后需要重新预览。"
-          }
-        }
-      }
-    },
-    "Saving this item will create the category “%@”." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Saving this item will create the category “%@”."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Al guardar este registro se creará la categoría «%@»."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "L’enregistrement de cette entrée créera la catégorie « %@ »."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "この項目を保存すると、カテゴリー「%@」が作成されます。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "保存此条目将创建类别“%@”。"
           }
         }
       }
@@ -15874,6 +15518,40 @@
         }
       }
     },
+    "Share Content" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Share Content"
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Compartir contenido"
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Partager le contenu"
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "内容を共有"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "分享内容"
+          }
+        }
+      }
+    },
     "Share Link" : {
       "localizations" : {
         "en" : {
@@ -15904,41 +15582,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "分享链接"
-          }
-        }
-      }
-    },
-    "Share Template" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Share Template"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Compartir plantilla"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Partager le modèle"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "テンプレートを共有"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "共享模板"
           }
         }
       }
@@ -16823,41 +16466,6 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "目标年份"
-          }
-        }
-      }
-    },
-    "Template" : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Template"
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Plantilla"
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Modèle"
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "テンプレート"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "模板"
           }
         }
       }
@@ -18155,41 +17763,6 @@
         }
       }
     },
-    "This replaces the current draft fields and turns off repetition. Review the form and choose Create to save." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "This replaces the current draft fields and turns off repetition. Review the form and choose Create to save."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Sustituye los campos del borrador y desactiva la repetición. Revisa el formulario y elige Crear para guardar."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Remplace les champs du brouillon et désactive la répétition. Vérifiez le formulaire et choisissez Créer pour enregistrer."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "現在の下書きの項目を置き換え、繰り返しをオフにします。フォームを確認し、「作成」で保存してください。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "这将替换当前草稿字段并关闭重复。检查表单后，选择“创建”以保存。"
-          }
-        }
-      }
-    },
     "This search only finds saved items. It can't add, change, or delete them." : {
       "localizations" : {
         "en" : {
@@ -19319,41 +18892,6 @@
         }
       }
     },
-    "Uses Apple Intelligence to interpret the text again. Template values may be interpreted differently." : {
-      "extractionState" : "manual",
-      "localizations" : {
-        "en" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Uses Apple Intelligence to interpret the text again. Template values may be interpreted differently."
-          }
-        },
-        "es" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Usa Apple Intelligence para volver a interpretar el texto. Los valores pueden interpretarse de otra forma."
-          }
-        },
-        "fr" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Utilise Apple Intelligence pour réinterpréter le texte. Les valeurs du modèle peuvent être interprétées différemment."
-          }
-        },
-        "ja" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "Apple Intelligenceで文章を改めて解釈します。テンプレートの値と異なる解釈になる場合があります。"
-          }
-        },
-        "zh-Hans" : {
-          "stringUnit" : {
-            "state" : "translated",
-            "value" : "使用 Apple Intelligence 重新解读文本。对模板值的解读可能有所不同。"
-          }
-        }
-      }
-    },
     "Uses the on-device model behind Apple Intelligence. Check generated text against your items." : {
       "extractionState" : "manual",
       "localizations" : {
@@ -19865,6 +19403,40 @@
         }
       }
     },
+    "Your choice is on, but a subscription is required to enable iCloud sync at the next launch." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Your choice is on, but a subscription is required to enable iCloud sync at the next launch."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tu elección está activada, pero se necesita una suscripción para activar la sincronización con iCloud en el próximo inicio."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Votre choix reste activé, mais un abonnement est nécessaire pour activer la synchronisation iCloud au prochain lancement."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "ONの選択は保存されていますが、次回起動時にiCloud同期を有効にするにはサブスクリプションが必要です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "您已选择开启，但需要订阅才能在下次启动时启用 iCloud 同步。"
+          }
+        }
+      }
+    },
     "Your data has not changed. Please try exporting again." : {
       "localizations" : {
         "en" : {
@@ -20069,6 +19641,74 @@
         }
       }
     },
+    "iCloud sync is disabled for this session." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud sync is disabled for this session."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sincronización con iCloud está desactivada en esta sesión."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La synchronisation iCloud est désactivée pour cette session."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今回の起動ではiCloud同期が無効です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本次启动中，iCloud 同步已停用。"
+          }
+        }
+      }
+    },
+    "iCloud sync is enabled for this session." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud sync is enabled for this session."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sincronización con iCloud está activada en esta sesión."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La synchronisation iCloud est activée pour cette session."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "今回の起動ではiCloud同期が有効です。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "本次启动中，iCloud 同步已启用。"
+          }
+        }
+      }
+    },
     "iCloud sync is on. This import also changes your other devices. If changes from another device have not arrived yet, items may be duplicated or reappear." : {
       "localizations" : {
         "en" : {
@@ -20099,6 +19739,40 @@
           "stringUnit" : {
             "state" : "translated",
             "value" : "iCloud 同步已开启。此次导入也会更改你的其他设备。如果其他设备的更改尚未同步过来，项目可能会重复或重新出现。"
+          }
+        }
+      }
+    },
+    "iCloud sync requires a subscription. Your choice is saved even when your subscription ends. Changes apply after you quit and reopen Incomes." : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud sync requires a subscription. Your choice is saved even when your subscription ends. Changes apply after you quit and reopen Incomes."
+          }
+        },
+        "es" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La sincronización con iCloud requiere una suscripción. Tu elección se guarda incluso cuando finaliza la suscripción. Los cambios se aplican después de cerrar y volver a abrir Incomes."
+          }
+        },
+        "fr" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "La synchronisation iCloud nécessite un abonnement. Votre choix est conservé même à la fin de votre abonnement. Les modifications s’appliquent après avoir quitté puis rouvert Incomes."
+          }
+        },
+        "ja" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud同期にはサブスクリプションが必要です。購読が終了しても選択は保存されます。変更はIncomesを終了して開き直すと適用されます。"
+          }
+        },
+        "zh-Hans" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "iCloud 同步需要订阅。订阅结束后，您的选择仍会保存。退出并重新打开 Incomes 后，更改才会生效。"
           }
         }
       }
@@ -20211,37 +19885,37 @@
         }
       }
     },
-    "The amount is unspecified. This draft uses 0 for income and outgo. Review before saving." : {
+    "The amount or payment direction could not be determined. This draft uses 0 for income and outgo. Review before saving." : {
       "extractionState" : "manual",
       "localizations" : {
         "en" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "The amount is unspecified. This draft uses 0 for income and outgo. Review before saving."
+            "value" : "The amount or payment direction could not be determined. This draft uses 0 for income and outgo. Review before saving."
           }
         },
         "ja" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "金額は未定です。この下書きでは収入・支出を0にしています。保存前に確認してください。"
+            "value" : "金額または収入・支出の区分を特定できませんでした。この下書きでは収入・支出を0にしています。保存前に確認してください。"
           }
         },
         "es" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "El importe está sin determinar. Este borrador usa 0 en ingresos y gastos. Revísalo antes de guardar."
+            "value" : "No se pudo determinar el importe o si se trata de un ingreso o un gasto. Este borrador usa 0 en ingresos y gastos. Revísalo antes de guardar."
           }
         },
         "fr" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "Le montant n’est pas précisé. Ce brouillon utilise 0 pour les revenus et les dépenses. Vérifiez avant d’enregistrer."
+            "value" : "Le montant ou le type de transaction (revenu ou dépense) n’a pas pu être déterminé. Ce brouillon utilise 0 pour les revenus et les dépenses. Vérifiez avant d’enregistrer."
           }
         },
         "zh-Hans" : {
           "stringUnit" : {
             "state" : "translated",
-            "value" : "金额未定。此草稿的收入和支出均设为 0。请在保存前检查。"
+            "value" : "无法确定金额或收支类型。此草稿的收入和支出均设为 0。请在保存前检查。"
           }
         }
       }

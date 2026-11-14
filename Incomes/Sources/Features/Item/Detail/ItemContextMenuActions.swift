@@ -9,20 +9,20 @@ struct ItemContextMenuActions {
     private let editAction: (() -> Void)?
     private let duplicateAction: (() -> Void)?
     private let deleteAction: (() -> Void)?
-    private let exportTemplateAction: (() -> Void)?
+    private let shareContentAction: (() -> Void)?
 
     init(
         showAction: (() -> Void)? = nil,
         editAction: (() -> Void)? = nil,
         duplicateAction: (() -> Void)? = nil,
         deleteAction: (() -> Void)? = nil,
-        exportTemplateAction: (() -> Void)? = nil
+        shareContentAction: (() -> Void)? = nil
     ) {
         self.showAction = showAction
         self.editAction = editAction
         self.duplicateAction = duplicateAction
         self.deleteAction = deleteAction
-        self.exportTemplateAction = exportTemplateAction
+        self.shareContentAction = shareContentAction
     }
 }
 
@@ -32,7 +32,7 @@ extension ItemContextMenuActions: View {
         EditItemButton(action: editAction)
         DuplicateItemButton(action: duplicateAction)
         RecalculateItemButton()
-        ExportItemTemplateButton(action: exportTemplateAction)
+        ShareItemContentButton(action: shareContentAction)
         if let itemURL = MainNavigationOperations.preferredURL(for: item) {
             Divider()
             ShareLink(item: itemURL) {

@@ -92,9 +92,8 @@ private extension BalanceChart {
     }
 
     var latestItem: Item? {
-        items.max { lhs, rhs in
-            lhs.localDate < rhs.localDate
-        }
+        // Item comparison follows the reverse financial sequence, including same-day ties.
+        items.min()
     }
 
     var highestBalance: Decimal? {

@@ -92,7 +92,7 @@ extension IncomesFileItem {
         )
     }
 
-    /// Orders items by their values alone, so the order never depends on store identity.
+    /// Canonical file value order is locale-independent; it is not the financial sequence.
     static func sortedByValue(_ items: [Self]) -> [Self] {
         items.sorted { left, right in
             left.isOrderedByValue(before: right)
@@ -123,6 +123,9 @@ extension IncomesFileItem {
         }
         if repeatID != other.repeatID {
             return repeatID.uuidString < other.repeatID.uuidString
+        }
+        if (balance == nil) != (other.balance == nil) {
+            return balance == nil
         }
         return (balance ?? .zero) < (other.balance ?? .zero)
     }

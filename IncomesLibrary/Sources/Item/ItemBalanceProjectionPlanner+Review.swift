@@ -90,7 +90,7 @@ extension ItemBalanceProjectionPlanner {
                     income: item.income,
                     outgo: item.outgo,
                     storedBalance: item.balance,
-                    tieBreaker: String(describing: item.persistentModelID)
+                    tieBreaker: .stored(item.persistentModelID)
                 )
             }
         )
@@ -191,25 +191,12 @@ private extension ItemBalanceProjectionPlanner {
                 ledgerIdentifier: item.ledgerIdentifier
             )
         }
-        .sorted { left, right in
-            isOrderedBefore(left, right)
-        }
-    }
-
-    static func isOrderedBefore(
-        _ left: ItemBalanceProjectionReview.RecordSignature,
-        _ right: ItemBalanceProjectionReview.RecordSignature
-    ) -> Bool {
-        if left.utcDate != right.utcDate {
-            return left.utcDate < right.utcDate
-        }
-        if left.priority != right.priority {
-            return left.priority > right.priority
-        }
-        if left.content != right.content {
-            return left.content < right.content
-        }
-        return String(describing: left.itemID) < String(describing: right.itemID)
+        .sorted(using: ItemOrdering.descriptors(
+            date: \.utcDate,
+            priority: \.priority,
+            content: \.content,
+            identity: \.itemID
+        ))
     }
 
     static func balancedRows(
@@ -316,7 +303,7 @@ private extension ItemBalanceProjectionPlanner {
             income: item.income,
             outgo: item.outgo,
             storedBalance: item.balance,
-            tieBreaker: String(describing: item.persistentModelID)
+            tieBreaker: .stored(item.persistentModelID)
         )
     }
 }

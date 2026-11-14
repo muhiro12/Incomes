@@ -116,7 +116,7 @@ private extension WatchSyncOperations {
                 income: .init(wire.income),
                 outgo: .init(wire.outgo),
                 category: wire.category,
-                priority: 0
+                priority: wire.priority
             ),
             repeatID: .init()
         )
@@ -175,7 +175,8 @@ private extension ItemWire {
             content: item.content,
             income: Double(item.income.description) ?? .zero,
             outgo: Double(item.outgo.description) ?? .zero,
-            category: item.category?.name ?? ""
+            category: item.category?.name ?? "",
+            priority: item.priority
         )
     }
 }

@@ -4,35 +4,6 @@ import SwiftData
 import Testing
 
 struct ItemInputQualificationTests {
-    private let template = """
-    # Incomes Item Template
-    formatVersion: 1
-    schemaVersion: 2.0.0
-
-    ## Date
-    - 2026-10-29
-
-    ## Content
-    - QA lunch / déjeuner / 昼食
-      ## Literal heading
-      <b>literal HTML</b> https://example.com
-
-    ## Income
-    - 0
-
-    ## Outgo
-    - 1234.56
-
-    ## Category
-    - Food
-
-    ## Priority
-    - 3
-
-    ## Currency
-    - JPY
-    """
-
     @Test(arguments: ["en_US", "ja_JP", "fr_FR", "de_DE"], ["12.50", "1.234"])
     func typed_amounts_keep_their_value_after_localized_formatting(_ identifier: String, _ text: String) throws {
         let amount = try #require(Decimal(string: text))
@@ -57,14 +28,6 @@ struct ItemInputQualificationTests {
             locale: .init(identifier: identifier)
         )
         #expect(update.applied(to: input).outgo == amount)
-    }
-
-    @Test
-    func templates_cannot_import_text_that_the_writer_refuses() throws {
-        let text = template.replacingOccurrences(of: "QA lunch", with: "QA\r lunch")
-        #expect(throws: ItemTemplateError.invalidStructure) {
-            try ItemTemplateOperations.read(text, ledgerIdentifier: .default, currencyCode: "JPY")
-        }
     }
 
     @available(iOS 26.0, *)
@@ -110,7 +73,7 @@ struct ItemInputQualificationTests {
     @Test
     func unknown_amounts_remain_zero_drafts_with_explicit_review_metadata() throws {
         try ItemFormInferenceOperations.validate(dateString: "", content: "Rent", income: nil, outgo: nil)
-        let original = try ItemTemplateOperations.read(template, ledgerIdentifier: .default, currencyCode: "JPY")
+        let original = try originalInput()
         let update = ItemFormInferenceUpdate(dateString: "", content: "Rent", income: nil, outgo: nil, category: "Rent")
         let draft = update.applied(to: original)
         #expect(update.hasUnspecifiedAmount)
@@ -130,10 +93,9 @@ struct ItemInputQualificationTests {
     }
 
     @available(iOS 26.0, *)
-    @Test(arguments: ["inference", "template"], [false, true])
+    @Test(arguments: [false, true])
     @MainActor
-    func both_paths_preserve_financial_values_through_save_reopen_and_export(
-        path: String,
+    func inference_preserves_financial_values_through_save_reopen_and_export(
         additionalLedger: Bool
     ) throws {
         let directory = try persistentTestDirectory(fileManager: .default)
@@ -148,10 +110,8 @@ struct ItemInputQualificationTests {
             let ledgerIdentifier = try additionalLedger
                 ? LedgerOperations.create(context: context, name: "QA destination").id
                 : LedgerIdentifier.default
-            let expected = try ItemTemplateOperations.read(
-                template, ledgerIdentifier: ledgerIdentifier, currencyCode: "JPY"
-            )
-            let input = try proposal(path: path, expected: expected)
+            let expected = try originalInput(ledgerIdentifier: ledgerIdentifier)
+            let input = try proposal(expected: expected)
             #expect(context.hasChanges == false)
             let item = try ItemCreationOperations.createAndSaveWithOutcome(
                 context: context, input: input, repeatCount: 1
@@ -164,10 +124,7 @@ struct ItemInputQualificationTests {
         #expect(saved.count == 1)
         #expect(ItemExportOperations.fileItems(items: saved) == original)
         let item = try #require(saved.first)
-        let exported = try ItemTemplateOperations.text(for: item, currencyCode: "JPY")
-        let imported = try ItemTemplateOperations.read(
-            exported, ledgerIdentifier: item.ledgerIdentifier, currencyCode: "JPY"
-        )
+        let imported = ItemFormInput(item: item)
         let expectedContent = "QA lunch / déjeuner / 昼食\n## Literal heading\n"
             + "<b>literal HTML</b> https://example.com"
         #expect(imported.content == expectedContent)
@@ -179,15 +136,26 @@ struct ItemInputQualificationTests {
         #expect(reopened.mainContext.hasChanges == false)
     }
 
+    private func originalInput(ledgerIdentifier: LedgerIdentifier = .default) throws -> ItemFormInput {
+        let date = try #require(DateFormatter.fixed(.yyyyMMdd).date(from: "20261029"))
+        let amount = try #require(Decimal(string: "1234.56"))
+        return .init(
+            date: date,
+            content: "QA lunch / déjeuner / 昼食\n## Literal heading\n<b>literal HTML</b> https://example.com",
+            income: .zero,
+            outgo: amount,
+            category: "Food",
+            priority: 3,
+            ledgerIdentifier: ledgerIdentifier
+        )
+    }
+
     private func makeContainer(_ url: URL) throws -> ModelContainer {
         try ModelContainerFactory.make(configuration: .init(url: url, cloudKitDatabase: .none))
     }
 
     @available(iOS 26.0, *)
-    private func proposal(path: String, expected: ItemFormInput) throws -> ItemFormInput {
-        guard path == "inference" else {
-            return expected
-        }
+    private func proposal(expected: ItemFormInput) throws -> ItemFormInput {
         try ItemFormInferenceOperations.validate(
             dateString: "20261029", content: expected.content, income: .zero, outgo: expected.outgo
         )

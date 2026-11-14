@@ -1,0 +1,100 @@
+[
+  {
+    "id": "copied_item_1_ja_JP",
+    "locale": "ja_JP",
+    "currency": "JPY",
+    "text": "日付: 2026年10月28日\n昼食\n定食とコーヒー\n収入: 0\n支出: 1,234.567\nカテゴリー: 食費\n通貨: JPY",
+    "expected": {
+      "date": "20261028",
+      "content": "昼食\n定食とコーヒー",
+      "income": "0",
+      "outgo": "1234.567",
+      "category": "食費",
+      "hasUnspecifiedAmount": false
+    }
+  },
+  {
+    "id": "copied_item_2_en_US",
+    "locale": "en_US",
+    "currency": "USD",
+    "text": "Date: Oct 28, 2026\nLunch\nMeal and coffee\nIncome: 0\nOutgo: 1,234.567\nCategory: Food\nCurrency: USD",
+    "expected": {
+      "date": "20261028",
+      "content": "Lunch\nMeal and coffee",
+      "income": "0",
+      "outgo": "1234.567",
+      "category": "Food",
+      "hasUnspecifiedAmount": false
+    }
+  },
+  {
+    "id": "copied_item_3_fr_FR",
+    "locale": "fr_FR",
+    "currency": "EUR",
+    "text": "Date : 28 oct. 2026\nDéjeuner\nRepas et café\nRevenu : 0\nDépenses : 1 234,567\nCatégorie : Alimentation\nDevise : EUR",
+    "expected": {
+      "date": "20261028",
+      "content": "Déjeuner\nRepas et café",
+      "income": "0",
+      "outgo": "1234.567",
+      "category": "Alimentation",
+      "hasUnspecifiedAmount": false
+    }
+  },
+  {
+    "id": "copied_item_4_es_ES",
+    "locale": "es_ES",
+    "currency": "EUR",
+    "text": "Fecha: 28 oct 2026\nAlmuerzo\nComida y café\nIngresos: 0\nGastos: 1234,567\nCategoría: Comida\nMoneda: EUR",
+    "expected": {
+      "date": "20261028",
+      "content": "Almuerzo\nComida y café",
+      "income": "0",
+      "outgo": "1234.567",
+      "category": "Comida",
+      "hasUnspecifiedAmount": false
+    }
+  },
+  {
+    "id": "copied_item_5_zh_CN",
+    "locale": "zh_CN",
+    "currency": "CNY",
+    "text": "日期: 2026年10月28日\n午餐\n套餐和咖啡\n收入: 0\n支出: 1,234.567\n类别: 餐饮\n货币: CNY",
+    "expected": {
+      "date": "20261028",
+      "content": "午餐\n套餐和咖啡",
+      "income": "0",
+      "outgo": "1234.567",
+      "category": "餐饮",
+      "hasUnspecifiedAmount": false
+    }
+  },
+  {
+    "id": "copied_item_6_ja_JP",
+    "locale": "ja_JP",
+    "currency": "JPY",
+    "text": "日付: 2026年10月28日\n部屋の家賃\n収入: 80,000\n支出: 0\nカテゴリー: 賃貸収入\n通貨: JPY",
+    "expected": {
+      "date": "20261028",
+      "content": "部屋の家賃",
+      "income": "80000",
+      "outgo": "0",
+      "category": "賃貸収入",
+      "hasUnspecifiedAmount": false
+    }
+  },
+  {
+    "id": "copied_item_7_en_US",
+    "locale": "en_US",
+    "currency": "",
+    "text": "Date: Oct 28, 2026\nFree event\nIncome: 0\nOutgo: 0\nCategory: Leisure",
+    "expected": {
+      "date": "20261028",
+      "content": "Free event",
+      "income": "0",
+      "outgo": "0",
+      "category": "Leisure",
+      "hasUnspecifiedAmount": false
+    }
+  }
+]

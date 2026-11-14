@@ -10,23 +10,7 @@ enum UpcomingPaymentPresentationBuilder {
         now: Date,
         calendar: Calendar = .current
     ) -> [UpcomingPaymentNotificationPresentation] {
-        let sortedPlans = plans.sorted { lhs, rhs in
-            if lhs.notifyDate != rhs.notifyDate {
-                return lhs.notifyDate < rhs.notifyDate
-            }
-
-            let lhsIdentifier = UpcomingPaymentItemTargetSupport.targetContentIdentifier(
-                for: lhs.item
-            )
-            let rhsIdentifier = UpcomingPaymentItemTargetSupport.targetContentIdentifier(
-                for: rhs.item
-            )
-            if lhsIdentifier != rhsIdentifier {
-                return lhsIdentifier < rhsIdentifier
-            }
-
-            return lhs.item.content < rhs.item.content
-        }
+        let sortedPlans = UpcomingPaymentOperations.sortedPlans(plans)
 
         return sortedPlans.enumerated().map { index, plan in
             buildPresentation(
@@ -94,7 +78,7 @@ private extension UpcomingPaymentPresentationBuilder {
             targetContentIdentifier: itemIdentifier,
             summaryArgument: plan.item.content,
             summaryArgumentCount: 1,
-            badgeCount: plan.reminderPlan?.badgeCount ?? badgeCount,
+            badgeCount: badgeCount,
             daysUntilDue: daysUntilDue,
             relevanceScore: plan.reminderPlan?.relevanceScore ?? relevanceScore(
                 amount: plan.item.outgo,

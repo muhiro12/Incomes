@@ -213,16 +213,13 @@ public extension Item {
 
 extension Item: Comparable {
     public static func < (lhs: Item, rhs: Item) -> Bool {
-        if lhs.utcDate != rhs.utcDate {
-            return lhs.utcDate > rhs.utcDate
+        for descriptor in ItemOrdering.descriptors(order: .reverse) {
+            let result = descriptor.compare(lhs, rhs)
+            if result != .orderedSame {
+                return result == .orderedAscending
+            }
         }
-        if lhs.priority != rhs.priority {
-            return lhs.priority < rhs.priority
-        }
-        if lhs.content != rhs.content {
-            return lhs.content > rhs.content
-        }
-        return String(describing: lhs.persistentModelID) > String(describing: rhs.persistentModelID)
+        return false
     }
 }
 
