@@ -28,7 +28,8 @@ struct NaturalLanguageSearchGrounding {
         var isUsed = false
     }
 
-    private static let numberPattern = #"(?<![0-9.])-?(?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\.[0-9]+)?(?![0-9])"#
+    private static let numberPattern =
+        #"(?<![0-9.])-?(?:(?:[0-9]{1,3}(?:,[0-9]{3})+|[0-9]+)(?:\.[0-9]+)?|\.[0-9]+)(?![0-9])"#
     private static let posixLocale = Locale(identifier: "en_US_POSIX")
     private static let monthNameLocales = ["en_US", "es_ES", "fr_FR"]
     private static let yearUnits = ["年"]

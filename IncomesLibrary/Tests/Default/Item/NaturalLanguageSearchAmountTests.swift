@@ -24,6 +24,28 @@ struct NaturalLanguageSearchAmountTests {
         #expect(conditions.outgo == .init(minimum: 1_200, maximum: 1_200))
     }
 
+    @Test(arguments: [".25", "−.25"])
+    func leading_decimal_amount_cannot_be_omitted_or_changed(_ expression: String) throws {
+        let request = "rent outgo of " + expression
+        let sourceNumber = expression.replacingOccurrences(of: "−", with: "-")
+        #expect(throws: NaturalLanguageSearchError.unusedNumbers([sourceNumber])) {
+            try conditions(.init(content: "rent"), request: request)
+        }
+        let amount = expression == ".25" ? "0.25" : "-0.25"
+        let expected = try #require(Decimal(string: amount))
+        let conditions = try conditions(
+            .init(amounts: [.init(target: .outgo, comparison: .exactly, amount: amount)]),
+            request: request
+        )
+        #expect(conditions.outgo == .init(minimum: expected, maximum: expected))
+        #expect(throws: NaturalLanguageSearchError.ungroundedAmount(.outgo)) {
+            try self.conditions(
+                .init(amounts: [.init(target: .outgo, comparison: .exactly, amount: "25")]),
+                request: request
+            )
+        }
+    }
+
     @Test("Missing, malformed, and overprecise amounts fail")
     func invalid_amounts_fail() {
         let overprecise = "0." + String(
