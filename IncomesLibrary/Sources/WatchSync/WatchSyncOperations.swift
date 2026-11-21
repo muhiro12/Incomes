@@ -44,27 +44,33 @@ public enum WatchSyncOperations {
             baseDate: baseDate,
             monthOffsets: monthOffsets
         )
-        let groupedIncomingItems = Dictionary(grouping: items) { wire in
-            Date(timeIntervalSince1970: wire.dateEpoch)
-                .stringValueWithoutLocale(.yyyyMM)
+        // Validate the retained amounts before deleting any of the previous cache.
+        let values = try items.compactMap { wire -> ItemStoredValues? in
+            let date = Date(timeIntervalSince1970: wire.dateEpoch)
+            guard allowedYearMonths.contains(date.stringValueWithoutLocale(.yyyyMM)) else {
+                return nil
+            }
+            let income = try decimalAmount(wire.income)
+            let outgo = try decimalAmount(wire.outgo)
+            _ = try BalanceCalculator.netIncome(income: income, outgo: outgo)
+            return .init(
+                date: date,
+                content: wire.content,
+                income: income,
+                outgo: outgo,
+                category: wire.category,
+                priority: wire.priority
+            )
         }
-
-        // Reject inexact row arithmetic before deleting the previous cache.
-        try validateNetIncome(
-            groupedIncomingItems: groupedIncomingItems,
-            allowedYearMonths: allowedYearMonths
-        )
 
         let allItems = try context.fetch(FetchDescriptor<Item>())
         let deleteOutcome = try ItemDeletionOperations.deleteWithOutcome(
             context: context,
             items: allItems
         )
-        let createdItems = try createItems(
-            context: context,
-            groupedIncomingItems: groupedIncomingItems,
-            allowedYearMonths: allowedYearMonths
-        )
+        let createdItems = try values.map { value in
+            try Item.create(context: context, values: value, repeatID: .init())
+        }
 
         if !createdItems.isEmpty {
             try BalanceCalculator.calculate(
@@ -81,45 +87,15 @@ public enum WatchSyncOperations {
 }
 
 private extension WatchSyncOperations {
-    static func validateNetIncome(
-        groupedIncomingItems: [String: [ItemWire]],
-        allowedYearMonths: Set<String>
-    ) throws {
-        for yearMonth in allowedYearMonths {
-            for wire in groupedIncomingItems[yearMonth] ?? [] {
-                _ = try BalanceCalculator.netIncome(
-                    income: .init(wire.income),
-                    outgo: .init(wire.outgo)
-                )
-            }
+    static func decimalAmount(_ amount: Double) throws -> Decimal {
+        // The existing wire format uses Double. Its shortest round-trip spelling
+        // preserves a supported phone amount without introducing binary digits.
+        guard amount.isFinite,
+              let decimal = Decimal(string: amount.description, locale: Locale(identifier: "en_US_POSIX")),
+              AmountPrecision.isExactlyStorable(decimal) else {
+            throw ItemAmountError.balanceOutOfRange
         }
-    }
-
-    static func createItems(
-        context: ModelContext,
-        groupedIncomingItems: [String: [ItemWire]],
-        allowedYearMonths: Set<String>
-    ) throws -> [Item] {
-        try allowedYearMonths.flatMap { yearMonth in
-            try (groupedIncomingItems[yearMonth] ?? []).map { wire in
-                try createItem(context: context, wire: wire)
-            }
-        }
-    }
-
-    static func createItem(context: ModelContext, wire: ItemWire) throws -> Item {
-        try Item.create(
-            context: context,
-            values: .init(
-                date: Date(timeIntervalSince1970: wire.dateEpoch),
-                content: wire.content,
-                income: .init(wire.income),
-                outgo: .init(wire.outgo),
-                category: wire.category,
-                priority: wire.priority
-            ),
-            repeatID: .init()
-        )
+        return decimal
     }
 
     static func snapshotOutcome(

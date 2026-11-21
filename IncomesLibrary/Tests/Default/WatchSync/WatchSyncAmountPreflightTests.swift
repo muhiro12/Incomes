@@ -43,6 +43,31 @@ struct WatchSyncAmountPreflightTests {
     }
 
     @Test
+    func phone_snapshot_preserves_a_storable_decimal_after_watch_save() throws {
+        let amount = try #require(Decimal(string: "123456789.123456"))
+        try withStore { phone in
+            let phoneContext = ModelContext(phone)
+            _ = try ItemCreationOperations.createAndSaveWithOutcome(
+                context: phoneContext,
+                input: .init(date: baseDate, content: "Income", income: amount, outgo: 0, category: "Test"),
+                repeatCount: 1
+            )
+            let wires = try WatchSyncOperations.recentItemWires(context: phoneContext, baseDate: baseDate)
+            let reply = try WatchSyncReply.responseData(for: .success(items: wires))
+            try withStore { watch in
+                _ = try WatchSyncOperations.applySnapshotAndSave(
+                    context: ModelContext(watch),
+                    items: WatchSyncReply.decodeResponse(reply).items,
+                    baseDate: baseDate
+                )
+                let item = try #require(fetchItems(ModelContext(watch)).first)
+                #expect(item.income == amount)
+                #expect(item.balance == amount)
+            }
+        }
+    }
+
+    @Test
     func supported_fractional_negative_values_and_ignored_months_keep_the_existing_contract() throws {
         try withStore { container in
             let context = ModelContext(container)
