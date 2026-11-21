@@ -11,6 +11,7 @@ struct ItemInferenceAmountOperationsTests {
         ("1234,567", "es_ES", "1234.567"),
         ("1.234567", "en_US", "1.234567"),
         (".50", "en_US", "0.50"),
+        ("．２５円", "ja_JP", "0.25"),
         (",50", "fr_FR", "0.50"),
         ("0", "ja_JP", "0")
     ])
@@ -33,6 +34,8 @@ struct ItemInferenceAmountOperationsTests {
         ("-100", "Refund -100"),
         ("-100", "Paid 100"),
         ("100", "Refund -100"),
+        ("100", "返金額 －１００円"),
+        ("25", "返金額 －．２５円"),
         ("50", "Refund -.50"),
         ("0.50", "Refund −.50"),
         ("1234567890123456", "Paid 1234567890123456")

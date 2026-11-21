@@ -23,7 +23,8 @@ public enum ItemInferenceAmountOperations {
         }
         // The source owns decimal placement. A model sometimes drops every
         // separator; recover only a unique complete digit sequence, never a prefix.
-        let matches = Set(sourceNumbers(sourceText).compactMap { number -> Decimal? in
+        let source = sourceText.folding(options: .widthInsensitive, locale: locale)
+        let matches = Set(sourceNumbers(source).compactMap { number -> Decimal? in
             guard let amount = DecimalTextParser.parse(number, locale: locale), amount >= .zero else {
                 return nil
             }
@@ -40,8 +41,10 @@ public enum ItemInferenceAmountOperations {
 
 private extension ItemInferenceAmountOperations {
     static func numberExpression(_ expression: String, sourceText: String, locale: Locale) -> String {
+        let isCopied = sourceText.contains(expression)
+        let expression = expression.folding(options: .widthInsensitive, locale: locale)
         let numbers = sourceNumbers(expression)
-        guard sourceText.contains(expression), numbers.count == 1,
+        guard isCopied, numbers.count == 1,
               let number = numbers.first, let range = expression.range(of: number) else {
             return expression
         }
