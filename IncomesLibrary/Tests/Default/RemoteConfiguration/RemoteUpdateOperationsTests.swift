@@ -22,6 +22,7 @@ struct RemoteUpdateOperationsTests {
             mutationCount += 1
         }
         #expect(operations.isEnabled == false)
+        #expect(operations.evaluatedDecision == nil)
         #expect(preparation == nil)
         #expect(mutationCount == 1)
     }
@@ -29,12 +30,35 @@ struct RemoteUpdateOperationsTests {
     @Test
     func invalidConfigurationKeepsMutationGateClosed() async {
         let operations = RemoteUpdateOperations(configurationError: TestError.invalidConfiguration)
+        #expect(operations.evaluatedDecision == .unavailable)
         await #expect(throws: TestError.invalidConfiguration) {
             try await operations.prepare()
         }
         await expectBlocked(operations, error: .policyUnavailable)
         #expect(operations.isEnabled)
         #expect(operations.decision == .unavailable)
+    }
+
+    @Test
+    func initialCheckPublishesStatusAfterEvaluation() async throws {
+        let fixture = try makeFixture()
+        #expect(fixture.operations.evaluatedDecision == nil)
+        #expect(fixture.operations.decision == .unavailable)
+
+        try await fixture.operations.prepare()
+
+        #expect(fixture.operations.evaluatedDecision == .notRequired)
+    }
+
+    @Test
+    func failedInitialRefreshPublishesUnavailableStatus() async throws {
+        let fixture = try makeFixture()
+        await fixture.provider.goOffline()
+
+        let preparation = try await fixture.operations.prepare()
+
+        #expect(preparation?.refreshError != nil)
+        #expect(fixture.operations.evaluatedDecision == .unavailable)
     }
 
     @Test
@@ -56,6 +80,7 @@ struct RemoteUpdateOperationsTests {
         try await fixture.operations.prepare()
         await expectBlocked(fixture.operations, error: .updateRequired)
         #expect(fixture.operations.decision == .updateRequired)
+        #expect(fixture.operations.evaluatedDecision == .updateRequired)
         #expect(fixture.operations.evaluation?.reason == .updateRequired)
         #expect(fixture.operations.evaluation?.minimumVersion == MHAppVersion("6.1"))
     }

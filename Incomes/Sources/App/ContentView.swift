@@ -21,9 +21,9 @@ extension ContentView: View {
     var body: some View {
         LedgerWorkspaceView()
             .safeAreaInset(edge: .top) {
-                if remoteConfigurationService.scheduledUpdates.isEnabled {
+                if let decision = remoteConfigurationService.scheduledUpdates.evaluatedDecision {
                     RemoteUpdateStatusView(
-                        decision: remoteConfigurationService.scheduledUpdates.decision,
+                        decision: decision,
                         isLoading: remoteConfigurationService.isLoading,
                         retry: retryUpdateCheck,
                         openStore: openAppStore

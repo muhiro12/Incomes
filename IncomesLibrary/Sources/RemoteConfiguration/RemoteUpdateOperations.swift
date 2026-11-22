@@ -12,9 +12,14 @@ public final class RemoteUpdateOperations {
     /// The latest diagnostic snapshot, shared by presentation and mutation adapters.
     public private(set) var evaluation: MHRemoteUpdateEvaluation?
 
+    /// The status to present once evidence has been evaluated or configuration has failed.
+    public var evaluatedDecision: MHRemoteUpdateDecision? {
+        evaluation?.decision ?? (configurationError == nil ? nil : .unavailable)
+    }
+
     /// Observed update status; an explicit local exception does not change the evidence.
     public var decision: MHRemoteUpdateDecision {
-        evaluation?.decision ?? .unavailable
+        evaluatedDecision ?? .unavailable
     }
 
     private let controller: MHRemoteUpdateController?
