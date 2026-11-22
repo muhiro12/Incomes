@@ -389,10 +389,8 @@ Markdown follows the [markdownlint rules](https://github.com/DavidAnson/markdown
 
 Helper scripts may write disposable cache data under `.build/ci/shared/`.
 
-The repository rules check records the SwiftLint artifact, version, binary
-hash, configuration, and full tracked Swift file scope in its output. SwiftLint
-is selected only from the configured project's registered package artifacts;
-other repositories' global DerivedData are not fallback inputs. An explicit
+The lint and format scripts run the project's registered SwiftLint binary on
+tracked Swift files and non-ignored untracked Swift files. An explicit
 `CI_SWIFTLINT_BIN` must match an artifact in those configured package roots.
 Missing resolution or tool mismatches are incomplete verification, not a reason
 to install another linter. Boundary searches likewise distinguish no matches

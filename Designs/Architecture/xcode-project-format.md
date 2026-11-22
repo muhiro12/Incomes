@@ -22,11 +22,10 @@ identified these dependencies on the legacy file or its property-list syntax:
 | Consumer | Required adaptation |
 | --- | --- |
 | `ci_scripts/tasks/check_environment.sh` | Discover exactly one configuration and validate the SwiftLint package structurally. |
-| `ci_scripts/lib/swiftlint_evidence.py` | Read the package requirement in either format and hash the actual configuration. |
+| SwiftLint binary selection (now `ci_scripts/lib/swiftlint_binary.py`) | Read the package requirement in either format. |
 | `ci_scripts/tasks/check_mhplatform_boundaries.sh` | Replace property-list text extraction with structural package and target checks. |
-| `ci_scripts/tasks/check_push_verification.py` | Bind lint evidence to the single configuration in its source commit. |
-| `ci_scripts/tests/test_rules_evidence.py` | Retain legacy coverage and add JSON provenance coverage. |
-| `ci_scripts/tests/test_push_verification.py` | Retain historical receipts and test JSON configuration hashes. |
+| `ci_scripts/tests/test_repository_rules.py` | Cover SwiftLint selection for both project formats. |
+| Retired [push verification pilot](push-verification-pilot.md) | Bind lint evidence to the configuration in the source commit. |
 | `Designs/Overviews/incomes-architecture-conformance-audit.md` | Update current configuration references after conversion. |
 
 Bundle-level references in shared schemes, SwiftLint resolution, and Xcode Cloud

@@ -107,7 +107,7 @@ ci_swiftlint_prepare_directories() {
 
 ci_swiftlint_find_binary() {
   local repository_root=$1
-  python3 "$repository_root/ci_scripts/lib/swiftlint_evidence.py" select \
+  python3 "$repository_root/ci_scripts/lib/swiftlint_binary.py" \
     "$repository_root" \
     "$(ci_swiftlint_source_packages_directory "$repository_root")" \
     "$(ci_swiftlint_derived_data_directory "$repository_root")/SourcePackages"
@@ -191,15 +191,19 @@ ci_swiftlint_run() {
   local empty_message
   local start_message
   local finish_message
+  local binary
+  local -a flags
   local -a swift_files=()
 
   case "$mode" in
     format)
+      flags=(--fix --format)
       empty_message="No Swift files found to format."
       start_message="Formatting Swift files with SwiftLint..."
       finish_message="Finished formatting Swift files."
       ;;
     lint)
+      flags=(--strict)
       empty_message="No Swift files found to lint."
       start_message="Linting Swift files with SwiftLint..."
       finish_message="Finished linting Swift files."
@@ -222,13 +226,9 @@ ci_swiftlint_run() {
     return 0
   fi
 
-  ci_swiftlint_resolve_binary "$repository_root" >/dev/null
+  binary=$(ci_swiftlint_resolve_binary "$repository_root") || return $?
 
   echo "$start_message"
-  python3 "$repository_root/ci_scripts/lib/swiftlint_evidence.py" run \
-    "$repository_root" \
-    "$(ci_swiftlint_source_packages_directory "$repository_root")" \
-    "$(ci_swiftlint_derived_data_directory "$repository_root")/SourcePackages" \
-    "$mode" "${swift_files[@]}"
+  "$binary" lint --quiet --no-cache "${flags[@]}" "${swift_files[@]}" || return $?
   echo "$finish_message"
 }

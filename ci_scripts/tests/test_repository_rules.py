@@ -1,7 +1,6 @@
-"""Negative fixtures for retained boundary searches and SwiftLint provenance."""
+"""Exercise project-managed SwiftLint and repository boundary checks."""
 from __future__ import annotations
 
-import importlib.util
 import json
 import os
 from pathlib import Path
@@ -14,26 +13,20 @@ import unittest
 
 REPOSITORY = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(REPOSITORY / "ci_scripts/lib"))
-spec = importlib.util.spec_from_file_location("swiftlint_evidence", REPOSITORY / "ci_scripts/lib/swiftlint_evidence.py")
-adapter = importlib.util.module_from_spec(spec)
-spec.loader.exec_module(adapter)
+import swiftlint_binary
 
 
-class SwiftLintEvidenceTests(unittest.TestCase):
+class SwiftLintTests(unittest.TestCase):
     def setUp(self):
         self.temporary = tempfile.TemporaryDirectory()
         self.root = Path(self.temporary.name).resolve()
         (self.root / "Incomes.xcodeproj").mkdir()
         project = {"rootObject": "root", "objects": {
             "root": {"isa": "PBXProject", "packageReferences": ["fixture"], "targets": []},
-            "fixture": {"isa": "XCRemoteSwiftPackageReference", "repositoryURL": adapter.REMOTE,
+            "fixture": {"isa": "XCRemoteSwiftPackageReference", "repositoryURL": swiftlint_binary.SWIFTLINT_REMOTE,
                         "requirement": {"kind": "upToNextMajorVersion", "minimumVersion": "0.0.0"}}}}
         (self.root / "Incomes.xcodeproj/project.pbxproj").write_bytes(plistlib.dumps(project))
-        (self.root / ".swiftlint.yml").write_text("strict: true\n")
-        (self.root / "Value.swift").write_text("let value = 1\n")
         self.git(self.root, "init", "-q")
-        self.git(self.root, "add", ".")
-        self.git(self.root, "-c", "user.name=Fixture", "-c", "user.email=fixture@example.invalid", "commit", "-qm", "Fixture")
         self.cache = self.root / "cache"
         self.package = self.cache / "checkouts/SwiftLintPlugins"
         self.package.mkdir(parents=True)
@@ -49,7 +42,7 @@ class SwiftLintEvidenceTests(unittest.TestCase):
         self.binary.chmod(0o700)
         (bundle / "info.json").write_text(json.dumps({"artifacts": {"swiftlint": {"type": "executable",
             "version": "0.65.1", "variants": [{"path": "macos/swiftlint"}]}}}))
-        reference = {"identity": "swiftlintplugins", "location": adapter.REMOTE}
+        reference = {"identity": "swiftlintplugins", "location": swiftlint_binary.SWIFTLINT_REMOTE}
         self.state = {"object": {"dependencies": [{"packageRef": reference, "subpath": "SwiftLintPlugins",
             "state": {"checkoutState": {"version": "0.65.1", "revision": self.git(self.package, "rev-parse", "HEAD")}}}],
             "artifacts": [{"packageRef": reference, "targetName": "SwiftLintBinary",
@@ -68,56 +61,68 @@ class SwiftLintEvidenceTests(unittest.TestCase):
     def save(self):
         (self.cache / "workspace-state.json").write_text(json.dumps(self.state))
 
-    def test_registered_binary_and_actual_execution_are_recorded(self):
-        selected = adapter.select(self.root, [self.cache])
-        self.assertEqual(selected["version"], "0.65.1")
-        self.assertEqual(selected["binary_sha256"], adapter.sha256(self.binary))
-        q = subprocess.run([sys.executable, str(REPOSITORY / "ci_scripts/lib/swiftlint_evidence.py"), "run",
-                            str(self.root), str(self.cache), str(self.root / "unused"), "lint", "Value.swift"],
-                           capture_output=True, text=True)
-        self.assertEqual(q.returncode, 0, q.stderr)
-        proof = json.loads(q.stdout.removeprefix(adapter.MARKER))
-        self.assertEqual(proof["files"], ["Value.swift"])
-        self.assertEqual(proof["mode"], "lint")
-        self.assertEqual(proof["argv"][-2:], ["--strict", "Value.swift"])
+    def test_lint_and_format_run_the_selected_binary_and_propagate_failures(self):
+        shutil.copytree(REPOSITORY / "ci_scripts", self.root / "ci_scripts")
+        (self.root / ".gitignore").write_text("cache/\nIgnored.swift\n")
+        for name in ("Tracked.swift", "New File.swift", "Ignored.swift"):
+            (self.root / name).touch()
+        self.git(self.root, "add", "Tracked.swift")
+        self.binary.write_text(
+            f"#!{sys.executable}\n"
+            "import json, os, sys\n"
+            "if sys.argv[1] == 'version':\n"
+            "    print('0.65.1')\n"
+            "else:\n"
+            "    print(json.dumps(sys.argv[1:]))\n"
+            "    sys.exit(int(os.environ['FIXTURE_LINT_EXIT']))\n"
+        )
+        for mode, flags in (("lint", ["--strict"]), ("format", ["--fix", "--format"])):
+            for status in (0, 7):
+                with self.subTest(mode=mode, status=status):
+                    result = subprocess.run(
+                        ["bash", f"ci_scripts/tasks/{mode}_swift.sh"], cwd=self.root,
+                        env={**os.environ, "CI_SWIFT_PACKAGE_DIR": str(self.cache), "FIXTURE_LINT_EXIT": str(status)},
+                        capture_output=True, text=True,
+                    )
+                    self.assertEqual(result.returncode, status, result.stderr)
+                    args = [json.loads(line) for line in result.stdout.splitlines() if line.startswith("[")]
+                    self.assertEqual(args, [["lint", "--quiet", "--no-cache", *flags, "Tracked.swift", "New File.swift"]])
 
     def test_actual_version_mismatch_is_incomplete(self):
         self.binary.write_text(f"#!{sys.executable}\nprint('0.65.2')\n")
         with self.assertRaisesRegex(ValueError, "actual SwiftLint binary version"):
-            adapter.select(self.root, [self.cache])
+            swiftlint_binary.select(self.root, [self.cache])
 
-    def test_json_project_binds_the_actual_configuration_file(self):
+    def test_json_project_selects_the_registered_binary(self):
         legacy = self.root / "Incomes.xcodeproj/project.pbxproj"
         legacy.unlink()
         project = self.root / "Incomes.xcodeproj/project.xcproj"
-        project.write_text(json.dumps({"packages": [{"kind": "remote", "repository": adapter.REMOTE,
+        project.write_text(json.dumps({"packages": [{"kind": "remote", "repository": swiftlint_binary.SWIFTLINT_REMOTE,
             "version": {"up-to-next-major-version": "0.0.0"}}], "targets": []}))
-        selected = adapter.select(self.root, [self.cache])
-        self.assertEqual(selected["project_sha256"], adapter.sha256(project))
-        self.assertEqual(selected["version"], "0.65.1")
+        self.assertEqual(swiftlint_binary.select(self.root, [self.cache]), self.binary)
 
     def test_wrong_package_or_project_requirement_is_incomplete(self):
         self.state["object"]["dependencies"][0]["packageRef"]["location"] = "https://example.invalid/Other"
         self.save()
         with self.assertRaisesRegex(ValueError, "different source"):
-            adapter.select(self.root, [self.cache])
+            swiftlint_binary.select(self.root, [self.cache])
 
     def test_unregistered_override_and_other_repo_cache_are_not_selected(self):
         os.environ["CI_XCODE_GLOBAL_DERIVED_DATA_DIR"] = str(self.cache)
-        self.assertIsNone(adapter.select(self.root, [self.root / "missing"]))
+        self.assertIsNone(swiftlint_binary.select(self.root, [self.root / "missing"]))
         os.environ["CI_SWIFTLINT_BIN"] = str(self.binary)
         with self.assertRaisesRegex(ValueError, "registered artifact"):
-            adapter.select(self.root, [self.root / "missing"])
-        self.assertEqual(adapter.select(self.root, [self.cache])["binary"], str(self.binary))
+            swiftlint_binary.select(self.root, [self.root / "missing"])
+        self.assertEqual(swiftlint_binary.select(self.root, [self.cache]), self.binary)
 
     def test_missing_or_changed_package_resolution_is_incomplete(self):
         self.state["object"]["dependencies"][0]["state"]["checkoutState"]["revision"] = "b" * 40
         self.save()
         with self.assertRaisesRegex(ValueError, "checkout changed"):
-            adapter.select(self.root, [self.cache])
+            swiftlint_binary.select(self.root, [self.cache])
         (self.cache / "workspace-state.json").unlink()
         with self.assertRaises(OSError):
-            adapter.select(self.root, [self.cache])
+            swiftlint_binary.select(self.root, [self.cache])
 
 
 class BoundarySearchTests(unittest.TestCase):
