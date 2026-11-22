@@ -327,9 +327,6 @@ post-clone CI setup.
 - `bash ci_scripts/tasks/check_repository_rules.sh` runs SwiftLint plus the
   repository-specific static architecture checks that are not naturally covered
   by the Xcode-native integration.
-- The [push verification pilot](Designs/Architecture/push-verification-pilot.md)
-  records actual verification evidence and compares it with the exact outgoing
-  branch updates. Its hook is local setup, and required checks remain explicit.
 - Release UI smoke auditing uses live Simulator evidence. Use the
   [release UI smoke audit guide](Designs/Architecture/release-ui-smoke-audit.md)
   when a release or UI-sensitive change needs live Simulator evidence.
@@ -378,6 +375,10 @@ active integration's tool inventory:
 - Runtime or UI-sensitive changes: add a targeted run and runtime-log review,
   with Preview, live UI, or screenshot evidence appropriate to the change.
 
+Before pushing, review the results of the applicable checks and inspect the
+outgoing commits and their destination. A standard clone supports this workflow
+without a Git hook, a private receipt, or a manual receipt comparison.
+
 Runtime and UI checks require signed App Group entitlements at launch. Do not
 disable signing for these checks; `CODE_SIGNING_ALLOWED=NO` is limited to
 compile-only builds. Library tests, surface builds, and runtime/UI evidence
@@ -388,9 +389,8 @@ Markdown follows the [markdownlint rules](https://github.com/DavidAnson/markdown
 
 Helper scripts may write disposable cache data under `.build/ci/shared/`.
 
-The rules receipt accepts the complete `bash ci_scripts/tasks/check_repository_rules.sh`
-execution, including a source-bound SwiftLint record with its actual artifact,
-version, binary hash, configuration, and full tracked Swift file scope. SwiftLint
+The repository rules check records the SwiftLint artifact, version, binary
+hash, configuration, and full tracked Swift file scope in its output. SwiftLint
 is selected only from the configured project's registered package artifacts;
 other repositories' global DerivedData are not fallback inputs. An explicit
 `CI_SWIFTLINT_BIN` must match an artifact in those configured package roots.

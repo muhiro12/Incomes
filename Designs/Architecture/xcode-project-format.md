@@ -158,13 +158,9 @@ unchanged. At the time of this migration run, Issue #400 remained open while the
 implementation was unpublished. The deferred release checks are not a current
 completion gate.
 
-The earlier app build and library-test results are migration-run observations,
-not a publication receipt for subsequent tooling commits. Prepare current-source
-evidence through the [push verification pilot](push-verification-pilot.md) before
-any separately authorized push. Shared verification-skill modernization was
-handled separately after this run. Incomes continues to use its repository-owned
-evidence adapter and matcher, while other adopters may delegate to the shared
-helpers.
+The app build and library-test results above apply to the migration revision.
+For subsequent changes, follow the current
+[build and test guidance](../../README.md#build-and-test).
 
 ## Xcode 27.2 RC requalification on October 20, 2026
 

@@ -1,4 +1,9 @@
-# Push Verification Pilot
+# Push Verification Pilot (Historical)
+
+This document preserves the design of a retired local pilot, including its
+receipt format and hook setup. For current checks and publication guidance,
+see [Build and Test](../../README.md#build-and-test). Ordinary pushes need
+neither the hook nor a manual run of its checker.
 
 The agent prepares and reviews evidence before a meaningful push. A thin local
 pre-push hook then compares that private evidence with every proposed branch
