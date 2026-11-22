@@ -48,7 +48,7 @@ and widgets.
   `MHPreferencesUI` products.
 - `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally uses the MHPlatform 1.x semver range
-  `1.20.0..<2.0.0` for consent-managed ads, retained verified purchase
+  `1.22.0..<2.0.0` for consent-managed ads, retained verified purchase
   identifiers, and shared configuration and update processing.
 - Native ad placements choose `MHNativeAdLayout.compact` or `.media`. The ad
   view takes the proposed row width and its natural height; the app owns the

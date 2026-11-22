@@ -1,19 +1,19 @@
 {
-  "originHash" : "856b175980fc9c2e510ab9bfe6ad806178df6c47b1d7f4b978299cf385c7b5e7",
+  "originHash" : "866bec5b28c459f1e9cb74eb9df319f8f26a348939866530ff7ac52fd2af2b0d",
   "pins" : [
     {
       "identity" : "googlemobileadswrapper",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/GoogleMobileAdsWrapper",
       "state" : {
-        "revision" : "99611421e24b72353f26ec5f8c722de8f43e94a0",
-        "version" : "2.0.0"
+        "revision" : "c4d74000d25f6f60ecc864c28a6f680d392febde",
+        "version" : "2.1.0"
       }
     },
     {
       "identity" : "licenselist",
       "kind" : "remoteSourceControl",
-      "location" : "https://github.com/cybozu/LicenseList.git",
+      "location" : "https://github.com/cybozu/LicenseList",
       "state" : {
         "revision" : "ee1e897acb2c8f3061fca4434cb702e8ddb7a72c",
         "version" : "2.5.0"
@@ -24,8 +24,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/MHPlatform",
       "state" : {
-        "revision" : "3f67a4165046e5864f3b4dcab8b367d7646b35f4",
-        "version" : "1.20.0"
+        "revision" : "19d3c4d539be58787d6d48edef6f16cdfd333113",
+        "version" : "1.22.0"
       }
     },
     {
@@ -33,8 +33,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/MHUI",
       "state" : {
-        "revision" : "00a26dc40a3d2c2c7ef27c3749a280ba0891041c",
-        "version" : "2.4.0"
+        "revision" : "027e5a8f9d5374f467d05b6e85d70d976a8d01b6",
+        "version" : "2.6.0"
       }
     },
     {
@@ -42,8 +42,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/muhiro12/StoreKitWrapper",
       "state" : {
-        "revision" : "d82ee5bc733faf5ce14bc3e7139839eb0136f4d6",
-        "version" : "1.4.0"
+        "revision" : "c07644719476f0b0a1c6f8116d0d9752e8ed948d",
+        "version" : "1.5.0"
       }
     },
     {
@@ -51,8 +51,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/googleads/swift-package-manager-google-mobile-ads.git",
       "state" : {
-        "revision" : "d1fa1f5c1dfe3b43d56c73f4de388ad3316618bc",
-        "version" : "13.11.0"
+        "revision" : "1e305d74a0edcc8d74f7f2cae7a267e36d722ca2",
+        "version" : "13.13.0"
       }
     },
     {
