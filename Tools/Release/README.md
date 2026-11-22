@@ -1,13 +1,13 @@
 # Incomes release tools
 
 This macOS SwiftPM package uses Apogee's command plugin for the Incomes 6.x
-release cycle. It pins Apogee **1.6.0** at
-`22aa373e40fa2fad0b33506e7afe14e2ab45074d`; commit `Package.resolved` with any
+release cycle. It pins Apogee **1.8.0** at
+`1be65f954d3cfe44b3dd4e1e3b7f9718bd2b4ae2`; commit `Package.resolved` with any
 deliberate dependency update. No app target links Apogee.
 
 Apogee publishes three-component semantic version tags, so the Git tag, the
 `Package.swift` requirement, and the `Package.resolved` version all read
-`1.6.0`. Check the resolved revision as well as the version when updating.
+`1.8.0`. Check the resolved revision as well as the version when updating.
 
 Match the selected local Xcode to the toolchain used for the intended release
 candidate. The current project-format qualification uses Xcode 27.2 RC
@@ -65,7 +65,7 @@ server-verified checksum: the new API has no `sourceFileChecksum`. Verification
 checks processing, compatible specifications, byte counts, asset and placement
 identities, readiness, and order. Inspect the entire plan before applying.
 
-See the pinned [screenshot guide](https://github.com/muhiro12/Apogee/blob/1.6.0/docs/screenshots.md)
+See the pinned [screenshot guide](https://github.com/muhiro12/Apogee/blob/1.8.0/docs/screenshots.md)
 for input limits, recovery, and the verification contract.
 
 ## Local metadata
@@ -220,7 +220,7 @@ Successful metadata validation does not authorize review submission or release.
    out of the completed release tag and `main` baseline.
 
 No operation runs automatically from an app build or Git push in this package.
-Use Apogee's [adoption guide](https://github.com/muhiro12/Apogee/blob/1.6.0/docs/adoption.md)
+Use Apogee's [adoption guide](https://github.com/muhiro12/Apogee/blob/1.8.0/docs/adoption.md)
 for command boundaries and failure recovery. After dependency updates, verify
 the published tag and resolved revision, run local metadata validation, and
 check release status and a fresh metadata dry run before the next write.
