@@ -89,7 +89,7 @@ and widgets.
 ## MHDesign Adoption
 
 - `Incomes`, `Watch`, and `Widgets` adopt only the `MHDesign` product from
-  MHUI 2.4 or later.
+  MHUI 2.6 or later.
 - The app keeps native SwiftUI containers and its existing presentation styles.
   Package updates do not opt the app into the full MHUI theme or chrome.
 - Every surface reads `MHDesignMetrics.standard`, the shared eight-point

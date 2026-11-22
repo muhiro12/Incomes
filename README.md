@@ -188,7 +188,7 @@ Models.
 - `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally tracks MHPlatform with the 1.x semver range
   `1.22.0..<2.0.0`.
-- App, watch, and widget UI use only the `MHDesign` product from MHUI 2.4 or
+- App, watch, and widget UI use only the `MHDesign` product from MHUI 2.6 or
   later; the `MHUI` product is not linked.
 - The app opts into MHPlatform's consent-managed ads and exposes privacy
   options in Settings when required by the SDK. Startup cleanup preserves the
@@ -296,8 +296,7 @@ It is not fetched by this integration and must not be replaced with the new wire
 format. Forks must configure their own endpoint, Store ID, and app identity.
 
 Use the package's [configuration and update contract](https://github.com/muhiro12/MHPlatform/blob/1.22.0/Designs/Architecture/remote-update.md)
-for deployment, plan changes, postponement, and explicit cancellation. This
-integration targets 1.20 or later for the first shared-configuration app release.
+for deployment, plan changes, postponement, and explicit cancellation.
 
 ## Build and Test
 
