@@ -39,7 +39,7 @@ living in the app targets.
   `MHPreferencesUI` products.
 - `Widgets` intentionally stay off direct MHPlatform package adoption.
 - This repository intentionally tracks MHPlatform with the 1.x semver range
-  `1.22.0..<2.0.0`.
+  `1.23.0..<2.0.0`.
 - The app uses consent-managed advertising and offers privacy options in
   Settings when the SDK requires them. Startup cleanup retains consent keys.
 - All UI surfaces use only `MHDesign` from MHUI 2.6 or later, alongside native
