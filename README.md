@@ -201,7 +201,7 @@ Models.
   replace application-specific message configuration.
 - The standard update controller uses `MHRemoteConfig` through the existing
   umbrellas to fetch and validate the shared MHAppConfig document. Update policy
-  owns only `features.remoteUpdate`; no publisher renewal job is needed.
+  owns only `features.remoteUpdate`. The same fetch supplies in-app announcements.
 - Ledger migration retains its existing numeric-string comparison through
   `MHAppVersionComparison`; adopting typed remote-update versions does not
   change migration ordering.
@@ -297,6 +297,27 @@ format. Forks must configure their own endpoint, Store ID, and app identity.
 
 Use the package's [configuration and update contract](https://github.com/muhiro12/MHPlatform/blob/1.23.0/Designs/Architecture/remote-update.md)
 for deployment, plan changes, postponement, and explicit cancellation.
+
+### In-app announcements
+
+After a compatible app release, publish localized notices under
+`features.announcements` in the existing Incomes configuration. The next
+successful startup or foreground fetch delivers them. The first active title
+appears above the workspace. Tap it to read all active notices in publication
+order. Subscribers and free users see the same feed.
+
+Use the [MHPlatform announcement format](https://github.com/muhiro12/MHPlatform/blob/1.23.0/Designs/Architecture/announcements.md)
+for localized plain text, stable IDs, optional UTC start/end times, and app
+version bounds. Validate the document with `mh-validate-remote-config
+--announcements` before publication. For a subscription price notice, supply
+the confirmed effective date and terms for the intended audience. Language
+selection is independent of the customer's App Store storefront.
+
+A valid empty feed, a missing section, or an invalid section clears the
+display. On a network failure the app can show its last observation for up to
+24 hours in the same process. It checks publication windows while the app is
+open, at minute granularity. Notice publication is independent of the update
+policy revision, StoreKit pricing, and permission to edit records.
 
 ## Build and Test
 

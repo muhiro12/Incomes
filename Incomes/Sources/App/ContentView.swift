@@ -21,13 +21,16 @@ extension ContentView: View {
     var body: some View {
         LedgerWorkspaceView()
             .safeAreaInset(edge: .top) {
-                if let decision = remoteConfigurationService.scheduledUpdates.evaluatedDecision {
-                    RemoteUpdateStatusView(
-                        decision: decision,
-                        isLoading: remoteConfigurationService.isLoading,
-                        retry: retryUpdateCheck,
-                        openStore: openAppStore
-                    )
+                VStack(spacing: .zero) {
+                    if let decision = remoteConfigurationService.scheduledUpdates.evaluatedDecision {
+                        RemoteUpdateStatusView(
+                            decision: decision,
+                            isLoading: remoteConfigurationService.isLoading,
+                            retry: retryUpdateCheck,
+                            openStore: openAppStore
+                        )
+                    }
+                    RemoteAnnouncementBanner(store: remoteConfigurationService.announcements)
                 }
             }
             .alert(

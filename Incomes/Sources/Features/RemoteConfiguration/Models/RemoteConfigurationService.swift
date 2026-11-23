@@ -12,16 +12,19 @@ import MHPlatform
 final class RemoteConfigurationService {
     private(set) var isLoading = false
 
+    let announcements: RemoteAnnouncementStore
     let scheduledUpdates: RemoteUpdateOperations
 
     private let logger: MHLogger
 
     init(
         logger: MHLogger,
-        scheduledUpdates: RemoteUpdateOperations = IncomesRemoteUpdateConfiguration.operations
+        scheduledUpdates: RemoteUpdateOperations,
+        announcements: RemoteAnnouncementStore
     ) {
         self.logger = logger
         self.scheduledUpdates = scheduledUpdates
+        self.announcements = announcements
     }
 
     func load() async throws {
