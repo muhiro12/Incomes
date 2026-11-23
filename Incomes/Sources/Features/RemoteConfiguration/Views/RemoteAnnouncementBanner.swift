@@ -23,18 +23,22 @@ struct RemoteAnnouncementBanner: View {
                             HStack {
                                 Label {
                                     Text(verbatim: first.title)
+                                        .foregroundStyle(.primary)
                                         .lineLimit(Self.titleLineLimit)
                                 } icon: {
                                     Image(systemName: "megaphone")
+                                        .foregroundStyle(.tint)
                                 }
                                 Spacer()
                                 Image(systemName: "chevron.forward")
+                                    .foregroundStyle(.secondary)
                                     .accessibilityHidden(true)
                             }
                             .padding(.horizontal)
                             .frame(minHeight: designMetrics.layout.control.minimumTouchTarget)
                             .contentShape(Rectangle())
                         }
+                        .buttonStyle(.plain)
                         .background(.regularMaterial)
                     }
                 }

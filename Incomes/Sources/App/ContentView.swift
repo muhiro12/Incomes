@@ -19,9 +19,10 @@ struct ContentView {
 
 extension ContentView: View {
     var body: some View {
-        LedgerWorkspaceView()
-            .safeAreaInset(edge: .top) {
-                VStack(spacing: .zero) {
+        VStack(spacing: .zero) {
+            RemoteAnnouncementBanner(store: remoteConfigurationService.announcements)
+            LedgerWorkspaceView()
+                .safeAreaInset(edge: .top) {
                     if let decision = remoteConfigurationService.scheduledUpdates.evaluatedDecision {
                         RemoteUpdateStatusView(
                             decision: decision,
@@ -30,23 +31,22 @@ extension ContentView: View {
                             openStore: openAppStore
                         )
                     }
-                    RemoteAnnouncementBanner(store: remoteConfigurationService.announcements)
                 }
+        }
+        .alert(
+            "Invalid Link",
+            isPresented: invalidDeepLinkAlertBinding,
+            presenting: routePipeline.lastParseFailureURL
+        ) { _ in
+            Button("OK", role: .cancel) {
+                routePipeline.clearLastParseFailure()
             }
-            .alert(
-                "Invalid Link",
-                isPresented: invalidDeepLinkAlertBinding,
-                presenting: routePipeline.lastParseFailureURL
-            ) { _ in
-                Button("OK", role: .cancel) {
-                    routePipeline.clearLastParseFailure()
-                }
-            } message: { invalidURL in
-                Text("Incomes could not open \(invalidURL.absoluteString)")
-            }
-            .onChange(of: appRuntime.premiumStatus, initial: true) {
-                syncSubscriptionStateIfNeeded()
-            }
+        } message: { invalidURL in
+            Text("Incomes could not open \(invalidURL.absoluteString)")
+        }
+        .onChange(of: appRuntime.premiumStatus, initial: true) {
+            syncSubscriptionStateIfNeeded()
+        }
     }
 }
 
